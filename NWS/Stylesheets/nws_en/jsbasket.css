@@ -20,6 +20,7 @@
   .js-basket div.js-basket-error{
     color:#ad0000;
     }
+  .js-basket-textarea {width: 600px; height: 100px}  
   .js-basket textarea.js-basket-error, .js-basket input.js-basket-error{
     border:1px solid #ad0000;
     }
@@ -80,13 +81,16 @@
       padding:0 0 10px 0;
       }
       .js-basket .js-basket-top .js-basket-field-wrapper{
-        float:left;
         padding:0 15px 0 0;
         }
 
   .js-basket .js-basket-input{
     clear:both;
     }
+
+  .js-basket-form-actions{
+		display:inline-block;
+  	}
 
   .js-basket-disable-screen{
     width:100%;
