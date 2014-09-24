@@ -1,0 +1,48 @@
+.popup_menu {
+ font-family: verdana,tahoma,arial,sans-serif;
+ font-size: 10pt;
+ color:#000000;
+ padding:10px;
+ border:2px solid #921A0A;
+ left: 0px;
+visibility: hidden;
+ position: absolute;
+ top: 0px;
+ background-color:#ededed;
+}
+
+.popup_menuItem {
+ font-family: verdana,tahoma,arial,sans-serif;
+ font-size: 10pt;
+ padding:2px 12px 2px 8px;
+ color:#000000;
+ display: block;
+ cursor: default;
+ text-decoration:none;
+}
+.popup_menuItem_red {
+ padding:2px 12px 2px 8px;
+ display: block;
+ font-weight:bold;
+ font-size: 10pt;
+ cursor: default;
+ color:#ff0000;
+ font-family: verdana,tahoma,arial,sans-serif;
+ text-decoration: none;
+}
+
+a.popup_menuItem{
+font-family: verdana,tahoma,arial,sans-serif;
+font-size: 10pt;
+border:1px solid #666666;
+ color: #000000;
+ background-color: #cccccc;
+ cursor:pointer;
+ text-decoration: none;
+}
+a.popup_menuItem:hover{
+ color: #921A0A;
+ background-color:#BDC1CA;
+ cursor:pointer;
+ text-decoration: none;
+}

@@ -1,0 +1,67 @@
+#set($key="")
+#set($brand_param="")
+#set($cname="")
+#if($advancedSolrSearchCommand)
+  #if($advancedSolrSearchCommand.searchParameters.key)
+    #set($key=$advancedSolrSearchCommand.searchParameters.key)
+  #end
+  #if($advancedSolrSearchCommand.searchParameters.brand)
+    #set($brand_param=$advancedSolrSearchCommand.searchParameters.brand)
+  #end
+  #if($advancedSolrSearchCommand.searchParameters.cname)
+    #set($cname=$advancedSolrSearchCommand.searchParameters.cname)
+  #end
+  #if($brand_param && $brand_param.length() > 2)
+    #set($brand_length = $math.sub($brand_param.length(),1))
+    #set($brand_param = $brand_param.substring(1,$brand_length))
+  #end
+#end
+
+#if($vendorSettingsDTO.templateName == "myaccount" || $vendorSettingsDTO.templateName == "home_store" || $vendorSettingsDTO.templateName == "static-content" )
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quick_bar.vm")
+#end
+
+<div class="">
+<div class="navbar">
+  <div class="navbar-inner search-bar">
+    <div class="container">
+      <div class="nav-collapse">
+
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_primary.vm")
+
+        	
+      <form action="asearch.html" onsubmit="checkKey();" id="searchForm" class="navbar-search">
+         <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId"/>
+         <input name="keyword" value="$!keyword" id="key2" type="text" placeholder="Search: NWS# / mfg# / Description" class="search-query span5"/>
+         <button class="btn btn-primary" type="submit">GO</button>
+         <a href="advancedsearch.html?vid=$vendorSettingsDTO.vendorId">Advanced</a>
+
+      </form>
+
+      </div><!-- /.nav-collapse -->
+      <div class="nav-collapse pull-right">
+         ##<form class="form-inline navbar-search quick-add" action="action.html" method="GET">
+            <div class="form-inline navbar-search quick-add">
+           <input type="hidden" name="mode"        value="addItems"/>
+           <input type="hidden" id="line_vid"         value="$vendorSettingsDTO.vendorId"/>
+           <input type="hidden" name="itemscount"  value="1"/>
+           <input type="hidden" name="url"         value="basket.html?vid=$vendorSettingsDTO.VendorId"/>
+
+           <label for="nws-id">NWS # </label>
+           <input type="text" name="ic1" id="line_itemCode" class="pn" placeholder="part number "/>
+           <label for="nws-qty">Qty. </label>
+           <input type="text" name="qty1" id="line_qty" class="qty"/>
+
+           <button class="btn btn-primary" id="line_addButton" type="submit"><span>Add</span></button>
+           <div id="line_error1"></div>
+
+    <div id="line_loading" class="ac"><img src="store/20070723002/assets/themes/desktop2_en/images/loading.gif"></div>        
+    <div id="line_notification"></div>
+
+</div>
+        ##</form>
+      </div>
+    </div>
+  </div>
+</div>
+</div> <!-- end fluid -->

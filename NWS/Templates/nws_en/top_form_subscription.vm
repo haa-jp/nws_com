@@ -1,0 +1,14 @@
+<div class="alert alert-info alert-block">
+
+	<h3>Northern Wholesale Supply, Inc. Promotion &amp; Update Emails</h3>
+
+	<p> Northern Wholesale Supply and our vendors offer specials, sales, promotions and updates to our customers on a subscriber-only basis. Email flyers let us quickly tell you about our best deals and newest products. We also use email for updates about our annual Super Shows.</p>
+	<p> We limit email communication to the highlights - we don't believe that adding messages to your inbox every day, or even every week, is worth your time. We'll send you only the best deals and most important updates.</p>
+	<p> Whether you're interested in RV &amp; Manufactured Housing, Marine,Powersports or a combination tailored to your business, you can tailor your email preferences to receive the communication that matters to you.</p> 
+	<div class="alert">
+		<p> We guard your information as well as we guard our own: we'll never sell it, and our servers are protected with the best firewall available.  <a class="internal-link" href="$seourl.encodeURL("store.html?cid=22778&vid=$vendorSettingsDTO.vendorId")">#springMessage("vm.logincustomer.link1")</a></p>
+	</div>
+
+	<p><b>Interested?</b> Please Fill in the form below.</p>
+</div>
+

@@ -1,0 +1,98 @@
+	<!-- Modal Override -->
+	<style type="text/css">
+		
+		.modal {
+		    left: 50%;
+		    margin-left: -340px;
+		    width: 850px;
+		  }
+	</style>
+	
+	
+		<div class="container">
+			<div class="row-fluid">
+<!-- -->
+			</div> <!-- end row -->
+			
+	
+			
+
+			
+<div id="example" class="modal hide fade in" style="display: none; ">
+            <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+              <h3>Purchase Order Transfer </h3>
+            </div>
+            <div class="row-fluid">
+            	<div class="span10 offset1">
+					<h3>It's Easy... </h3>
+					<p> To help speed things up for you, please use the following form to select your Purchase Order format then, copy and paste the contents of your purchase order into the text field provided. Please do NOT include the column headings in the information you submit as it may cause problems. </p>
+					<p> Then add your items to the shopping cart by pressing the &quot;Add items to Cart&quot; button. If your receive any errors they will be displayed indicating where, and you can attend to the problem.</p>
+				</div>
+            </div>
+            <div class="modal-body">
+            <div class="tabbable tabs-left">
+              <ul class="nav nav-tabs">
+						<li class="active"> <a href="#po7" data-toggle="tab"> Text or Tab Delimeted.</a> </li>
+						<li class=""> <a href="#po1" data-toggle="tab"> DealerVu</a> </li>
+						<li class=""> <a href="#po2" data-toggle="tab"> Light Speed</a> </li>
+						<li class=""> <a href="#po3" data-toggle="tab"> Quick Books</a> </li>
+						<li class=""> <a href="#po4" data-toggle="tab"> Systems 2000 Galaxy V2</a> </li>
+						<li class=""> <a href="#po5" data-toggle="tab"> Systems 2000 Galaxy V3</a> </li>
+						<li class=""> <a href="#po6" data-toggle="tab"> Total Control</a> </li>
+					</ul>
+					<div class="tab-content">
+			
+
+
+
+						<div class="tab-pane fade in active" id="po7">
+							<h3>Simple Text files</h3>
+							<p><b>NOTES:</b> One item per line. First position must be the NWS Part Number, Last position must be the itme's quantity. <br>
+								Also works with Microsoft Excel or other spreadsheets with just a simple copy and paste.
+							</p>
+						</div>
+						<div class="tab-pane fade" id="po1">
+							<h3>DealerVu&reg; </h3>
+							<p><b>NOTES:</b>DealerVu, Innovative Dealership Management System. <a href="http://www.dealervu.com/support/" tagret="_blank"> Contact Support</a> </p>						</div>
+						<div class="tab-pane fade " id="po2">
+							<h3>LightSpeed&trade; </h3>
+							<p><b>NOTES:</b> Complete POS Solutions. <a href="http://www.lightspeedretail.com/support/" tagret="_blank"> Contact Support</a> </p>
+						</div>
+						<div class="tab-pane fade" id="po3">
+							<h3>Quick Books&reg; </h3>
+							<p><b>NOTES:</b> The #1 accounting solution for small business.  <a href="http://support.quickbooks.intuit.com/support/" tagret="_blank"> Contact Support</a> </p></p>
+						</div>
+						<div class="tab-pane fade" id="po4">
+							<h3>Galaxy&reg; 22 by Systems 2000 </h3>
+							<p><b>NOTES:</b> </p>
+						</div>
+						<div class="tab-pane fade" id="po5">
+							<h3>Galaxy&reg; v3 by Systems 2000 </h3>
+							<p><b>NOTES:</b> </p>
+						</div>
+						<div class="tab-pane fade" id="po6">
+							<h3>Total Control&reg; </h3>
+							<p><b>NOTES:</b> Software for total control of your Business. <a href="http://www.tcsoft.com/" target="_blank"> Learn more</a></p>
+						</div>
+					</div>
+					<div class="control-group js-basket-input">
+						<div class=""><textarea class="js-basket-textarea"></textarea></div>
+						<input type="button" value="Add Items to Cart" class="btn btn-primary addToCartBtn js-basket-add-btn">
+						##<div class="pologo"><button value="logo"></button></div>
+					</div>
+				</div>      
+            </div>
+            <div class="modal-footer">
+              <a id="closemodal" class="btn" data-dismiss="modal">close</a>
+ <!--             <a href="#" class="btn btn-success">confirm</a> -->
+            </div>
+          </div>
+##<p><a data-toggle="modal" href="#example" class="btn btn-primary btn-large js-basket-po-transfer-btn">PO Transfer</a></p>
+
+</div>
+			
+			
+				</div>
+				<!-- end container -->

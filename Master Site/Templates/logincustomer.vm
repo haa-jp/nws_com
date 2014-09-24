@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>$storeName - #springMessage("vm.logincustomer.title")</title>
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+      <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$storeSkinName/css/app.css" media="all"/>
+</head>
+  <body id="login" class="nws">
+    ############################ Header ####################################
+#if($vendorSettingsDTO.themeId == $storeSkinId)
+    #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+#else
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+#end
+    ############################ End Header ################################
+    
+    ############################ Search Bar ################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
+    ############################ End Search Bar ############################
+
+    <div id="wrapper" class="row-fluid">
+      <div class="span10 offset1" id="right-col">
+
+    ############################ Page Content #############################
+        <div class="content pad70">
+          <h2>Welcome, Please #springMessage("vm.logincustomer.title")</h2>
+          <div id="loginBox" class="row-fluid"> 
+            <div class="span6">
+              <div class="well">
+                <h3>#springMessage("nw.vm.logincustomer.returning")</h3> 
+                <form id="nws-form" class="login-form" name="frm" method="POST" action="signin.html?vid=${vendorSettingsDTO.vendorId}">
+#springBind("loginViewDTO.doSubmit")
+                  <input type=hidden id=hiddenlogin name="$status.expression">
+#springBind( "loginViewDTO.*" )
+#if($status.errors.errorCount>0)
+                  <div class="alert alert-error">
+                    <p><strong>Warning!</strong></p>
+                    <ul>
+  #foreach($error in $status.errorMessages) 
+                      <li>$error</li>
+  #end
+                    </ul>
+                  </div>
+#end
+                  <div>
+                    <label for="email">#springMessage("word.userid"): <em>( Typically your email address )</em></label> 
+                    <input value="" name="login" id="login" class="login_content" maxlength="50" tabindex="1" type="text"  /> 
+                  </div>
+                  <div>
+                    <label for="password">#springMessage("word.password"):</label> 
+                    <input name="password" id="password" class="login_content"  maxlength="20" tabindex="2" type="password" />
+                  </div>
+                    
+                  <div>
+                    <input type="hidden" name="mode" value="Log In">
+                    <input class="btn btn-primary" type="submit" value="#springMessage('vm.logincustomer.title')" onclick="JavaScript:document.frm.hiddenlogin.value='Log In';"/>
+                    <input type="hidden" value="$!authenticationSubmitURL" name="Log In">                    </div>                    
+                    <br/>
+                    <a class="login_content" href="forgot_password.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType} == 1)&mt=${loginViewDTO.memberType}#else&mt=3#end" >#springMessage('vm.logincustomer.link2')</a>
+
+  #if(${storeOptions.properties.get("FACEBOOK.EnableLogin")}=='Yes' || ${storeOptions.properties.get("TWITTER.EnableLogin")}=='Yes')
+                    <p id="features_login">
+    #if(${storeOptions.properties.get("FACEBOOK.EnableLogin")}=='Yes')
+                      <input type="image" src="assets/plugins/extlogin/facebook_connect.gif" alt='#springMessage("vm.externalaccounts.loginwithfacebook")' style="border: none; margin: 10px 7px 0px 0px;"  href="#" target="_top" onclick="display_login_window('facebookLogin.html?vid=${vendorSettingsDTO.vendorId}&#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}#end','twitter_login');return false;"/>
+    #end
+    #if(${storeOptions.properties.get("TWITTER.EnableLogin")}=='Yes')
+                      <div>
+                        <input type="image" src="assets/plugins/extlogin/twitter.jpg" alt="#springMessage("vm.externalaccounts.loginwithtwitter")" style="border: none; margin: 10px 7px 0px 0px;" href="#" target="_top" onclick="display_login_window('twitterLogin.html?vid=${vendorSettingsDTO.vendorId}&#if(${loginViewDTO.memberType} == 1)&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26vid%3D${vendorSettingsDTO.vendorId}#end','twitter_login');return false;"/>
+                      </div>
+
+    #end
+                    </p>
+  #end
+                </form>
+              </div>
+            </div><!--end span6--> 
+
+            <div class="span6 vertSeparator" > 
+              <h2>#springMessage("vm.logincustomer.starthere")</h2>
+              <p>
+                #springMessage("vm.logincustomer.msg")
+              </p> 
+
+              <p>
+                <input type="button" value="#springMessage('vm.logincustomer.creat')" class="btnLogin btnclass" onclick="window.location='register.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26fr%3Dregister#end';"/>
+              </p>
+
+              <p>
+                <a href="guestregister.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26fr%3Dregister%26vid%3D${vendorSettingsDTO.vendorId}#end">
+                  Create a Guest Account
+                </a>
+              </p>
+            </div><!--span6-->
+
+          </div><!--row-fluid-->
+        </div><!-- end content -->
+    ############################ Ends Page Content ########################
+      </div>
+    </div>
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################    
+    
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+
+  </body>
+</html>

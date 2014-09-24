@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>#springMessage("vm.checkout_shipping.title")</title>
+    <meta name="interestgroup" content="tp">
+    <meta name="prodtype" content="">
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+  </head>
+  <body id="checkout" class="checkout">
+    ############################ Header ####################################
+    #if($vendorSettingsDTO.themeId == $storeSkinId)
+        #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+      #else
+        #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+    #end
+    ############################ End Header ################################
+    <div id="wrapper" class="row-fluid">
+
+      <div class="container">
+        <div class="row-fluid">
+          <ul class="co-breadcrumb step3">
+            <li class="yi">
+              <a href="yourinfo.html?vid=$vendorSettingsDTO.vendorId">#springMessage("vm.checkout_customerinfo.infor")</a>
+            </li>
+            <li class="sp"><strong>#springMessage("vm.checkout_customerinfo.shipping")</strong></li>
+            <li class="py">#springMessage("vm.checkout_customerinfo.payment")</li>
+            <li class="rv">#springMessage("vm.checkout_customerinfo.placeorder")</li>
+            <li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>#springMessage("vm.checkout_customerinfo.shipping")</h2>
+        #parse($checkout_shippingDTO.getItems().get(0).get('checkout_shipping'))
+        <form name="frm" action="shipping.html" method="POST" id="nws-form">
+          <input type="hidden" name="t">
+          <input type="hidden" name="productidx" value="0">
+          <input type="hidden" name="addressidx" value="0">
+          <input type="hidden" name="shipaddressid" value="0">
+
+          #if(!$currencyInUse)
+            #foreach($cur in $storeCurrencies)
+              #if($cur.def==1)
+                <input type="hidden" name="c" value="$cur.id" />
+              #end
+            #end
+          #else
+            <input type="hidden" name="c" value="$currencyInUse" />
+          #end
+
+          <table class="table">
+            <colgroup>
+              <col class="col1" />
+              <col class="col2" />
+              <col class="col3" />
+              <col class="col4" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th scope="col">#springMessage("vm.register.description")</th>
+                <th scope="col">#springMessage("vm.register.shipto")</th>
+                <th scope="col" class="first-col">#springMessage("vm.register.qty")</th>
+                <th scope="col">#springMessage("vm.register.total") </th>
+              </tr>
+            </thead>
+
+            <tbody>
+              #set($key = 0)
+              #set($address_count=0)
+              #foreach($product in $checkoutViewDTO.details.products)
+                #set ($num = 0)
+                #set($needShip = "Y")
+
+                #foreach($property in $product.properties)
+                  #if($property.propName == "no_ship_info")
+                    #if($property.propValue == "Y")
+                      #set($needShip = "N")
+                    #end
+                  #end
+                #end
+
+
+                #foreach($shipaddr in $product.shipAddress)
+                  #set($address_count = $address_count + 1)
+
+                    <tr>
+                      <td>$product.description</td>
+                      <td>
+                        #if($product.itemtype!=2)
+                          #springBind( "checkoutViewDTO.shipTypes.currentType")
+                          #if($address_count==1)
+                            <select class="select-shipping-address" name="ADDRESS_${key}_${num}" onChange="upAddress($key,$num,'add')" #if($product.itemtype==2) disabled #end>
+                              <option value="-1" >#springMessage("vm.checkout_shipping.selectadd")</option>
+                              #foreach($address in $customerAddressDTO)
+                                <option  value="$address.addressid" #if("$address.addressid"=="$shipaddr.shipaddressid") selected #end >
+                                  $address.nickname
+                                </option>
+                                #if("$address.addressid"=="$shipaddr.shipaddressid")
+                                  #set($selected_address="$address.addressid")
+                                #end
+                              #end
+                              <option value="0" >#springMessage("vm.checkout_shipping.newaddress")</option>
+                            </select>
+                          #else
+                            <input type="hidden" name="ADDRESS_${key}_${num}" class="address-no-split" value="$!selected_address" />
+                          #end
+                        #end
+                      </td>
+                      <td class="ac">$shipaddr.qty</td>
+                      <td class="ar">
+                        $number.format('currency',$checkoutViewDTO.formatter.currency($shipaddr.totalPrice),$viewStoreCurrency.getLocale())
+                      </td>
+                    </tr>
+                    #if($shipaddr.itemTaxDetails)
+                      #if($shipaddr.itemTaxDetails.nationtax>0.0 || $shipaddr.itemTaxDetails.regiontax>0.0  ||  $shipaddr.itemTaxDetails.citytax>0.0)
+                        <tr>
+                          <td colspan="2" class="empty-cel">&nbsp;</td>
+                          <td>#springMessage('vm.register.sgtaxdetail') $shipaddr.address.address.nickname</td>
+                          <td>
+                            #if($shipaddr.itemTaxDetails.nationtax>0.0)
+                              $shipaddr.itemTaxDetails.nationtaxname : <br/>$$checkoutViewDTO.formatter.currency($shipaddr.itemTaxDetails.nationtax) ($regExp.round($math.mul($shipaddr.itemTaxDetails.nationtaxrate,100), 2) %)<br>
+                            #end
+
+                            #if($shipaddr.itemTaxDetails.regiontax>0.0)
+                              $shipaddr.itemTaxDetails.regiontaxname: <br/>$$checkoutViewDTO.formatter.currency($shipaddr.itemTaxDetails.regiontax) ($regExp.round($math.mul($shipaddr.itemTaxDetails.regiontaxrate,100), 3) %)<br>
+                            #end
+
+                            #if($shipaddr.itemTaxDetails.citytax>0.0)
+                              $shipaddr.itemTaxDetails.citytaxname: <br/>$$checkoutViewDTO.formatter.currency($shipaddr.itemTaxDetails.citytax) ($regExp.round($math.mul($shipaddr.itemTaxDetails.citytaxrate,100), 2) %) <br>
+                            #end
+
+                            #if($shipaddr.itemTaxDetails.countytax>0.0)
+                              $shipaddr.itemTaxDetails.countytaxname: <br/>$$checkoutViewDTO.formatter.currency($shipaddr.itemTaxDetails.countytax) ($regExp.round($math.mul($shipaddr.itemTaxDetails.countytaxrate,100), 2) %) <br>
+                            #end
+
+                            #if($shipaddr.itemTaxDetails.placetax>0.0)
+                              $shipaddr.itemTaxDetails.placetaxname: <br/>$$checkoutViewDTO.formatter.currency($shipaddr.itemTaxDetails.placetax) ($regExp.round($math.mul($shipaddr.itemTaxDetails.placetaxrate,100), 2) %) <br>
+                            #end
+
+                            #if($shipaddr.itemTaxDetails.othertax1>0.0)
+                              $shipaddr.itemTaxDetails.othertax1name:<br/>$$checkoutViewDTO.formatter.currency($shipaddr.itemTaxDetails.othertax1) ($regExp.round($math.mul($shipaddr.itemTaxDetails.othertaxrate1,100), 2) %) <br>
+                            #end
+
+                            #if($shipaddr.itemTaxDetails.othertax2>0.0)
+                              $shipaddr.itemTaxDetails.othertax2Name:<br/>$$checkoutViewDTO.formatter.currency($shipaddr.itemTaxDetails.othertax2) ($regExp.round($math.mul($shipaddr.itemTaxDetails.othertaxrate2,100), 2) %) <br>
+                            #end
+                          </td>
+                        </tr>
+                      #end
+                    #end
+                    #set($num = $num+1)
+                #end
+                #set($key = $key + 1)
+              #end
+            </tbody>
+            <tfoot class="totals">
+              <tr class="subtotal">
+                <td colspan="2" class="empty-cel"></td>
+                <td class="ar vat lbl">#springMessage("vm.register.subtotal") ($checkoutViewDTO.details.totalQty #if($checkoutViewDTO.details.totalQty > 1)#springMessage("vm.register.items")#else #springMessage("vm.register.item")#end):</td>
+                <td class="ar vat val">$number.format('currency', $checkoutViewDTO.details.total, $viewStoreCurrency.locale)</td>
+                <input type="hidden" value="$subtotal" id="subtotal" name="subtotal">
+              </tr>
+              #if($math.round($checkoutViewDTO.details.totalDiscount )> 0)
+                <tr class="discount">
+                  <td colspan="2" class="empty-cel">&nbsp;</td>
+                  <td class="ar vat lbl">#springMessage("vm.register.discounts"):</td>
+                  <td class="ar vat val">$number.format('currency', $checkoutViewDTO.details.totalDiscount, $viewStoreCurrency.locale)</td>
+                </tr>
+              #end
+
+              #set($tempgiftcert=0)
+              #if($checkoutViewDTO.giftCertificate.giftCertificates && $checkoutViewDTO.giftCertificate.giftCertificates.size() > 0 )
+                <tr class="discount">
+                  <td colspan="2" class="empty-cel">&nbsp;</td>
+                  <td class="ar vat lbl">#springMessage("vm.register.giftapplied"):</td>
+                  <td class="ar vat val">$number.format('currency', $checkoutViewDTO.giftCertificate.totalAvailable, $viewStoreCurrency.locale)</td>
+                </tr>
+                #set($tempgiftcert=$checkoutViewDTO.giftCertificate.totalAvailable)
+              #end
+
+              <tr class="shipping">
+                <td colspan="2" class="empty-cel">&nbsp;</td>
+                <td class="ar vat lbl">#springMessage("vm.register.shipping"):</td>
+                <td class="ar vat val">$number.format('currency',$checkoutViewDTO.details.shipTotal,$viewStoreCurrency.getLocale())</td>
+              </tr>
+
+              #if($checkoutViewDTO.details.perShippingDiscount>0)
+                <tr class="discount" id="shippingDiscount">
+                  <td colspan="2" class="empty-cel">&nbsp;</td>
+                  <td class="ar vat lbl">
+                    <span id="shippinglab1">#springMessage("vm.basket.shippingdiscount"):</span>
+                  </td>
+                  <td class="ar vat val">$number.format('currency', $checkoutViewDTO.details.perShippingDiscount,$viewStoreCurrency.locale)</td>
+                </tr>
+              #end
+
+              <tr class="tax">
+                <td colspan="2" class="empty-cel">&nbsp;</td>
+                <td class="ar vat lbl">
+                  <span id="taxlab1">#springMessage("vm.register.tax"):</span>
+                </td>
+                <td class="ar vat val">$number.format('currency', $checkoutViewDTO.details.taxTotal, $viewStoreCurrency.locale)</td>
+              </tr>
+
+              <tr class="total">
+                <td colspan="2" class="empty-cel">&nbsp;</td>
+                <td class="ar vat lbl">#springMessage("vm.register.totalbill"):</td>
+                <td class="ar vat val" id="totalcost">
+                   #set($totalwithdis=$math.sub($math.sub($checkoutViewDTO.details.total,$checkoutViewDTO.details.totalDiscount),$checkoutViewDTO.details.perShippingDiscount))
+                   $number.format('currency', $math.abs($math.sub($math.add($math.add(${totalwithdis},${checkoutViewDTO.details.taxTotal}),${checkoutViewDTO.details.shipTotal}),${tempgiftcert})), $viewStoreCurrency.locale)
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+          <div class="form-actions">
+            <input class="btn btn-primary" type="submit" value="#springMessage('button.CONTINUE')" onclick="doSubmit(this.form,this.form.t,'payment')"/>
+           <input class="btn" type="button" value="#springMessage('button.CANCEL')" onclick="JavaScript:window.location.href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/yourinfo.html?vid=${vendorSettingsDTO.vendorId}' "/>
+            <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+          </div>
+        </form>
+
+      </div>
+
+    </div><!-- wrapper -->
+
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################
+
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+
+    <script src="store/$checkoutViewDTO.vendorId/assets/toggleDisplay.js"></script>
+    <script src="store/$checkoutViewDTO.vendorId/assets/limitText.js"></script>
+    <script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
+    <script>
+      function upAddress(productidx,addressidx,mode) {
+        var addressid="0";
+        if(mode != "split"){
+          addressid=eval("document.frm.ADDRESS_"+productidx+"_"+addressidx+".value");
+        }
+
+        if(mode=="add") {
+          if (addressid == 0) {
+              document.frm.t.value="add";
+            } else {
+              document.frm.t.value="update";
+            }
+            document.frm.productidx.value=productidx;
+            document.frm.addressidx.value=addressidx;
+            document.frm.shipaddressid.value=addressid;
+            jQuery('.address-no-split').val(addressid);
+            document.frm.submit();
+        }
+      }
+
+    </script>
+  </body>
+</html>

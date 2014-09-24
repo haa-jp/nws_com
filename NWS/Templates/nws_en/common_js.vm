@@ -1,0 +1,128 @@
+
+<input type="hidden" value="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname" name="themePath" />
+
+<!-- start common_js.vm -->
+<!-- <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.0.min.js"></script> -->
+<!-- <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/jquery/jquery-1.7.2.min.js"></script> -->
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/megamenu.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/jquery.cookie.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/login.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/lineItemAdd.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/lineItemAdd_events.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/bootbox/bootbox.min.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/bootstrap/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/toastr/toastr.js "></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/storejs/store.min.js "></script>
+  ## The overrides javascript below overrides any default commerce shop behaviour and implements its own.  Its usually make of copy/paste segments of commerce_shop code with some tweaks
+
+##if($pageTileDictionaryDTO.templateName != "order_builder.vm")
+##  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/overrides.js"></script>
+##end
+
+<!-- End common_js.vm -->
+  <!-- Google Analytics Code - Modify the Account number the UA for your business and place it here  -->
+  <script type="text/javascript">
+  if (document.location.href.indexOf('$baselink') == -1 ) {
+  var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+  document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+  }
+  
+  if (document.location.href.indexOf('$baselink') == -1 ) {
+  var pageTracker = _gat._getTracker("UA-30381655-1"); 
+  pageTracker._trackPageview();
+  }
+  </script>
+
+<script type="text/javascript">
+  jQuery("#line_itemCode").focus()
+  jQuery("#nws-add").bind('click', function(){
+    if(jQuery("#line_itemCode").val() == '' || jQuery("#line_qty").val() == ''){
+      return false;
+    }
+    
+    var params = 'mode=addItems&ic1='+ jQuery("#line_itemCode").val().replace(/\./g, "-") +'&qty1='+ jQuery('#line_qty').val() +'&vid='+ $vendorSettingsDTO.vendorId +'&noredirect';
+    jQuery("#line_itemCode").val('')
+    jQuery('#line_qty').val('')
+    toastr.success('Processing Item to Cart...')
+
+    jQuery.ajax({
+      url: 'action.html',
+      type: 'get',
+      data: params,
+      dataType : 'json',
+      success: function(data){
+        
+        toastr.success('Item Added to Cart!') 
+          
+        jQuery.ajax({
+          url: 'basket.ajx',
+          data: 'vid='+$vendorSettingsDTO.vendorId,
+          type: 'get',
+          dataType: 'json',
+          success: function(response){
+            var result = response['__Result'],
+            len = result['basketItems'].length;
+//            var items = data.Products.length;
+            var total = 0;
+            var str = '';                
+            
+            total = parseFloat(result.total);
+            jQuery('.mini-basket-total').text('$'+total.toFixed(2));
+
+/*            for(var i=0; i<len; i++){
+ *             total += parseFloat(data.Products[i].totalPrice.replace(',',''));
+ *           }
+ *           jQuery('.mini-basket-qty').text(items)
+ *           jQuery('.mini-basket-total').text('$'+total.toFixed(2));
+ *                      
+ */           if(document.location.href.indexOf('basket.html') >= 0) {
+               document.location.reload();
+            }
+          },
+          error: function(){
+            toastr.error('Failed Processing Item to Cart!')
+          } 
+        });
+
+      }
+    });
+  });
+  </script>
+
+<script type="text/javascript">
+  function checkKey() {
+    var keyword = document.getElementById('key');
+    if (null == keyword) {
+    	var keyword = new Object();
+    	keyword.value = $vendorSettingsDTO.vendorId;
+    } else {
+    	if (keyword.value.length=0)
+      keyword.value = $vendorSettingsDTO.vendorId;
+  }
+}
+</script>
+<script type="text/javascript">
+function logoSwap() {
+
+  var tltw =  jQuery(".navbar-inner").width();
+  var logow = jQuery("a.logo").width(); //279
+  var navw =  jQuery("ul.nav").width(); //229 on login
+    
+  if(logow + navw > tltw) {
+    jQuery("a.logo").fadeOut("slow");
+  } else {
+    jQuery("a.logo").fadeIn("slow");
+  }
+}
+jQuery(document).ready(function() {
+    logoSwap();
+    jQuery(window).resize(function(){
+        logoSwap();
+    });
+});
+</script>
+   
+<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/jquery/jquery-ui-1.8.23.custom.min.js"></script>
+<!-- Griz Start -->
+
+<!-- Griz End -->

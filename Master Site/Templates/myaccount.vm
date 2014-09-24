@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+#set($mode = $request.getParameter("mode"))
+#set($menu = $request.getParameter("mn"))
+#if($mode == "billingaddress")
+  $response.sendRedirect("myaccount.html?mode=customerinfo&vid=$vendorSettingsDTO.vendorId")
+#end
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <base href="$baselink">
+    <link rel="shortcut icon" href="/favicon.png">
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" />
+  </head>
+
+  <body class="myaccount nws">
+    ############################ Header ####################################
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/a_banner.vm")
+    ############################ End Header ################################
+
+    ############################ Search Bar ################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
+    ############################ End Search Bar ############################
+
+    <div id="wrapper" class="row-fluid">
+      <div class="span2" id="left-col">
+        #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/accountbar.vm")
+      </div>
+
+      <div class="span10" id="right-col">
+        <form class="form-horizontal" action="" method="post" name="frm" >
+          <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+            #if($myAccountDTO.subtemplate)
+              #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/$myAccountDTO.subtemplate")
+            #end
+        </form>
+      </div>
+    </div> <!-- end wrapper -->
+
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################
+
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/megamenu.js"></script>
+    <script type="text/javascript">
+    var panels = new Array('myinfo-content','billingadd-content','shippingadd-content','changepass-content');
+    var tabStubs = new Array('myinfo-menu','billing-menu','shippingadd-menu','changepass-menu');
+    var selectedTab = null;
+    var selectedStub = null;
+    function swapTab(tab, name, stub) {
+      selectedTab = tab;
+    for(i = 0; i < panels.length; i++) {
+    document.getElementById(panels[i]).style.display = (name == panels[i]) ? 'block':'none';
+    }
+    selectedStub = stub;
+    for(i = 0; i < tabStubs.length; i++) {
+    document.getElementById(tabStubs[i]).className = '';
+    }
+    document.getElementById(selectedStub).className = 'current';
+    //return false;
+    }
+
+    function changeResion(countryid) {
+    var c = document.getElementById("province");
+    var oc = document.getElementById("otherprovince");
+    c.length=0;
+       if(countryid > 0){
+            #foreach($country in ${myAccountDTO.countyInUse})
+              if(countryid == ${country.country.id})  {
+            #if($country.provinces.size()>0)
+              c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");##-1 stand for this country has region but select none
+               #foreach($province in ${country.provinces})
+               c.options[c.length]=new Option("$province.province.name","$province.province.id");
+               #end
+            #else
+              c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","0");
+              ##0 stand for this country dont have region which need display input field and go around back-end validation
+            #end
+             }
+           #end
+          } else{
+          c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");
+         }
+        if(c.options[0].value== 0){
+          c.style.display = "none";
+          oc.style.display = "block";
+           } else {
+          c.style.display = "block";
+          oc.style.display = "none";
+           }
+
+    }
+
+
+    function initCap(inputObject) {
+       var str = inputObject.value;
+       if (str.length > 0) {
+          var words = str.split(" ");
+          var i = 1;
+          str = words[0].substring(0,1).toUpperCase() + words[0].substring(1, words[0].length);
+          while (i < words.length) {
+             str += " " + words[i].substring(0,1).toUpperCase() + words[i].substring(1, words[i++].length);
+          }
+
+          inputObject.value = str;
+       }
+
+    }
+
+    </script>
+
+    <script type="text/javascript">
+      function check_country(){
+        if (document.getElementById('country_id'))
+        {
+          var getcountry=document.getElementById('country_id').value;
+          var getregion=document.getElementById('province').value;
+          if (getregion==0)
+          {
+            changeResion(getcountry);
+          }
+        }
+      }
+
+      $(document).ready(function(){
+        check_country();
+      });
+    </script>
+
+  </body>
+</html>
+

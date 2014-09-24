@@ -1,0 +1,15 @@
+<div>
+	<h4>Looking for a wholesale parts supplier?</h4>
+	<p>If your business is in our industry, NWS offers the products you need and unparalleled service.  Check out our <a href="$seourl.encodeURL("store.html?vid=vendorSettingsDTO.vendorId&cid=23057")" alt="Apply for an Account">Wholesale Account Application</a> to view account requirements and apply for an account.</p>
+	<p>Please take a moment to review our Account Requirements.</p>
+	
+	<div>
+		<a class="btn btn-primary"
+			href="$seourl.encodeURL("store.html?vid=vendorSettingsDTO.vendorId&cid=23053")" 
+			title="Become a dealer"> Account Requirements</a></div>
+	<br />	
+	<div class="alert">
+		<p><strong>NOTICE:</strong> <br /> 
+		As a wholesale distributor, neither Northern Wholesale Supply nor northernwholesale.com offer retail or consumer-direct sales.  An approved wholesale account is required to view complete site and pricing.</p>
+	</div>
+</div>

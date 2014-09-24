@@ -1,0 +1,479 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+#set($itemRow = $singleItemDTO.getItem(0))
+#set($item = $pageTile.getItemObject($singleItemDTO, $itemRow , "i"))
+#set($price = $item.itemPrice)
+#set($printitemid = $pageTile.getItemObject($singleItemDTO, $itemRow , "itemid"))
+
+#set($tmp= $vendorInfoDTO.getItem(0))
+#set($vendor= $pageTile.getItemObject($vendorInfoDTO, $tmp, "v"))
+
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+
+
+#if ($pageTileDictionaryDTO)
+  ###set ($storeMainCategoriesDTO=$pageTileDictionaryDTO.getPageTile("storeMainCategoriesDTO") )
+  #set ($childItemsHomeDTO=$pageTileDictionaryDTO.getPageTile("childItemsHomeDTO") )
+  #set ($catDropMenuDTO=$pageTileDictionaryDTO.getPageTile("catDropMenuDTO") )
+#end
+
+#set($metadescription= $item.metadescription)
+#set($keywords= $item.keywords)
+#set($pagetitle= $item.pagetitle)
+
+#if(!${welcomeMatDTO.loggedIn})
+<script type="text/javascript">
+   window.location = "$baselink/signin.html?vid=20120606532&mt=1";
+</script>
+#end
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="description" content="$!metadescription" />
+    <meta name="keywords" content="$!keywords" />
+    <base href="$baselink" />
+    <title>$pagetitle</title>
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/deliveryoption/deliveryoption.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/showimage/showimage.css">
+    <script language="javascript" src="assets/commercelib/ajax/ajax_object.js"></script>
+    <script language="javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
+    <script type="text/javascript" src="assets/commercelib/showimage/showimage.js"></script>
+
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/5_en/css/reset-fonts-grids.css">
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/5_en/css/layout.css" media="all" />
+    <script type="text/javascript">
+      var ns4 = (document.layers)? true:false;
+      var ie4 = (document.all)? true:false;
+      
+      function PopWindow(myimage,w,h,pos)
+      {
+        var win=null;
+        pos="center";
+        if(pos=="random")
+        {
+          myleft = (screen.width)?Math.floor(Math.random()*(screen.width-w)):100;
+          mytop = (screen.height)?Math.floor(Math.random()*((screen.height-h)-75)):100;
+        }
+        if(pos=="center")
+        {
+          w = (screen.width)?(screen.width-60):760;
+          h = (screen.height)?(screen.height-100):540;
+          myleft = (screen.width)?(screen.width-w)/2:60;
+          mytop = (screen.height)?(screen.height-h-30)/2:60;
+        }
+        else if((pos!="center" && pos!="random") || pos==null)
+        {
+          myleft=10;
+          mytop=10;
+        }
+        settings = "width=" + w + ",height=" + h + ",top=" + mytop + ",left=" + myleft + ",scrollbars=yes,location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=yes";
+        win = window.open("","",settings);
+        if(win!=null)
+        {
+          var mypagecontent="<ht"+"ml><bo"+"dy><he"+"ad><ti"+"tle>- Click window to close</ti"+"tle><BASE href="+"$baselink"+"></he"+"ad>";
+          mypagecontent+="<bo"+"dy bgcolor=#FFFFFF marginheight=0 marginwidth=0 leftmargin=0 ";
+          mypagecontent+="topmargin=0 rightmargin=0 onBlur=javascript:self.close(); onClick=javascript:self.close();>";
+          mypagecontent+="<cen"+"ter><ta"+"ble align=center height=460 width=100% border=0><tb"+"ody valign=middle><tr valign=middle><td align=center valign=middle >";
+          mypagecontent+="<p><img src="+myimage+" name=image>";
+          mypagecontent+="</td></tr></tb"+"ody></tab"+"le></cent"+"er></b"+"ody></ht"+"ml>";
+          win.document.write(mypagecontent);
+          win.document.close();
+        }
+        win.focus();
+      }
+
+      function setAddItems()
+      {
+         document.all.addItemsIframe.src="action.html?vid=$vendorSettingsDTO.vendorId&mode=addItems&iid1=$item.itemid&qty1=1&url=basket.html%3Fvid%3D$vendorSettingsDTO.vendorId";
+      }
+
+      function checkSelectEl(matchstr)
+      {
+        var count=0;
+        var alertmsg="";
+        var selectArray = document.getElementsByTagName('select');
+
+        for(var i=0; i<selectArray.length; i++)
+        {
+          var selectAttr = selectArray[i];
+          if (selectAttr && beginWith(selectAttr.name, matchstr))
+          {
+            var opt=selectAttr.options[selectAttr.selectedIndex];
+            if(opt.value=="0")
+            {
+              var selectName=selectAttr.name;
+              var errHiddenId=selectName.substring(0, selectName.lastIndexOf(".") );
+              document.getElementById(errHiddenId).innerHTML="<div class=\"warning\">Please, select value</div>";
+              count++;
+            }
+
+          }
+        }
+
+        if(count==0)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }
+
+    </script>
+
+    <script type="text/javascript">
+      var panels = new Array('about-content','op-content'#if($item.longdesc2!=""), 'toc-content'#end,'tab-review');
+      var tabStubs = new Array('about-tab','op-tab'#if($item.longdesc2!=""), 'toc-tab'#end,'op-review');
+      var selectedTab = null;
+      var selectedStub = null;
+      
+      function swapTab(tab, name, stub) 
+      {
+        selectedTab = tab;
+        for(i = 0; i < panels.length; i++) 
+        {
+          document.getElementById(panels[i]).style.display = (name == panels[i]) ? 'block':'none';
+        }
+        selectedStub = stub;
+        
+        for(i = 0; i < tabStubs.length; i++) 
+        {
+          document.getElementById(tabStubs[i]).className = '';
+        }
+        document.getElementById(selectedStub).className = 'current';
+      }
+
+      function addItems(obj,objform,i)
+      {
+        var oo=eval(objform+".basketItems["+i+"].itemToProcess");
+        if(obj.checked)
+        {
+          oo.value="true";
+          objform.itemscount.value+=1;
+        }
+        if(obj.checked==false)
+        {
+          oo.value="false";
+          objform.itemscount.value-=1;
+        }
+      }
+
+      function changevalues(obj, frm, i){
+        if(obj.checked==true){
+          document.getElementsByName("basketItems["+i+"].itemToProcess")[0].value = "true";
+        }
+        if(obj.checked==false){
+          document.getElementsByName("basketItems["+i+"].itemToProcess")[0].value = "false";
+        }
+      }
+
+      function checkAccesoriesIsSelected(){
+        var count = document.getElementsByName('itemscount')[0].value;
+        //iterate over all accessories exept main item
+        for (i = 1; i < count; i++) {
+          if (document.getElementsByName("basketItems["+i+"].itemToProcess")[0] == null) continue;
+          if (document.getElementsByName("basketItems["+i+"].itemToProcess")[0].value == "true") {
+            return true;
+          }
+        }
+        alert('No accessories were selected to add to the shopping cart!');
+        return false;
+      }
+
+    </script>
+
+
+             
+
+  </head>
+  <body>
+    <div id="doc2" class="yui-t2">
+      <!-- Start header  james-->
+<div id="hd">   
+ <div id="logoMenu" class="yui-gf">
+        <div class="yui-u first">
+          <div id="logo"></div>
+        </div>
+    </div>
+</div>
+      <!-- End header -->
+      <!-- Start Content -->
+      <div id="bd"> 
+        <div id="yui-main">
+          <div>
+            <div class="yui-u">
+              <div id="breadcrumbs">              
+                                                                <div class="pf-link" align="right">
+                     <a  href="javascript:window.print()">Click to Print This Page</A>
+                     <br/> <br/>
+                     <a  href="javascript:window.close()">Close the window</a>
+                </div>        
+              </div>
+                
+#if($item.itemid)
+  #set($formName = "F$item.itemid")
+#end
+              <form method="POST" name="$formName" action="storeitem.html?$vendorSettingsDTO.vendorId&iid=$item.itemid">
+
+#set ($found = 'false')
+#if ( $item.itemid && $basketMap.get($item.itemid) )
+  #set ($found = 'true')
+  #set ($basketItemDTO =$basketMap.get($item.itemid))
+                <input type='hidden' name='basketItems[0].editMode' value='true'/>
+                <input type='hidden' name='basketItems[0].basketItemId' value='$basketItemDTO.basketItemId'/>
+#end
+                <input type='hidden' id='basketItems[0].inventoryHistoryId' name='basketItems[0].inventoryHistoryId' value='$!basketItemDTO.inventoryHistoryId'/>
+                <input type='hidden' name='basketItems[0].comment' value='$!basketItemDTO.comment'/>
+    
+                <div id="item">
+                  <div class="item-img">
+#if($item.itemimage!="")
+#if($item.itemimage.startsWith("http")) 
+                  <a href="$item.largeimage"  rel="showImage" title="$item.title"><img name="slika" src="$item.itemimage" border="0" alt="" width="189"/></a>
+                  <div class="hide">
+                    <a href="$item.largeimage" rel="showImage">click to view larger</a>
+                  </div>
+#else
+                  <a href="$item.largeimage"  rel="showImage" title="$item.title"><img name="slika" src="$item.itemimage" border="0" alt="" width="189"/></a>
+                  <div class="hide">
+                    <a href="$item.largeimage" rel="showImage">click to view larger</a>
+                  </div>
+#end
+#end
+                  </div>   
+                  <!-- End item-img -->
+                  <div class="item-desc">
+                    <div class="yui-gc">
+                      <div class="yui-u first">
+                        <h1 class="title">$item.title</h1>
+                        <p class="code">Product code: $item.code</p>
+                        <p class="shortDesc">$item.shortdesc</span>
+
+
+                        <!--simple view price-->
+#if($math.round($price.listPrice) > $math.round($price.price))
+                        <p>List Price:<span class="item-list-price" id="_listPrice_0">$$regExp.showPrice($price.listPrice)</span></p> 
+                              
+                              <p class="price-pf"><span id="_price_0">$$regExp.showPrice($price.price)</span></p>
+#elseif($price.listPrice.compare($price.listPrice.doubleValue(),0) == 0)
+                            <p class="noPrice" id="_price_0">Call for pricing</p>
+#else
+                          <p class="price-pf"><span  id="_price_0">$$regExp.showPrice($price.Price)<br/></span></p>
+#end
+                        <!--end price-->
+
+
+
+
+
+                                                                                               <div class="hide">
+
+#if($math.round($price.listPrice) > $math.round($price.price))         
+                        <p>List Price:<span class="item-list-price" id="_listPrice_0">$$regExp.showPrice($price.listPrice)</span></p>
+                        <div class="hide" id="_price_0">$price.price</div>
+                        <p class="price">
+    #if($math.sub($math.round($price.price), $price.price) > 0)
+      #set($cents = $math.sub(1, $math.sub($math.round($price.price), $price.price)))
+    #else
+      #set($cents = $math.abs($math.sub($math.round($price.price), $price.price)))
+    #end
+    #set($dollars = $math.toInteger($math.sub($price.price, $cents)))
+    #set($intCents = $math.toInteger($math.round($math.mul(100, $cents))))
+                          <span class="dollars">$$dollars</span><span class="cents">$intCents</span>
+                        </p>
+#elseif($price.listPrice.compare($price.listPrice.doubleValue(),0) == 0)  
+                        <p id="_price_0" class="noPrice">Call for pricing</p>                
+#else
+                        <p class="price">
+    #set($cents = $math.sub(1, $math.sub($math.round($items.Price), $items.Price)))
+    #set($dollars = $math.toInteger($math.sub($items.Price, $cents)))
+    #set($intCents = $math.toInteger($math.mul(100, $cents)))
+                          <span class="dollars">$$dollars</span><span class="cents">$intCents</span>
+                        </p>
+#end
+                                                                                                </div>
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_attributes.vm")
+#else
+      #parse("/$vendorSettingsDTO.vendorId/itemT_attributes.vm")
+#end
+
+#****************************************
+* input name="redirectmode" 
+* div id="success"  
+* Are used to show a confirmation when 
+* adding an item to the wishlist and  
+* staying on the same page or otherwise
+* redirect to wishlist.
+* value = "true" to add item & redirect
+* value = "false" to add item & stay
+****************************************#
+                     <input type="hidden" name="redirectMode" value="true"/>
+                        <div id="success"></div>
+                      </div><!-- End yui-u -->
+                       <div class="yui-u">
+                        <div class="item-options">
+                     <!--       <ul>
+                            <li class="stock">
+#set ($instock=$itemInventoryDTO.getItem(0).getInstock())
+                              <p>Availability:</p>
+                              <span>#if($instock && $instock.intValue()>0) In Stock #else Out of Stock #end</span>
+                            </li>
+                            <li class="qty">
+                              <label for="qty">Quantity:</label>
+#if ($basketItemDTO.quantity)
+  #set($itemqty=$basketItemDTO.quantity)
+#else
+  #set($itemqty=$item.qty)
+#end
+                              <input type='text' NAME='basketItems[0].quantity' ID='qty' VALUE='$itemqty' style="width: 25px;" maxlength="5"  onKeyDown="if (event.keyCode==13){document.VIEWCART.mode.value='updateBasket';document.VIEWCART.submit();event.keyCode=9;}" onchange="clearMessage('basketItems[0].quantity');" />    
+                            </li> 
+#if($price.listPrice.compare($price.listPrice.doubleValue(),0) != 0)
+                            <li>
+                              <input  type="image" src="store/$vendorSettingsDTO.vendorId/assets/images5/btnAddToCart.png" value="art" name="instantadd" onclick="if( checkSelectEl('basketItems[0].attributes') ){ checkInventory('$vendorSettingsDTO.vendorId', 'check','','basketItems[0].inventoryHistoryId',makeCompCode('$item.code'), 'qty','$itemqty','exec','document.${formName}.mode.value=\'addItem\';document.${formName}.submit();' ); } return false;"/>
+                            </li>
+#end
+#if($price.listPrice.compare($price.listPrice.doubleValue(),0) != 0)
+                            <li>
+                              <a href="wishlist.html?action=add&vid=$vendorSettingsDTO.vendorId"><img src="store/$vendorSettingsDTO.vendorId/assets/images5/btnViewWishlist.png" alt="View Wishlist" /></a>
+                            </li>
+                            <li>
+                              <a href="action.html?mode=addWishlist&iid=$item.itemid&vid=$vendorSettingsDTO.vendorId&qty=1&url=storeitem.html%3Fiid%3D$item.itemid%26vid%3D$vendorSettingsDTO.vendorId" onClick="setAddItems();"><img src="store/$vendorSettingsDTO.vendorId/assets/images5/btnWishlist.png" alt="Add to Wishlist" /></a> 
+                            </li>
+#end
+                            <li>
+                              <a href="javascript:void(null)" name='instantadd' onclick="document.${formName}.mode.value='addCompare'; ${formName}.submit();" ><img src="store/$vendorSettingsDTO.vendorId/assets/images5/btnCompare.png" alt="add to compare" /></a>
+                            </li>
+                            <li>
+                              <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank><img src="store/$vendorSettingsDTO.vendorId/assets/images5/btnPrinterf.png" alt="Printer Friendly" /></a>
+                            </li>
+                            <li>
+                              <a href="review.html?iid=$item.itemid&vid=$vendorSettingsDTO.vendorId"><img src="store/$vendorSettingsDTO.vendorId/assets/images5/btnReview.png" alt="add review" /> </a>
+                            </li>
+                          </ul>-->
+                        </div><!-- End item-options -->
+                      </div><!-- End yui-u -->
+                    </div><!-- End yui-ge -->
+                  </div><!-- End item-desc -->
+
+                  <div class="item-ldesc">
+                    <h4>Product Description</h4>
+#if($item.longdesc!="")              
+                    <p>$item.longdesc </p>
+#elseif($item.longdesc2!="")
+                    <p>$item.longdesc2</p> 
+#end
+
+
+
+  #set ($itemProperties = $propertiesDTO.getItems())
+  <div class="title subTitle2">Properties</div>
+  <div class="desc">
+          <table style="width: 450px;">
+                  <tbody>
+                          #foreach( $prop in $itemProperties )
+                          #if($prop.propvalue.length() > 0)
+                          <tr>
+                                  <td style="border: none;">$prop.propname:</td>
+                                  <td style="border: none;">$prop.propvalue</td>
+                          </tr>
+                          #end
+                          #end
+                  </tbody>
+          </table>
+  </div>
+
+
+
+#* loop to find the number of properties that are not null *#
+#set($propLenght = 0)
+#foreach($prop in $item.properties)
+  #if($prop)
+    #set($propLenght=$propLenght+1)
+  #end
+#end
+#set($propLenght=$math.sub($propLenght,1))
+                    <div class="properties"> <!-- add .hide to clear the properties displayed -->
+#set($detailslast = 0)
+#foreach($prop in $item.properties)
+  #if($prop.propname && $prop.propvalue!='')
+    #if($detailslast < $propLenght)     
+                      <div class="details"> 
+                        <div class="left"><b>$prop.propname</b></div>
+                        <div class="right">$prop.propvalue</div>
+                      </div>
+    #else
+                      <div class="details" style="border: none;"> 
+                        <div class="left"><b>$prop.propname</b></div>
+                        <div class="right">$prop.propvalue</div>
+                      </div>
+    #end
+    #set($detailslast=$detailslast+1)
+  #end
+#end
+                    </div>
+                  </div><!-- End item-ldesc -->
+#*
+                
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_accessoryItems.vm")
+#else
+      #parse("/$vendorSettingsDTO.vendorId/itemT_accessoryItems.vm")
+#end
+    
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_weSuggest.vm")
+#else
+      #parse("/$vendorSettingsDTO.vendorId/itemT_weSuggest.vm")
+#end
+
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_alsolike.vm")
+#else
+      #parse("/$vendorSettingsDTO.vendorId/itemT_alsolike.vm")
+#end 
+
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_reviews.vm")
+#else
+      #parse("/$vendorSettingsDTO.vendorId/itemT_reviews.vm")
+#end
+*#
+                </div><!-- End item -->
+              </form>
+            </div><!-- End yui-g-->
+          </div><!-- End yui-b -->
+        </div><!-- End yui-main -->
+      </div>
+      <!-- End bd-->
+      <!-- Start footer -->
+      <div class="ft">
+  <p class="ft-copyright">&copy; 2012 Northern Wholesale Supply, Inc.. All rights reserved</p>
+      </div>
+      <!-- End footer -->
+    </div>
+    <!-- End doc-->
+  </body>
+</html>

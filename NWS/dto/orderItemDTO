@@ -1,0 +1,1 @@
+select o as o, v.name as status, o.courierno as courierno from com.avetti.commerce.domainmodel.OrderItem o, Venshipstates v where o.orderdataid=%%orderDataId%% and v.shipstateid=o.orderitemstate and v.vendorid=o.vid

@@ -1,0 +1,94 @@
+
+.ui-dialog {
+    background-color: #FFFFFF;
+    border: 1px solid #006699;
+    border-radius: 13px 13px 13px 13px;
+    box-shadow: 0 0 30px #000000;
+}
+.ui-dialog-titlebar {
+    background-color: #006699;
+    border: 1px solid #006699;
+    border-radius: 10px 10px 0 0;
+    color: white;
+    padding: 15px;
+}
+.ui-dialog-titlebar-close {
+    color: #FFFFFF;
+    float: right;
+}
+.ui-dialog-title {
+    font-weight: bold;
+}
+.ui-dialog-content {
+    padding: 20px;
+}
+#quicklook {
+    display: none;
+}
+#quicklook_actions {
+    overflow: hidden;
+}
+#quicklook_actions .left {
+    float: left;
+}
+#quicklook_actions .right {
+    float: right;
+    text-align: right;
+    padding-right: 15px;
+}
+#quicklook_inventory {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+#quicklook_price {
+    color: #329900;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+#quicklook_msrp {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+#quicklook_price.noPrice {
+    font-size: 14px;
+}
+#quicklook_quantity_wrapper {
+    margin-bottom: 5px;
+}
+#quicklook_quantity {
+    padding: 5px;
+    width: 40px;
+}
+#quicklook_description {
+    clear: both;
+    margin-top: 10px;
+    padding: 5px;
+}
+
+#quicklook_shortdesc {
+    clear: both;
+    height: 50px;
+    margin-top: 10px;
+    overflow: auto;
+    padding: 5px;
+}
+
+.quicklook_title {
+	margin: 2px;
+	padding-bottom: 10px;
+	line-height: normal;
+	border-bottom: 1px solid #5f87ff;
+}
+.quicklook_code { color: #0f2c8f;}
+
+#quicklook_image img {
+    border: 2px solid #EEEEEE;
+}
+#quicklook_logo { display: inline-block}
+#quicklook_logo img {
+    border: none;
+    float: right;
+    margin: 10px;
+}

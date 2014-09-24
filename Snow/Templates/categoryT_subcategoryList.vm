@@ -1,0 +1,86 @@
+<div id="options">
+#if($navigationDTO.recentCategory.size()>1)
+    <div id="item-hview"  class="hide">
+#else
+    <div id="item-hview">
+#end
+</div>
+<div id="viewAs" >&nbsp;</div>
+   
+
+</div>
+<div id="cat-grid">   
+
+
+#set($itemsPerRow = 3)
+
+#set($counter = 0)
+
+#set($odd = 1)
+
+#foreach($itemIter in $navigationDTO.recentCategory)
+   #set($category = $itemIter.getItemObject(0,0))
+        #if($category && $category.categoryid!=$category1.categoryid)
+   #if($counter == 0)
+       #if($odd == 1)
+                <div class="cat-hg ">
+       #else
+                <div class="cat-hg ">
+       #end
+   #end   
+   
+   <div class="cat-ul">
+      
+      <div class="cat-desc">
+         <div class="cat-title">
+         <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")" > $category.name</a>  
+         </div>                        
+      </div> 
+      
+   </div>
+
+   #set($counter = $counter + 1)
+   
+
+
+   #if($counter == $itemsPerRow)
+      #set($counter = 0)
+      
+      #if($counter == 0)
+         #if($odd == 1)
+            #set($odd = 0)
+         #elseif($odd == 0)
+            #set($odd = 1)
+         #end
+      #end
+   #end
+   
+
+   #if($counter == 0)
+           </div>       
+   #end
+#end
+#end
+
+#if($counter != 0)
+</div>
+
+#end
+
+<!-- end cat-->
+
+<!--pagination-->
+
+
+#if($navigationDTO.recentCategory.size()>1)
+   <div id="item-hview"  class="hide">
+#else
+   <div id="item-hview">
+#end
+ 
+
+   </div>
+   <!--end item-hview-->
+
+<!--end pagination-->
+</div>

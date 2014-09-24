@@ -1,0 +1,80 @@
+#springBind( "checkoutViewDTO.addresses.billingAddress.firstName" )
+#set($customerName = "$!{status.value}")
+#springBind( "checkoutViewDTO.addresses.billingAddress.middleName" )
+#set($customerName = "$customerName $!{status.value}")
+#springBind( "checkoutViewDTO.addresses.billingAddress.lastName" )
+#set($customerName = "$customerName $!{status.value}")
+
+#springBind( "checkoutViewDTO.addresses.billingAddress.company" )
+#set($companyName = "$!{status.value}")
+
+#springBind( "checkoutViewDTO.addresses.billingAddress.address1" )
+#set($street1 = "$!{status.value}")
+
+#springBind( "checkoutViewDTO.addresses.billingAddress.address2" )
+#set($street2 = "$!{status.value}")
+
+#springBind( "checkoutViewDTO.addresses.billingAddress.city" )
+#set($city = "$!{status.value}")
+
+#springBind("checkoutViewDTO.addresses.billingAddress.countryId")
+#foreach($country in $countriesInUse)
+  #if($country.id==${status.value})
+    #set($countryName = "$!country.a2")
+  #end
+#end
+
+#springBind("checkoutViewDTO.addresses.billingAddress.provinceId")
+#foreach($province in $provincesInUse)
+  #if(${province.countryid} == ${checkoutViewDTO.addresses.billingAddress.countryId} )
+    #if( ${province.id} == ${checkoutViewDTO.addresses.billingAddress.provinceId})
+      #set($stateName = "$!{province.a2}")
+    #end
+  #end
+#end
+
+#springBind( "checkoutViewDTO.addresses.billingAddress.postal" )
+#set($zipcode = "$!{status.value}")
+                <div class="span6 well">
+                  <div class="bill-to">
+                    <h3>Your Billing Information</h3>
+                    <p><b>$!customerName</b></p>                   
+                    <br>
+                    <p>$!companyName</p>
+                    <p>$!street1</p>
+#if($street2 == "")
+                    <p>$!street2</p>
+#end
+                    <p>$!city, $stateName $zipcode</p>
+#if($ounrtyName !="USA")
+                    <p>$countryName</p>
+#end
+
+#springBind( "checkoutViewDTO.addresses.billingAddress.firstName" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.middleName" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.lastName" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.company" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.dphone" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.address1" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.address2" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.city" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.countryId" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind("checkoutViewDTO.addresses.billingAddress.provinceId")
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind("checkoutViewDTO.addresses.billingAddress.anotherProvince")
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.postal" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+#springBind( "checkoutViewDTO.addresses.billingAddress.email" )
+                    <input class="dom-block" name="$status.expression" type="hidden" value="$!{status.value}" />
+                  </div><!-- end bill-to -->
+                </div><!-- end span6 -->

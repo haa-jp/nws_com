@@ -1,0 +1,129 @@
+#set( $propName = "SessionCustomerDTO_"+$vid)
+#set ($approved = "")
+#if($request.getSession().getAttribute($propName))
+##set($approved = $request.getSession().getAttribute($propName).getProps().get("approved"))
+#set($approved = $request.getSession().getAttribute($propName).getCustomerProperty("approved"))
+#end
+
+#if($miniBasketDTO.details.products.size() > 0)
+#set($basketItemsTotal = $miniBasketDTO.details.products.size())
+#else
+#set($basketItemsTotal = 0)
+#end
+#set($totalPrice = $math.toDouble("0.00"))
+#foreach($product in $miniBasketDTO.details.products)
+#set($totalPrice = $math.add($totalPrice,  $product.totalPrice))
+#end
+<div class="header navbar navbar-static-top">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+			<a class="logo" href="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/store.html?vid=$vendorSettingsDTO.vendorId"> &nbsp; </a>
+
+															<ul class="nav pull-right">
+#if($approved == "true")
+  #if($myaccount)
+  #set($active = 'class="active"')
+#end
+																<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")" alt="Dealer Home">Home</a></li>
+
+																<li><a href="account-home" alt="Account Management Hom"> Manage Account </a></li>
+																<!-- <li !$(active) class="dropdown">
+																	<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Manage Account<b class="caret"></b></a>
+																	<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+																		<li> <a href="account-home"> Account Home</a></li>
+																		<li> <a href="account-management"> Account Management</a></li>
+																		<li> <a href="account-resources"> Account Resources</a></li>
+																	</ul>
+																</li> -->
+																<!--          <a href="$seourl.encodeURL("myaccount.html?mode=billingaddress&vid=$vendorSettingsDTO.vendorId")">#springMessage("vm.header.myaccount")</a> -->
+															#end
+
+															#if(${welcomeMatDTO.loggedIn})
+
+															<!-- <li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22823")">Order Builder</a></li>
+															<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23046")">Saved Orders</a></li> -->
+															<!-- hold this area for later -->
+															<!-- hold this area for later -->
+															<!-- hold this area for later -->
+															#end
+																<li>
+																	<div class="mini-basket">
+																		Checkout<a class="mini-basket-total" href="$seourl.encodeURL("basket.html?vid=$vendorSettingsDTO.vendorId")"> &nbsp; $number.format('currency', $totalPrice).replace('¤','$')
+																			<!-- <div class="mini-basket-qty-left">
+																				<div class="mini-basket-qty-right">
+																					<span class="mini-basket-qty">$!basketItemsTotal</span>
+																				</div>
+																			</div> -->
+																		</a>
+																	</div>
+																</li>
+																<li class="dropdown">
+																	#if(!${welcomeMatDTO.loggedIn})
+																	<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Login<b class="caret "></b></a>
+																	<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+																		<li class="login-n-basket">
+																			<form autocomplete="off" class="form login-form" action="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}" method="post">
+																				<input type="hidden" name="doSubmit" value="Log In">
+																					<input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+																						<input type="hidden" name="mode" value="Log In">
+																							<input type="hidden" name="Log In">
+																								<div class="control-group">
+																									<label class="control-label" for="username">Login</label>
+																									<div class="controls">
+																										<input autocomplete="off" type="text" name="login"  placeholder="Username/Email">
+																										</div>
+																									</div>
+
+																									<div class="control-group">
+																										<label class="control-label" for="password">Password</label>
+																										<div class="controls">
+																											<input type="password" name="password" placeholder="Password">
+																											</div>
+																										</div>
+																										<div class="control-group">
+																											<div class="controls">
+																												<button type="submit" class="btn btn-primary">Sign in</button>
+																											</div>
+																										</div>
+																									</form>
+																									<form autocomplete="off" class="form forgot-form" action="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/forgot_password.html" method="post">
+																										<input type="hidden" name="doSubmit" value="Send Email"/>
+																										<input type="hidden" name="mode" value="sendEmail"/>
+																										<input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId"/>
+																										<input type="hidden" name="mt" value="1"/>
+																										<input type="hidden" name="Log In" />
+																										<div class="control-group">
+																											<label class="control-label" for="login">Login</label>
+																											<div class="controls">
+																												<input type="text" name="login" placeholder="Email"/>
+																											</div>
+																										</div>
+																										<div class="control-group">
+																											<div class="controls">
+																												<button type="submit" class="btn btn-primary">Sign in</button>
+																												<button class="btn back-login">Cancel</button>
+																											</div>
+																										</div>
+																									</form>
+																								</li>
+																								<li class="divider"></li>
+																								<li><a href="register.html?20120606532&mt=1">Register</a></li>
+																								<li><a href="#" class="show-forgot">Forgot Password</a></li>
+																							</ul>
+																							#else
+																							<a href="#" id="drop3" role="button" class="dropdown-toggle" data-toggle="dropdown">Welcome, ${welcomeMatDTO.firstName}<b class="caret"></b></a>
+																							<ul class="dropdown-menu" role="menu" aria-labelledby="drop3">
+																							<!--            <li><a href="accountsummary.html">Account Info</a></li>
+																								<li><a href="wishlist.html?vid=$vendorSettingsDTO.vendorId&action=add">Wishlist</a></li>
+																									<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22783")">About NWS</a></li> -->
+	<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23061")"> Get Help</a><li>
+			<li class="divider"></li>
+			#set($logoutURL = "https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signout.html?vid=${vendorSettingsDTO.vendorId}&redirect=store.html")
+			<li><a href="${logoutURL}">#springMessage("vm.header.logout")</a></li>
+			</ul>
+		#end
+	</li>
+</ul>
+												    </div>
+											    </div>
+										    </div>

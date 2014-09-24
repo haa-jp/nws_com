@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">   
+  #if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+  #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+  #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+  #else
+  #if ($request.getServerPort() ==80)
+  #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+  #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+  #end
+  <html xmlns="http://www.w3.org/1999/xhtml">
+  <!-- myaccount.vm-->
+  <head>
+    <title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <base href="$baselink" />
+    <link rel="shortcut icon" href="/favicon.png" />
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+    <link rel="stylesheet" href="$request.getContextPath()/assets/admin/css/calendar.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="assets/plugins/yahooUI/build/container/assets/skins/sam/container.css" />
+    <link rel="stylesheet" type="text/css" href="assets/plugins/yahooUI/build/button/assets/skins/sam/button.css" />
+    <link rel="stylesheet" href="$request.getContextPath()/assets/plugins/yahooUI/build/calendar/assets/skins/sam/calendar.css" type="text/css"/>
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/datepicker/datepicker.css" type="text/css" media="all" />
+    </head>
+  <body class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="row-fluid">
+        <div class="span2">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/account_nav.vm")
+        </div>
+
+        <div class="span10">
+          <div class="row-fluid">
+            <div class="span12">
+
+            <form action="paidinvoices.html" method="get" ></form>
+            <h1>Paid Invoice Detail</h1>
+	    <div class="clear-float">
+		    <div class="span8">
+	    <table class="table">
+		    <tr>
+			    <td>Invoice Number</td>
+			    <td> $paidInvoiceDTO.invoice.invoiceHeader.invoiceNumber</td>
+		    </tr>
+<!-- <tr>
+   <td> Sequence</td>
+   <td> $paidInvoiceDTO.invoice.invoiceHeader.histSequence</td>
+</tr> -->
+		    <tr>
+			    <td> Age Date</td>
+			    <td> $date.format('M/d/yyyy', $paidInvoiceDTO.invoice.invoiceHeader.ageDate)</td>
+		    </tr>
+		    <!-- <tr>
+			    <td> Invoice Balance</td>
+			    <td> $ $number.format('#,###.00', $paidInvoiceDTO.invoice.invoiceHeader.invoiceBalance)</td>
+		    </tr> -->
+	    </table>
+	    </div>
+
+            	
+            </div>
+            <table class="table table-striped" >
+              <thead>
+              <tr>
+                <th scope="col">Transaction Date</th>
+                <th scope="col">Transaction Type</th>
+                <th scope="col">Transaction Amount</th>
+                <th scope="col">Payment Amount</th>
+                <th scope="col">Cash Discount Amount</th>
+                <th scope="col">Check Number</th>
+                <th scope="col">Adjustment Number</th>
+                <th scope="col">Order Number</th>
+                <th scope="col">Purchase Order Number</th>
+			</tr>
+			</thead>
+			<tbody>
+               
+                #foreach($invoiceDetail in $paidInvoiceDTO.invoice.invoiceDetails)
+                  <tr>
+                <td>$date.format('M/d/yyyy', $invoiceDetail.transDate)</td>
+                    <td>$!invoiceDetail.transType</td>
+                    <td>$!invoiceDetail.transAmount</td>
+                    <td>$!invoiceDetail.paymentAmount</td>
+                    <td>$!invoiceDetail.cashDiscountAmount</td>
+                    <td>$!invoiceDetail.checkNumber</td>
+                    <td>$!invoiceDetail.adjustmentNumber</td>
+                    #if($invoiceDetail.orderNumber)
+                      <td><a href="nwrevieworder.html?ornum=$invoiceDetail.orderNumber&hseq=$paidInvoiceDTO.invoice.invoiceHeader.histSequence&gen=$!invoiceDetail.generation">$invoiceDetail.orderNumber</a></td>
+                    #else
+                      <td></td>
+                    #end
+                    <td>$!invoiceDetail.poNumber</td>
+                  </tr>
+                #end 
+			</tbody>
+              </table>
+<div>
+<form id="nws-invoice" name="form1" action="http://s1042d3p.northernwholesale.com:89/nws/invoice.php" method="post">
+<input type="hidden" value="$paidInvoiceDTO.invoice.invoiceHeader.histSequence" name="histseq">
+<button class="btn" type="submit">PDF</button> 
+</form>
+</div>
+            </div>
+          </div><!-- end of content -->
+        </div>
+        </div><!-- end of yui3-u-1 -->
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+  <!-- END footer -->
+      </div><!-- END page -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+   <!--  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/myaccount-invoices.js"></script>  -->
+   <!--    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" /> -->
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type="application/javascript">
+      $('#endDate').datepicker({format:'yyyy/mm/dd'});
+    </script>
+  </body>
+</html>

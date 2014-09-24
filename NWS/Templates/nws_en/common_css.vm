@@ -1,0 +1,25 @@
+<!--[if IE 7]>
+<meta http-equiv="X-UA-Compatible" content="IE=7">
+<![endif]-->
+<!--[if IE 8]>
+<meta http-equiv="X-UA-Compatible" content="IE=8">
+<![endif]-->
+<!--[if IE 9]>
+<meta http-equiv="X-UA-Compatible" content="IE=9">
+<![endif]-->
+<!-- start common_css.vm -->
+#set( $propName = "SessionCustomerDTO_"+${vendorSettingsDTO.vendorId})
+#set($customerType = $request.getSession().getAttribute($propName).getProps().get("Customer Type"))
+
+#if($customerType == "retail")
+  $response.sendRedirect($seourl.encodeURL("signout.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=store.html?vid=${vendorSettingsDTO.vendorId}"))
+#end
+
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/app.css" media="all" />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/toastr/toastr.css " />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/toastr/toastr-responsive.css " />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/jquery-ui/jqueryui.css" />
+  ## <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/jquery-ui/jqueryui-ie.css " />
+<!-- End common_css.vm -->
+    <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>

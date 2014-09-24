@@ -1,0 +1,18 @@
+#if($request.getParameter('login') == 'true')
+	#set($propName = "SessionCustomerDTO_"+$vid)
+	#set($loginPref = $request.getSession().getAttribute($propName).getCustomerProperty("Login Preference")) 
+
+	#if($loginPref == 'Home Store')
+		#set($redirectURL = "store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")
+	#elseif($loginPref == 'Order Builder')
+		#set($redirectURL = "store.html?vid=$vendorSettingsDTO.vendorId&cid=22823")
+	#elseif($loginPref == 'Saved Orders')
+		#set($redirectURL = "store.html?vid=$vendorSettingsDTO.vendorId&cid=23046")
+	#elseif($loginPref == 'Order History')
+		#set($redirectURL = 'nwrevieworders.html')
+	#else
+	  #set($redirectURL = "store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")
+	#end
+
+	$response.sendRedirect($seourl.encodeURL($redirectURL))
+#end

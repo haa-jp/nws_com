@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+   <title>Email Subscription Notice</title>	
+   <meta http-equiv="Expires" content="-1" />
+   <meta http-equiv="Pragma" content="no-cache" />
+   <meta http-equiv="Cache-Control" content="no-cache" />
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>   
+	<body>
+      <h2> We have received Subscription Request.</h2>
+<p> We received a request for a new Price List. <br> The following information was received.</p>
+<p> Be sure to verify all dealer information <strong>BEFORE</strong> processing the price list</p>
+
+<hr/>
+<h3>Customer Information:</h3>
+   <b>Name: </b> ${name}<br/>
+   <b>Customer Number: </b> ${customerNumber}<br/>
+   <b>Email Address: </b> ${email}<br/>
+   <b>Postal Code: </b> ${zipcode}<br/>
+   <br/>
+<h3> List Requirements</h3>
+   <b>RV / MH: </b> ${rvlist}<br/>
+   <b>Marine: </b>${marinelist}<br/>
+   <b>Powersports: </b>${snowlist}<br/>
+   <br/>
+   
+   </body>
+</html>

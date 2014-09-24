@@ -1,0 +1,318 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>#springMessage("vm.checkout_payment.title")</title>
+    <meta content=" " name="keywords">
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+    #set( $pgcodenocc = ["NCC","GL","PP","IB","NOCHEX","UFS","DPS","ALIGNET","PCI2NONE","PCI2CC", "PCICC",""] )
+  </head>
+  <body class="checkout" id="checkout">
+    ############################ Header ####################################
+#if($vendorSettingsDTO.themeId == $storeSkinId)
+    #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+#else
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+#end
+    ############################ End Header ################################
+
+    <div id="wrapper" class="row-fluid">
+
+      <div class="container">
+        <ul class="co-breadcrumb step4">
+          <li class="yi"><a href="yourinfo.html?vid=$vendorSettingsDTO.vendorId">#springMessage("vm.checkout_customerinfo.infor")</a> </li>
+          <li class="sp"><a href="shipping.html?vid=$vendorSettingsDTO.vendorId">#springMessage("vm.checkout_customerinfo.shipping")</a> </li>
+          <li class="py active"><strong>#springMessage("vm.checkout_customerinfo.payment")</strong></li>
+          <li class="rv">#springMessage("vm.checkout_customerinfo.placeorder")</li>
+          <li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
+        </ul>
+      </div>
+
+
+      <div class="container">
+       <div class="row=fluid">
+          <div class="span10 offset1">
+
+            <h2>#springMessage('vm.checkout_customerinfo.payment')</h2>
+            #parse($checkout_paymentDTO.getItems().get(0).get('checkout_payment'))
+
+            #if($checkoutViewDTO.giftCertificate.status.keySet() && ($checkoutViewDTO.giftCertificate.status.containsValue("0") ||
+              $checkoutViewDTO.giftCertificate.status.containsValue("1") || $checkoutViewDTO.giftCertificate.status.containsValue("2") ||
+              $checkoutViewDTO.giftCertificate.status.containsValue("3") || $checkoutViewDTO.giftCertificate.status.containsValue("4") ||
+              $checkoutViewDTO.giftCertificate.status.containsValue("5") || $checkoutViewDTO.giftCertificate.status.containsValue("6") ) )
+              <div class="warning">
+                <ul>
+                #foreach($key in $checkoutViewDTO.giftCertificate.status.keySet())
+                  #set($statval=$checkoutViewDTO.giftCertificate.status.get($key))
+                  #if($statval == "0")
+                    <li>#$key ---  #springMessage('vm.checkout_payment.msg1')</li>
+                  #end
+                  #if($statval == "1")
+                    <li>#$key ---  #springMessage('vm.checkout_payment.msg2')</li>
+                  #end
+                  #if($statval == "2")
+                    <li>#$key ---  #springMessage('vm.checkout_payment.msg3')</li>
+                  #end
+                  #if($statval == "3")
+                    <li>#$key ---  #springMessage('vm.checkout_payment.msg4')</li>
+                  #end
+                  #if($statval == "4")
+                    <li>#$key ---  #springMessage('vm.checkout_payment.msg4')</li>
+                  #end
+                  #if($statval == "5")
+                    <li>#$key ---  #springMessage('vm.checkout_payment.msg5')</li>
+                  #end
+                  #if($statval == "6")
+                    <li>#$key ---  #springMessage('vm.checkout_payment.msg6')</li>
+                  #end
+                #end
+                </ul>
+              </div>
+            #end
+
+            <form class="form-horizontal" name="frm" action="payment.html" method="POST" id="nws-form">
+              #springBind("checkoutViewDTO.*")
+
+              #if($status.errors.errorCount&&$status.errors.errorCount>0)
+              <div class="row-fluid">
+                <div class="alert alert-error span6">
+                  <button type="button" class="close" data-dismiss="alert">×</button>
+                  <h4>#springMessage("vm.checkout_payment.warn")</h4>
+                  <br/>
+                  <ul>
+                #foreach($error in $status.errorMessages)
+                    <li>$error</li>
+                #end
+                  </ul>
+                </div>
+              </div>
+              #end
+
+              <input type="hidden" name="t">
+              <input type="hidden" name="productidx" value="0"/>
+              <input type="hidden" name="addressidx" value="0"/>
+              <input type="hidden" name="shipaddressid" value="0"/>
+              <input type="hidden" name="mid" id="mid" value="demo"/>
+
+              #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutP-products.vm")
+
+              ## When manager email feature is off, you can hide the following div tag.
+
+              #if($showManagerEmail)
+                <div id="managerEmail">
+                  <label class="control-label">#springMessage("vm.checkout_payment.manageremail"): </label><input type="text" name="managerEmail" size="20" value="$!{session.getAttribute("managerEmail")}">
+                </div>
+              #end
+
+              #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutP-gateway.vm")
+
+              <div class="f-buttons">
+                <p class="info_needed"> #springMessage('vm.checkout_payment.msg7')</p>
+                <input type="button" class="btn btn-primary" value="#springMessage('button.CONTINUE')" onClick="doContinue('frm', 't', this,'review');" />
+                <input type="button" class="btn" value="#springMessage('button.CANCEL')" onClick="javascript:history.back();"/>
+                <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+              </div>
+
+            </form>
+
+          </div>
+        </div>
+      </div>
+
+    </div><!-- wrapper -->
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################
+
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+
+    <script src="store/$checkoutViewDTO.vendorId/assets/limitText.js"></script>
+    <script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
+    <script src="store/$checkoutViewDTO.vendorId/assets/toggleDisplay.js"></script>
+#*
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/js/pcisecureorderform.js"></script>
+*#   
+ <script language="JavaScript" type="text/javascript">
+      function upAddress(productidx,addressidx,addressid,mode)
+      {
+        document.frm.t.value=mode;
+        document.frm.productidx.value=productidx;
+        document.frm.addressidx.value=addressidx;
+        document.frm.shipaddressid.value=addressid;
+        document.frm.submit();
+      }
+
+      function setFocus(pidx,sidx,fomode)
+      {
+        if(fomode == "1")
+        {
+          var shiptoid="SHIPTYP_"+pidx+"_"+sidx;
+          if(document.getElementById(shiptoid))
+          {
+            document.getElementById(shiptoid).focus();
+            document.getElementById(shiptoid).click();
+          }
+        }
+        else if(fomode == "2")
+        {
+          if(document.getElementById("CARDNO"))
+          {
+            document.getElementById("CARDNO").focus();
+          }
+        }
+        else if(fomode == "3")
+        {
+          var msgid="MESSAGE_"+pidx+"_"+sidx;
+          if(document.getElementById(msgid))
+          {
+            document.getElementById(msgid).focus();
+          }
+        }
+      }
+
+      function doLocalSubmit(var1, var2 , var3, flag)
+      {
+        if (flag==true)
+          alert ("#springMessage('vm.checkout_payment.msg')");
+        else
+          return doSubmit(var1,var2,var3);
+      }
+
+      function doContinue(frmName,actFieldName,btn,todo){
+           var pgcode=$("input[name=selectedPaymentGatewayCode]:checked").val();
+               if(pgcode == "PCINONE" || pgcode == "PCICC"){
+                    doConfirm(frmName,actFieldName,btn,todo);
+               }else{
+                   $("input[name='"+actFieldName+"'][type='hidden']").val(todo);
+             $("form[name='"+frmName+"']").unbind('submit');
+             $("form[name='"+frmName+"']").submit();
+               }
+      }
+
+      function CVCWin()
+      {
+        mywin = window.open('store/${vendorSettingsDTO.vendorId}/assets/html/whatsthis.html',"popup","width=380,height=210,location=no,toolbar=no,scrollbars=yes,resizable=yes,menubar=no,status=yes,directories=no" );
+      }
+
+      function showhidecc(pgcode,radioid)
+      {
+        #set($arraystr="")
+        #foreach( $a in $pgcodenocc )
+           #if($velocityCount!=$pgcodenocc.size())
+             #set($arraystr=$arraystr+'"'+$a+'"'+',')
+           #else
+             #set($arraystr=$arraystr+'"'+$a+'"')
+          #end
+        #end
+
+        var noshowccinput =new Array($arraystr);
+        var flag=false;
+        for(var i=0;i<noshowccinput.length;i++)
+        {
+          if( noshowccinput[i]==pgcode || pgcode.indexOf("NCC")==0)
+          {
+            flag=true;
+            break;
+          }
+        }
+
+        if(flag)
+        {
+          if(pgcode=='PCI2CC' || pgcode == "PCICC" || pgcode=='PCINONE')
+          {
+            $("#cc").show();
+            $("#ccsubmitted").hide();
+          }else
+          {
+            $("#payment_method").hide();
+            clearccinfo();
+            }
+        } else
+        {
+          if(pgcode=='PCI2CC' || pgcode == "PCICC" || pgcode=='PCINONE')
+          {
+            showhidelast4cc();
+          }else
+          {
+            $("#payment_method").show();
+          }
+        }
+
+        var radiobutton=document.getElementById(radioid);
+        if(radiobutton)
+        {
+          radiobutton.checked=true;
+          document.getElementById("hidden_radioid").value=radioid;
+        }
+      }
+
+      function showhide(pgid,pgcode,radioid,inputid)
+      {
+        document.getElementById("hidden_pgid").value=pgid;
+        showhidecc(pgcode,radioid);
+        showhideci(inputid);
+      }
+
+      function showhideci(inputid)
+      {
+        var allciinput=new Array();
+        var allciinputprompt=new Array();
+        #foreach($paymentgateway in ${checkoutViewDTO.ccPreferencesDTO.paymentgateways})
+          #if($paymentgateway.inputtype && $paymentgateway.inputtype>0 && $paymentgateway.code != 'PF')
+          allciinput.push("input_$velocityCount");
+          allciinputprompt.push("input_${velocityCount}_prompt");
+          #end
+        #end
+        var inputfield=document.getElementById(inputid);
+        var inputprompt=document.getElementById(inputid+'_prompt');
+        document.getElementById("hidden_inputid").value=inputid;
+        if(inputfield)
+        {
+          inputfield.style.display="";
+          inputfield.disabled=false;
+        }
+
+        if(inputprompt){
+          inputprompt.style.display="";
+        }
+
+
+        for(var i=0;i<allciinput.length;i++)
+        {
+          if(allciinput[i]!= inputid)
+          {
+            var tempfield=document.getElementById(allciinput[i]);
+            tempfield.disabled=true;
+            tempfield.style.display="none";
+            tempfield.value="";
+
+          }
+
+          if(allciinputprompt[i]!= inputid+'_prompt')
+          {
+            var tempfield=document.getElementById(allciinputprompt[i]);
+            tempfield.style.display="none";
+          }
+
+        }
+      }
+
+      function clearccinfo()
+      {
+       if(document.getElementById("CARDNO"))
+            document.getElementById("CARDNO").value="";
+       if(document.getElementById("nameoncard"))
+           document.getElementById("nameoncard").value="";
+       if(document.getElementById("cvv"))
+          document.getElementById("cvv").value="";
+       }
+
+      $(document).ready(function(){
+        setFocus($checkoutViewDTO.productidx,$checkoutViewDTO.addressidx,$checkoutViewDTO.shipaddressid);
+        showhide('$checkoutViewDTO.selectedPaymentGatewayId','$!checkoutViewDTO.selectedPaymentGatewayCode','$!checkoutViewDTO.radioButtonId','$!checkoutViewDTO.inputFieldId');
+      });
+    </script>
+
+  </body>
+</html>

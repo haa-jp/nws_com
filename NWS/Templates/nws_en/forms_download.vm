@@ -1,0 +1,13 @@
+<div class="row-fluid">
+	<div class="span6">
+		<div class="well">
+			<ul class="unstyled">
+				<li><a target="_blank" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/Terms_Conditions.pdf">Terms Conditions</a></li>
+				<li><a target="_blank" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/Dealer_Return_Form.pdf">Dealer Return Form</a></li>
+				<li><a target="_blank" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/Credit_Application.pdf">Credit Application</a></li>
+				<li><a target="_blank" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/Tax_Exemption_Form.pdf">Tax Exemption Form</a></li>
+				<li><a target="_blank" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/Price_List_Request_Form.pdf">Price List Request Form</a></li>
+			</ul>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+
+<html>
+  <!-- logincustomer.vm--><head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Northern Wholesale Supply, Inc. - #springMessage("vm.logincustomer.title")</title>
+    <link rel="shortcut icon" href="/favicon.png">
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+  </head>
+  <body id="login" class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+
+
+
+      <div class="row-fluid">
+         <div class="span10 offset1">
+
+           <div class="row-fluid">
+              <div class="pad70">
+                 <div class="alert alert-error alert-block">
+                    <button class="close" data-dismiss="alert" type="button">×</button>
+                    <p> Welcome to the new northernwholesale.com. As of March 1, 2014, you may still view and order from our old website by clicking <a href="http://old.northernwholesale.com/storefrontB2BWEB" alt="Northern Wholesale Supply Inc."> here</a>. 
+        	            Please note that our old website is not updated with current product. The only way to view and order 2014 product online is through our new website. Thank you for your patience during this transition.  </p>
+                 </div>
+              </div>
+           </div>
+
+          <div class="content">
+              <h2>Welcome, Please #springMessage("vm.logincustomer.title")</h2>
+              <div id="loginBox" class="row-fluid"> 
+                <div class="span6">
+                <div class="well">
+                  <h3>#springMessage("nw.vm.logincustomer.returning")</h3> 
+                  <form id="nws-form" class="login-form" name="frm" method="POST" action="signin.html?vid=${vendorSettingsDTO.vendorId}">
+#springBind("loginViewDTO.doSubmit")
+                    <input type=hidden id=hiddenlogin name="$status.expression">
+#springBind( "loginViewDTO.*" )
+#if($status.errors.errorCount>0)
+                        <div class="alert alert-error">
+                          <p><strong>Warning!</strong></p>
+                          <ul>
+  #foreach($error in $status.errorMessages) 
+                            <li>$error</li>
+  #end
+                          </ul>
+                        </div>
+#end
+                        <div>
+                            <label for="email"><b>#springMessage("word.userid"):</b> <em> Current customers: Use the same name and password you're already familiar with.</em></label> 
+<!--                             <label for="email">#springMessage("word.userid"): <em>( Typically your email address )</em></label>  -->
+
+                            <input value="" name="login" id="login" class="login_content" maxlength="50" tabindex="1" type="text"  /> 
+                        </div>
+                        <div>
+                            <label for="password"><b>#springMessage("word.password"):</b></label> 
+                            <input name="password" id="password" class="login_content"  maxlength="20" tabindex="2" type="password" />
+                        </div>
+                    
+                        <div>
+                            <input type="hidden" name="mode" value="Log In">
+                            <input class="btn btn-primary" type="submit" value="#springMessage('vm.logincustomer.title')" onclick="JavaScript:document.frm.hiddenlogin.value='Log In';"/>
+                            <input type="hidden" value="$!authenticationSubmitURL" name="Log In">
+                        </div>                    
+                        <br/>
+                        <a class="login_content" href="forgot_password.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end" >#springMessage('vm.logincustomer.link2')</a>
+
+#if(${storeOptions.properties.get("FACEBOOK.EnableLogin")}=='Yes' || ${storeOptions.properties.get("TWITTER.EnableLogin")}=='Yes')
+                        <p id="features_login">
+#if(${storeOptions.properties.get("FACEBOOK.EnableLogin")}=='Yes')
+                            <input type="image" src="assets/plugins/extlogin/facebook_connect.gif" alt='#springMessage("vm.externalaccounts.loginwithfacebook")' style="border: none; margin: 10px 7px 0px 0px;"  href="#" target="_top" onclick="display_login_window('facebookLogin.html?vid=${vendorSettingsDTO.vendorId}&#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}#end','twitter_login');return false;"/>
+#end
+#if(${storeOptions.properties.get("TWITTER.EnableLogin")}=='Yes')
+                       <div>
+                           <input type="image" src="assets/plugins/extlogin/twitter.jpg" alt="#springMessage("vm.externalaccounts.loginwithtwitter")" style="border: none; margin: 10px 7px 0px 0px;" href="#" target="_top" onclick="display_login_window('twitterLogin.html?vid=${vendorSettingsDTO.vendorId}&#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26vid%3D${vendorSettingsDTO.vendorId}#end','twitter_login');return false;"/>
+                       </div>
+<!--
+#foreach( $header in $request.HeaderNames )
+  <b>$header:</b> $request.getHeader($header)<br>
+#end
+-->
+
+  #end
+#end
+                    </form>
+</div>
+<div style="padding: 19px">
+                  <h4> Authorized Dealers Needing Web Access</h4> 
+                   ##springMessage("nw.vm.logincustomer.starthere")
+                  <p>  Web site access is only available to customers that already have existing wholesale accounts. No customer-direct or retail sales can be made. 
+                  ##springMessage("nw.vm.logincustomer.msg")
+                  <br>
+                  <form id="nws-form">
+                    <div>
+                       <div>
+                        <p> If you already have a Wholesale Account, you must first apply for access before  you can proceed. Registration is quick and simple.</p> 
+                        <p> <input class="btn" type="button" value="Request Web Access" class="btnLogin" onclick="window.location='register.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=1#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26fr%3Dregister#end';"/> </p>
+                        </div>
+                        <div class="alert alert-error">
+                           <p> If you do NOT already have a wholesale account established, you <b>must</b> start here to <a href="$seourl.encodeURL('store.html?vid=vendorSettingsDTO.vendorid&cid=23057')" title="request your wholesale account"> request a wholesale account</a> </p>
+                        </div>
+                  </div>
+                  </form>
+                  <p><a class="internal-link" href="$seourl.encodeURL("store.html?cid=22778&vid=$vendorSettingsDTO.vendorId")">#springMessage("vm.logincustomer.link1")</a></p>
+                  <br>
+                  <br>
+#if(${loginViewDTO.memberType} == '3')  
+                  <p>
+                    <a href="guestregister.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26fr%3Dregister%26vid%3D${vendorSettingsDTO.vendorId}#end">
+                      #springMessage("vm.logincustomer.button")
+                    </a>
+                  </p>
+#end
+</div>
+
+
+                </div><!--end span6--> 
+
+                <div class="span6 vertSeparator" > 
+          <div class="alert alert-info alert-block">
+            <h3>NOTICE</h3>
+            <p>Welcome to www.northernwholesale.com. As a wholesale distributor, only our active accounts can view our site and pricing.</p>
+            <p> If you have an active account, but aren’t set up with online access, please make your request using the "Request an Account" button below and register your account for online access.</p>
+            <p>If you are a dealer and would like to <a href="$seourl.encodeURL('store.html?vid=vendorSettingsDTO.vendorid&cid=23057')" title="get started with a wholesale account"> Apply for an account with Northern Wholesale Supply </a>, and together, we can begin the application process. <b>Please note</b>: Retail and consumer-direct sales are not available through Northern Wholesale Supply.</p>
+          </div>
+
+                </div><!--span6-->
+
+              </div><!--row-fluid-->
+            </div><!-- end content -->
+          </div><!-- end span10 -->
+        </div>             
+  <!-- START footer -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+  <!-- END footer -->
+    </div><!-- end page -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+    <script src="assets/plugins/extlogin/popup.js" type="text/javascript"></script>
+  </body>
+</html>

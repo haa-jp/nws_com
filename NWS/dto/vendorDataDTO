@@ -1,0 +1,1 @@
+select v.company as company, v.address1 as address1, address2 as address2, city as city, cityarea as cityarea, prov as prov, country as country, postal as postal from com.avetti.commerce.domainmodel.Vendor v where vendor_id='%%vid%%'

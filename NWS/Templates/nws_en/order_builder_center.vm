@@ -1,0 +1,2 @@
+<p>Order Builder is the fastest way to create your order on the NWS web site. If you have a list of part numbers, this tool helps you rapidly build your shopping cart and check out using your open account and default shipping method.</p>
+		#parse($order_builder_topDTO.getItems().get(0).get('order_builder_top'))

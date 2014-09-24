@@ -1,0 +1,93 @@
+
+<div id="recently-viewed-items" title="#springMessage("vm.itemT_recentlyViewed.title")" iid="$itemid" vid="$vendorSettingsDTO.vendorId">
+
+<div class="listing grid">  
+
+#if($navigationDTO.recentItems.size()>0) 
+  <div class="item-secondary">
+    <div class="title subTitle2">#springMessage("vm.itemT_recentlyViewed.title")</div>
+    <div class="listing grid-n">
+  #foreach($recentItem in $navigationDTO.recentItems) 
+    #set($r_itemname = $recentItem.getTitle())
+    #set($r_itemid= $recentItem.getItemid())
+    #set($r_cimage = $recentItem.getThumbnail())
+    #set($r_price = $recentItem.getPrice())
+     
+        <div class="item">
+          <div class="container">
+                    <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$r_itemid")" >
+                      <span class="name">$r_itemname</span>
+
+                      <span class="image">
+                        <span class="badges"></span>
+    #if($r_cimage != "") 
+              <a class="center" href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$r_itemid")" alt="$r_itemname">
+      #if($r_cimage.startsWith("http"))
+                <img src="$r_cimage" alt="$r_itemname"/>
+      #else
+                <img src="store$r_cimage" alt="$r_itemname"/>
+      #end  
+              </a>
+    #else
+              <a class="center" href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$r_itemid")" alt="$r_itemname">
+                <img src="store/$vendorSettingsDTO.vendorId/assets/items/thumbnails/noimage.jpg"/>
+              </a>
+    #end
+            </span>
+            <!-- End image -->
+            
+            <p><strong>NWS#:</strong> $recentItem.code.replace("-", ".")</p>
+
+##set($instock = $pageTile.getItemObject($ItemDTO, $itemIter, "instock"))
+##                    <p>In stock: #if($instock >= 1)yes#{else}no#end</p>
+                    <p>
+#if($math.round($price.listPrice) > $math.round($price.price))
+                      <span class="price">$number.format('currency', $r_price, $viewStoreCurrency.locale)</span>
+#elseif($price.listPrice.compare($price.listPrice.doubleValue(),0) == 0)
+                      ##<span id="_price_0">#springMessage("vm.itemTemplate.callprice")</span>
+                      <span id="_price_0" class="no-price">Login to View Pricing</span>
+#else
+                      $number.format('currency', $price.price, $viewStoreCurrency.locale)
+#end
+                    </p>
+          </div><!-- End container -->
+        </div>
+        <!-- End item-->
+       
+  #end
+      </div>  <!-- End listing grid-1-4 -->
+    </div>  <!-- End item-secondary-->
+#end 
+</div>
+</div>
+
+
+#*
+
+#if($showRecentViewItem ==true && $navigationDTO.recentItems.size()>0) 
+	<div class="filter availablePreorder">
+		<div class="title blue">#springMessage("vm.itemT_recentlyViewed.title")</div>
+  	<div class="filter-content">
+	#set($itemCounter = 0)
+        #foreach($items in $navigationDTO.recentItems) 
+             #set($r_cimage = $items.getSmallimage())
+			<div class="preorderItem">
+				<div class="preorderImage">
+					<a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$items.itemid")">
+    	#if($r_cimage  !=   "")
+                  		<img src="store$r_cimage " alt="$items.title"/>
+    	#else
+                 		<img src="store/$vendorSettingsDTO.vendorId/assets/images5/no_img.gif" alt="$items.title"/>
+    	#end 
+                	</a>
+				</div>
+				<div class="preorderTitle">
+					<a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$items.itemid")">$items.title </a>
+				</div>
+
+		</div>
+	#end
+  	</div>
+	</div>
+#end
+*#

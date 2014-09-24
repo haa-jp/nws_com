@@ -1,0 +1,168 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#set($pageURI = "store.html")
+#macro ( hrefNewParameter $paramName $paramValue )
+  #set($hrefString = "${pageURI}?")
+  #if($request.getParameterMap().size()>0)
+  #foreach($parName in $request.getParameterNames())
+    #foreach($parVal in $request.getParameterValues($parName))
+    #if(!$parName.equals($paramName) && $hrefString.indexOf("${parName}=${parVal}")<0)
+      #set($hrefString = "${hrefString}${parName}=${parVal}&")
+    #end
+    #end
+  #end
+  #end
+  #set($hrefString = "${hrefString}${paramName}=${response.encodeURL($paramValue)}")
+  $hrefString
+#end
+
+#macro ( hrefNewRangeParameter $param1Name $param1Value $param2Name $param2Value)
+  #set($hrefString = "${pageURI}?")
+  #if($request.getParameterMap().size()>0)
+    #foreach($parName in $request.getParameterNames())
+      #foreach($parVal in $request.getParameterValues($parName))
+        #if(!$parName.equals($param1Name) && !$parName.equals($param2Name) && $hrefString.indexOf("${parName}=${parVal}")<0)
+          #set($hrefString = "${hrefString}${parName}=${parVal}&")
+        #end
+      #end
+    #end
+  #end
+  #set($tempMax = "${param2Value}")
+  #set($hrefString = "${hrefString}${param1Name}=${response.encodeURL($param1Value)}&${param2Name}=${response.encodeURL($tempMax)}")
+  $hrefString
+#end
+
+#macro ( formParameters $param1Name $param2Name)
+  #set($hrefString = "")
+  #if($request.getParameterMap().size()>0)
+    #foreach($parName in $request.getParameterNames())
+      #set($oriv="")
+      #foreach($parVal in $request.getParameterValues($parName))
+        #if($oriv=='' || $oriv!=$parVal) 
+          #set($oriv=$parVal )
+          #if(!$parName.equals($param1Name) && !$parName.equals($param2Name))
+            #set($hrefString = "${hrefString}<input type=hidden name=${parName} value='${parVal}'>")
+          #end
+        #end
+      #end
+    #end
+  #end
+  $hrefString
+#end
+
+#macro ( hrefRemoveParameter $paramName )
+  #set($hrefString = "${pageURI}?")
+  #if($request.getParameterMap().size()>0)
+    #foreach($parName in $request.getParameterNames())
+      #foreach($parVal in $request.getParameterValues($parName))
+        #if(!$parName.equals($paramName) && $hrefString.indexOf("${parName}=${parVal}")<0)
+          #set($hrefString = "${hrefString}${parName}=${parVal}&")
+        #end
+      #end
+    #end
+  #end
+  $hrefString
+#end
+
+#macro ( hrefRemoveRangeParameter $param1Name $param2Name )
+  #set($hrefString = "${pageURI}?")
+  #if($request.getParameterMap().size()>0)
+    #foreach($parName in $request.getParameterNames())
+      #foreach($parVal in $request.getParameterValues($parName))
+        #if(!$parName.equals($param1Name) && !$parName.equals($param2Name) && $hrefString.indexOf("${parName}=${parVal}")<0)
+          #set($hrefString = "${hrefString}${parName}=${parVal}&")
+        #end
+      #end
+    #end
+  #end
+  $hrefString
+#end
+
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)  
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+
+#if ($pageTileDictionaryDTO)
+  #set ($vCatsCategoryDTO=$pageTileDictionaryDTO.getPageTile("vCatsCategoryDTO") )
+#end
+
+#if(($multiPageViews) && ($__virtualCategory))
+  #set($itemMultiPageView = $multiPageViews.get($__virtualCategory.getPageTileName()))
+#end
+
+#if (!$direction) #set($direction = $regExp.getParamFromURL($itemMultiPageView.multiPageURL, 'direc'))  #end
+#if (!$mpvp&&$itemMultiPageView&&$itemMultiPageView.currentPageIndex) 
+  #set($mpvp = $itemMultiPageView.currentPageIndex)  
+#else
+  #set($mpvp = "")  
+#end
+
+#set($catid = $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'categoryid'))
+#set($metadescription= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metadescription'))
+#set($metakeywords= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metakeywords'))
+#set($pagetitle= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'pagetitle'))
+#set($categoryImage= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'image'))
+#set($categoryThumb= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'thumbimage'))
+#set($categoryName= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'name'))
+#set($category= $pageTile.getItemObject($childCategoriesDTO, $childCategoriesDTO.getItems(), "c"))
+
+#**
+ * Enables the use of the facet search on the category page only
+ *#
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <!-- myaccount.vm--><head>
+      <title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+      <base href="$baselink">
+      <link rel="shortcut icon" href="/favicon.png">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+      <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/jquery.min.js"></script>
+      <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/jquery.validate.min.js"></script>
+      <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/customer_form_data_input_jquery.js"></script>
+   </head>
+    <body id="category" class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="row-fluid">
+        <div class="span2">
+##if($categoryName == 'Resources')
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/resources_nav.vm")
+##else
+  ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/side_nav.vm")
+##end
+        </div>
+       <div class="span10">
+          <div class="container-fluid">
+#parse($category_topDTO.getItems().get(0).get('category_top')) 
+          </div>
+          <div class="container-fluid">
+            <h1>$categoryName</h1>
+#parse($category_centerDTO.getItems().get(0).get('category_center')) 
+          </div><!-- end content  -->
+      </div><!-- end span10 -->
+    </div>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+  </div><!-- end container-fluid -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/megamenu.js"></script>
+  </body> 
+</html>

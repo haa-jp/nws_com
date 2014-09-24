@@ -1,0 +1,47 @@
+<html>
+	<head>
+		<title>testing your check boxes</title> /> 
+		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+
+		<style type="text/css">
+		.group { 
+			border: 1px solid grey; 
+			padding: 4px;}
+		</style>
+	</head>
+	<body>
+<input class="radios" name="radios" type="radio" id="radio1" value="Yes"> Yes
+<br>
+<input class="radios" name="radios" type="radio" id="radio2" value="No"> No
+<br><br>
+<table border="1" id="employeeTable">
+    <tr>
+        <td>This is the table</td>
+    </tr>
+</table>
+
+	</body>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			
+var customerID = 123456
+// asp version: var customerID = <%=customerID%>
+
+if (customerID != "") {
+    $('#radio1').prop('checked', 'checked');
+} else {
+    $('#radio2').prop('checked', 'checked');
+}
+
+$('#radio1').click(function() {
+    $('#employeeTable').fadeIn('fast'); 
+})
+
+$('#radio2').click(function() {
+    $('#employeeTable').fadeOut('fast'); 
+})
+			
+		});
+	</script>
+
+</html>

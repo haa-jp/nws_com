@@ -1,0 +1,226 @@
+#set( $propName = "SessionCustomerDTO_"+$vid) #set ($customerNumber ="") 
+#if($request.getSession().getAttribute($propName))
+#set($customerNumber = $request.getSession().getAttribute($propName).getProps().get("CustomerNumber")) 
+#end
+
+<div id="form_message">
+	<div class="">
+		<p id="RegisterMessages"></p>
+		<h1 class="warning"></h1>
+		<p id="RegisterErrors"></p>
+	</div>
+</div>
+
+<div id="nws-form">
+	<form name="customerFormData" id="customerFormData" method="post" action="customerformdata.html">
+
+		<input type="hidden" class="systemData" name="emailName" value="NWSrequestAccount" /> 
+		<input type="hidden" name="customerFormData.formId" value="userData" /> 
+		<input type="hidden" name="customerFormData.vendorId" value='${vid}' /> 
+		<input type="hidden" id="CustomerFormDataInputMode" name="customerFormDataInputMode" value="database email" />
+
+		<!-- <h1> Public Request for a Wholesale Account </h1> -->
+
+		<p> <strong> Please, enter in the following information: </strong></p> 
+
+		<div class="form-horizontal">
+			<fieldset>
+				<legend>General Information</legend>
+                                <div class="row-fluid">
+					<div class="span6">
+					
+						<div class="control-group">
+							<label class="control-label" for="name">Name</label>
+							<div class="controls">
+								<input type="text" name="name" maxlength="50" id="name"	class="formData" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="email">Email Address</label>
+							<div class="controls">
+								<input type="text" name="email" maxlength="50" id="Email" class="formData" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="companyname">Company Name</label>
+							<div class="controls">
+								<input id="companyname" name="companyname" type="text" class="formData" />
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="phone">Primary Business Phone</label>
+							<div class="controls">
+								<input id="phonee" name="phone" type="text" class="formData" />
+							</div>
+						</div>
+
+					</div>
+					<div class="span5 offset1">
+						<!-- additional form fields -->
+						<div class="control-group">
+							<label class="radio">
+								<input type="radio" class="formData" name="onetime"  value="one time" />
+								I am looking for a one time purchase.
+							</label>
+							<label class="radio">
+								<input type="radio" class="formData" name="onetime"  value="supplier" />
+								I am looking for a supplier.
+							</label>
+						</div>
+						<div class="control-group">
+							<label for="estimate">What is your anticipated approximate yearly purchase total?</label>
+							<select id="estimate" name="estimate" class="formData">
+								<option value="less than $500"> less than $500</option>
+								<option value="$500 to $5000"> $500 to $5000</option>
+								<option value="$5000 to $20,000"> $5000 to $20,000</option>
+								<option value="Greater Than $20,000"> Greater Than $20,000</option>
+							</select>	
+						</div>
+					</div>
+				</div>
+			</fieldset>	
+
+			<fieldset>
+				<legend>Company Information</legend>
+				<div class="row-fluid">
+					<div class="span6">
+						<div class="control-group">
+							<label class="control-label" for="address">Address</label>
+							<div class="controls">
+								<input id="address" name="address" type="text" class="formData" />
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="address2">&nbsp;</label>
+							<div class="controls">
+								<input id="address2" name="address2" type="text" class="formData" />
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="city">City</label>
+							<div class="controls">
+								<input id="city" name="city" type="text" class="formData" />
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="state">State</label>
+							<div class="controls">
+								<input id="state" name="state" type="text" class="formData" />
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="postcode">Zip/Postal Code</label>
+							<div class="controls">
+								<input id="postcode" name="postcode" type="text" class="formData" />
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label" for="country">Country</label>
+							<div class="controls">
+								<input id="country" name="country" type="text" class="formData" />
+							</div>
+						</div>
+					</div>
+					<div class="span5 offset1">
+						<span class="help-block"><strong>Product Groups:</strong></span>
+						<label class="checkbox">  RV 
+							<input id="" type="checkbox" class="checkbox formData" name="rvitems" value="rvitems" />
+						</label> 
+						<label class="checkbox"> MH
+							<input id="" type="checkbox" class="checkbox formData" name="mhitems" value="mhitems" /> 
+						</label>
+						<label class="checkbox"> Marine 
+							<input id="" type="checkbox" class="checkbox formData" name="marineitems" value="marineitems" /> 
+						</label>
+						<label class="checkbox"> Snowmobile/ATV 
+							<input id="" type="checkbox" class="checkbox formData" name="snowatvitems" value="snowatvitems" /> 
+						</label>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset>
+				<legend>Additional Information</legend>
+				<div class="row-fluid">
+					<div class="control-group">
+						<div class="controls">
+							<textarea id="notes" class="textarea_scroll formData" name="notes" style="width: 400px;"></textarea>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<div>
+				<div>
+					<input id="Submit" class="btn btn-primary" type="button"
+					value="Submit">
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$("#customerFormData").validate({
+			errorLabelContainer : $("#RegisterErrors"),
+			errorContainer : $("#form_message"),
+			rules : {
+				name : {
+					required : true
+				},
+				email : {
+					required : true,
+					email : true
+				},
+				dealershipname : {
+					required : true
+				},
+				customernumber : {
+					required : true
+				},
+			},
+
+			messages : {
+				name : {
+					required : "Please enter your name <br/>"
+				},
+				email : {
+					required : "Please enter email <br/>",
+					email : "Please enter a valid email address <br/>"
+				},
+				dealershipname : "Please enter your dealership or company name <br/>",
+			},
+
+			invalidHandler : function(form, validator) {
+				var errors = validator.numberOfInvalids();
+				if (errors) {
+					var message = 'You missed fields.';
+					appendMsg(message, 'err');
+				}
+			}
+		});
+
+		$("#Submit").bind('click', function() {
+			$("#RegisterMessages").html("");
+			$("#RegisterErrors").html("");
+			if ($("#customerFormData").valid()) {
+				doSendCustomerFormData();
+				$("#customerFormData :text, #customerFormData textarea").each(function() {
+					$(this).val('');
+				});
+				$("#customerFormData select").val(0);
+				toastr.success('Thanks for submitting your form!');
+			} else {
+				toastr.error('Please verify your form fields.');
+			}
+			return false;
+		});
+	}); 
+</script>
+

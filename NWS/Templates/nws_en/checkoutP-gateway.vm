@@ -1,0 +1,262 @@
+          <div id="paymentGateway">
+            <h3>#springMessage('vm.register.msg4')</h3>
+#springBind("checkoutViewDTO.radioButtonId")
+            <input type="hidden" name="$status.expression" value="$!status.value" id="hidden_radioid">  
+#springBind("checkoutViewDTO.inputFieldId")
+            <input type="hidden" name="$status.expression" value="$!status.value" id="hidden_inputid">
+#springBind("checkoutViewDTO.selectedPaymentGatewayId")
+            <input type="hidden" name="$status.expression" value="$status.value" id="hidden_pgid">
+#foreach($paymentgateway in ${checkoutViewDTO.ccPreferencesDTO.paymentgateways})
+  #if($paymentgateway.logo && $paymentgateway.logo!="")
+            <div class="control-group">
+              <label class="radio">
+                <input type="radio" name="selectedPaymentGatewayCode" id="radio_$velocityCount" onClick="showhide('$paymentgateway.paymentgatewayid',this.value,this.id,'input_$velocityCount');" value="$paymentgateway.code" > 
+                <img src="$paymentgateway.logo" alt="$paymentgateway.displayname"/> 
+              </label>
+
+                  <label class="control-label" for="prompt_$velocityCount">$paymentgateway.prompttext</label>
+                  <div class="controls">
+                    <input type="text" name="$status.expression" id="input_$velocityCount" value="$!status.value" style="display:none" disabled>
+                  </div>
+ 
+            </div>
+  #else 
+    #if($paymentgateway.inputtype && $paymentgateway.inputtype>0)
+      #springBind("checkoutViewDTO.customerInput")
+            <div class="control-group"  >
+              <label class="control-label radio" for="radio_$velocityCount">
+                <input type="radio" name="selectedPaymentGatewayCode" id="radio_$velocityCount" onClick="showhide('$paymentgateway.paymentgatewayid',this.value,this.id,'input_$velocityCount');" value="$paymentgateway.code"> 
+                  $paymentgateway.displayname
+              </label>
+     #if($paymentgateway.code != 'PF')
+              <div class="controls">
+                <div class="control-group" id="input_${velocityCount}_prompt" style="display:none">
+                  <label class="control-label" for="prompt_$velocityCount">$paymentgateway.prompttext</label>
+                  <div class="controls">
+                    <input type="text" name="$status.expression" id="input_$velocityCount" value="$!status.value" style="display:none" disabled>
+                  </div>
+                </div>
+              </div>
+     #end
+            </div>
+    #else
+            <div class="control-group">
+              <label class="radio" for="radio_$velocityCount">$paymentgateway.displayname $paymentgateway.prompttext</label>
+            </div>
+    #end
+  #end
+  #if($paymentgateway.code == "PCICC" || $paymentgateway.code == "PCINONE")
+            <!-- PCI Secure Form -->
+            <div id="cc">
+              <div class="horizontal custom-lbl-width">    
+                <div class="title">
+                  <div class="heading2">#springMessage("vm.checkout_payment.creditcardinfo")</div>
+                </div>
+                <fieldset class="f-row">
+                  <legend class="outer">*#springMessage("vm.checkout_payment.creditcard")</legend>
+                  <input id="reviewAndPay-cardType-visa" name="reviewAndPay-cardType" type="radio" class="radio" value="visa" />
+                  <label class="visa control-label" for="reviewAndPay-cardType-visa"><img src="store/$vendorSettingsDTO.vendorId/assets/themes/theme2_en/images/icons/visa.gif" alt="Visa" /></label>
+                  <input id="reviewAndPay-cardType-masterCard" name="reviewAndPay-cardType" type="radio" class="radio" value="masterCard" />
+                  <label class="masterCard control-label" for="reviewAndPay-cardType-masterCard"><img src="store/$vendorSettingsDTO.vendorId/assets/themes/theme2_en/images/icons/master_card.gif" alt="Master Card" /></label>
+                  <input id="reviewAndPay-cardType-discover" name="reviewAndPay-cardType" type="radio" class="radio" value="discover" />
+                  <label class="discover control-label" for="reviewAndPay-cardType-discover"><img src="store/$vendorSettingsDTO.vendorId/assets/themes/theme2_en/images/icons/discover.gif" alt="Discover" /></label>    
+                </fieldset>
+                <div class="control-group">
+                  <label class="control-label" for="reviewAndPay-cardNumber">*Card Number</label>
+                  <div class="controls">
+                    <input id="reviewAndPay-cardNumber" name="reviewAndPay-cardNumber" type="text" class="text" />
+                  </div>
+                </div>
+    #if($paymentgateway.code == "PCICC")
+                <div class="control-group">
+                  <label class="control-label" for="reviewAndPay-level2Code">*#springMessage('vm.register.securitycode')</label>
+                  <div class="controls">
+                    <input id="reviewAndPay-level2Code" name="creditCard.level2Code" type="text" class="text" />
+                    <a href="#" onclick="return false;">What's this?</a>
+                  </div>
+                </div>
+    #else
+                <input type="hidden" name="creditCard.level2Code" id="cvv" value="1234"  autocomplete="off"/>
+    #end
+                <input type="hidden" id="currencyCode" value="$paymentgateway.option9">
+                <input type="hidden" id="authamt" value="$!checkoutViewDTO.authamt"/>
+                <input type="hidden" id="saleamt" value="$!checkoutViewDTO.saleamt"/>
+                <input type="hidden" id="zip" value="$!checkoutViewDTO.addresses.billingAddress.postal"/>
+                <input type="hidden" id="regioncode" value="$!checkoutViewDTO.addresses.billingAddress.provinceCode"/>
+                <input type="hidden" id="countrycode" value="$!checkoutViewDTO.addresses.billingAddress.countryCode"/>
+                <input type="hidden" id="city" value="$!checkoutViewDTO.addresses.billingAddress.city"/>
+                <input type="hidden" id="street" value="$!checkoutViewDTO.addresses.billingAddress.address1"/>
+                <input type="hidden" id="firstName" value="$!checkoutViewDTO.addresses.billingAddress.firstName"/>
+                <input type="hidden" id="middleName" value="$!checkoutViewDTO.addresses.billingAddress.middleName"/>
+                <input type="hidden" id="lastName" value="$!checkoutViewDTO.addresses.billingAddress.lastName"/>
+                <input type="hidden" id="address1" value="$!checkoutViewDTO.addresses.billingAddress.address1"/>
+                <input type="hidden" id="address2" value="$!checkoutViewDTO.addresses.billingAddress.address2"/>
+                <input type="hidden" id="phone" value="$!checkoutViewDTO.addresses.billingAddress.dphone"/>
+                <input type="hidden" id="billingemail" value="$!checkoutViewDTO.addresses.billingAddress.email"/>
+                <input type="hidden" name="email" value="$!checkoutViewDTO.addresses.billingAddress.email"/>
+    
+                <div class="control-group">
+                  <label class="control-label" for="reviewAndPay-expMonth">*Expiration Date</label>
+                  <div class="controls">
+                    <select class="month" id="reviewAndPay-expMonth" name="reviewAndPay-expMonth">
+                      <option value="0">-Month-</option>
+                      <option value="1">January</option>
+                      <option value="2">February</option>
+                      <option value="3">March</option>
+                      <option value="4">April</option>
+                      <option value="5">May</option>
+                      <option value="6">June</option>
+                      <option value="7">July</option>
+                      <option value="8">August</option>
+                      <option value="9">September</option>
+                      <option value="10">October</option>
+                      <option value="11">November</option>
+                      <option value="12">December</option>
+                    </select>
+                    <select class="year" id="reviewAndPay-expYear" name="reviewAndPay-expYear">
+                      <option value="0">-Year-</option>
+                      <option value="2011">2011</option>
+                      <option value="2012">2012</option>
+                      <option value="2013">2013</option>
+                      <option value="2014">2014</option>
+                      <option value="2015">2015</option>
+                      <option value="2016">2016</option>
+                      <option value="2017">2017</option>
+                      <option value="2018">2018</option>
+                    </select>
+                  </div>
+                </div><!-- /end .f-row -->
+
+                <div class="control-group">
+                  <label class="control-label" for="creditCard.ccHolderName">* #springMessage('vm.register.nameoncard')</label>
+                  <div class="conttols">
+                    #if($checkoutViewDTO.addresses.billingAddress.firstName && $checkoutViewDTO.addresses.billingAddress.firstName!=""
+                          && $checkoutViewDTO.addresses.billingAddress.lastName && $checkoutViewDTO.addresses.billingAddress.lastName!="")
+                  
+                  <input type="text" name="creditCard.ccHolderName" id="creditCard.ccHolderName" value="$!checkoutViewDTO.addresses.billingAddress.firstName $!checkoutViewDTO.addresses.billingAddress.lastName" />
+                    #else
+                  <input type="text" name="creditCard.ccHolderName" id="creditCard.ccHolderName" value="" />
+                    #end
+                  </div>
+                </div><!-- /end .f-row -->
+              </div><!-- /end .horizontal custom-lbl-width-->
+            </div><!-- /end .cc -->
+            <div class="secure" id="ccsubmitted">
+              <div class="form-horizontal">
+                <div class="title">
+                  <div class="heading2">Your Credit Card Information</div>
+                  <div class="legend">*Required</div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label outer">*Credit Card</label>
+                  <div class="controls">
+                    <span class="visa">VISA</span>
+                  </div>
+                </div>
+                <div class="control-group">
+                  <input type="hidden" name="transactionid" id="transactionid" value=""/>
+                  <input type="hidden" id="pciorderid" value="$checkoutViewDTO.ccIdentifier" />
+                  <input type="hidden" name="creditCard.ccNumber" id="CARDNO" value=""  autocomplete="off"/>
+                  <input type="hidden" id="creditCard.ccType" name="creditCard.ccType" value="3" />
+                  <input type="hidden" id="creditCard.expMonth" name="creditCard.expMonth" value="1"/>
+                  <input type="hidden"  name="creditCard.expYear" value="2010" />
+                  <label class="control-label" for="reviewAndPay-cardNumber">*Card Number</label>
+                  <div class="controls">
+                    <span>XXXX-XXXX-XXXX-</span><span id="last4cc"></span><a onclick="javascript:$('#ccsubmitted').css('display','none');$('#cc').css('display','block');" class="editCC">Edit Credit Card</a>
+                  </div>
+                </div><!-- /end .f-row -->
+                <div class="control-group">
+                  <label class="control-label" for="reviewAndPay-expMonth">*Expiration Date</label>
+                  <div class="controls">
+                    <div style="float:left">
+                      <span id="expDate"></span>
+                    </div>
+                  </div>
+                </div><!-- /end .f-row -->
+              </div><!-- /end .sleeve -->
+            </div><!-- End secure with prepop CC# and Exp Date-->
+   #elseif($paymentgateway.code.indexOf("NCC") == -1 && !$pgcodenocc.contains($paymentgateway.code) &&$paymentgateway.code != "ACH")
+   <!-- Credit Card Form -->
+            <div id="payment_method" style="display:none" class="well">
+              <div class="control-group">
+                <label class="control-label" for="CARDNO" >#springMessage("vm.register.creditcard")</label>
+                <div class="controls vat" >
+    #springBind ("checkoutViewDTO.creditCard.ccNumber")
+    #if($checkoutViewDTO.creditCard.startYear == 1)
+                  <input type="text" name="$status.expression" id="CARDNO" value="$checkoutViewDTO.creditCard.ccSecureNumber"  autocomplete="off"/>
+    #else
+                  <input type="text" name="$status.expression" id="CARDNO" value="$status.value"  autocomplete="off"/>
+    #end
+                  <div class="info_needed">#springMessage("vm.register.msg5")</div>
+                </div>
+              </div>
+              <div class="control-group">
+                <script language="javascript" type="text/javascript">
+                  function checkKey() {
+                    var keyword = document.getElementById('keyword');
+                    var key = document.getElementById('key');
+            
+                    keyword.value = key.value;
+                    if (keyword.value.length==0)
+                      keyword.value = $vendorSettingsDTO.vendorId;
+                    }
+                </script>    
+                <label class="control-label" for="cvv">#springMessage('vm.register.securitycode')</label>
+                <div class="controls" >
+    #springBind ("checkoutViewDTO.creditCard.level2Code")
+    #if($checkoutViewDTO.creditCard.startYear == 1 && $status.value!="")
+                  <input type="text" name="$status.expression" id="cvv" value="***"  autocomplete="off"/>
+    #else
+                  <input type="text" name="$status.expression" id="cvv" value="$status.value" maxlength="4" size="4"  autocomplete="off"/>
+    #end
+                  <span class="info_needed whatsthis" id="securityCode_help">#springMessage('vm.register.msg6')</span>
+                </div>
+              </div>  
+              <div class="control-group">
+    #springBind ("checkoutViewDTO.creditCard.ccType")
+                <label class="control-label" for="$status.expression">#springMessage('vm.register.cctype')</label>
+                <div class="controls" >      
+                  <select name="$status.expression" id="$status.expression">
+                    <option value="0" selected>#springMessage('vm.register.selectcard')</option>
+    #set ($cardtypekeys = $checkoutViewDTO.creditCard.ccTypes.keySet())
+    #foreach ($cardtypekey in $cardtypekeys)
+      #if ( $cardtypekey == 3 || $cardtypekey == 5 || $cardtypekey==6 || $cardtypekey==7)
+        #if ($cardtypekey == $status.value)
+                    <option value="$cardtypekey" selected>$checkoutViewDTO.creditCard.ccTypes.get($cardtypekey)</option>
+        #else
+                    <option value="$cardtypekey">$checkoutViewDTO.creditCard.ccTypes.get($cardtypekey)</option>
+        #end  
+      #end
+    #end
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
+    #springBind ("checkoutViewDTO.creditCard.expMonth")
+                <label class="control-label" for="$status.expression">#springMessage('vm.register.expirydate')</label>
+                <div class="controls">
+    #set ( $months = [1,2,3,4,5,6,7,8,9,10,11,12])
+                  <select id="$status.expression" name="$status.expression">
+    #foreach( $month in $months)
+                    <option value="$month" #if($status.value && $status.value == $month) selected #end> $month </option>
+    #end
+                  </select>
+    #springBind ("checkoutViewDTO.creditCard.expYear")
+                  <select name="$status.expression">
+    #foreach( $step in [0..10] )
+                    <option value="$math.add($date.getYear(),$step)" #if( $status.value && $status.value == $math.add($date.getYear(),$step)) selected #end> $math.add($date.getYear(),$step) </option>
+    #end
+                  </select>
+                </div>
+              </div>
+              <div class="control-group">
+                <label for="nameoncard" class="control-label">#springMessage('vm.register.nameoncard')</label>
+                <div class ="controls">
+    #springBind ("checkoutViewDTO.creditCard.ccHolderName")
+                  <input type="text" name="$status.expression" id="nameoncard" value="$status.value" maxlength="50" size="20" />
+                </div>
+              </div>
+            </div><!-- end of payment_method --> 
+  #end
+#end
+          </div><!-- End paymentGateway -->

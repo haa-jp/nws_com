@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#if($request.isSecure())
+#if ($request.getServerPort() ==443)
+#set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+#else
+#set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+#end
+#else
+#if ($request.getServerPort() ==80)
+#set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+#else
+#set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+#end
+#end
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>Account Summary - #springMessage("vm.myaccount.title")</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <base href="$baselink">
+    <link rel="shortcut icon" href="/favicon.png">
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" />
+  </head>
+
+  <body class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+        <div class="row-fluid">
+            <div class="span2">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/accountbar.vm")
+            </div>
+            
+            <div class="span10">
+					<div class="span6">
+						<h1>Customer Summary</h1>
+              #parse($item_topDTO.getItems().get(0).get('item_top'))
+              <div style="padding: 10px">
+                  <table>
+                    <tr>
+                      <td>$!customerDTO.arSummary.customerName
+                      <br/>
+                      #if($customerDTO.arSummary.address1 != "")
+                        $!customerDTO.arSummary.address1
+                      <br />
+                      #end
+                      #if($customerDTO.arSummary.address2 != "")
+                        $!customerDTO.arSummary.address2
+                      <br />
+                      #end
+                      #if($customerDTO.arSummary.address3 != "")
+                        $!customerDTO.arSummary.address3
+                      <br/>
+                      #end
+                      #if($customerDTO.arSummary.address4 != "")
+                        $!customerDTO.arSummary.address4
+                      <br/>
+                      #end
+                      $!customerDTO.arSummary.city, $!customerDTO.arSummary.state &nbsp; &nbsp; $!customerDTO.arSummary.zipCode </td>
+                    </tr>
+                  </table>
+					</div>
+					</div>
+			
+					<div class="span6">
+#set($propName = "SessionCustomerDTO_"+$vid)
+#set ($customerNumber = "")
+#if($request.getSession().getAttribute($propName))
+  #set($customerNumber = $request.getSession().getAttribute($propName).getCustomerProperty("Customer Number"))
+#end
+
+						<h3>Current Statement:</h3>
+						<div style="padding: 10px">
+							<form method="post" action="http://s1042d3p.northernwholesale.com:89/nws/statement.php" name="form1" id="nws-form">
+								<input type="hidden" name="cust" value="$customerNumber" />
+								<button class="btn-large btn-primary" type="submit">Get Statement</button>
+							</form>
+						</div>
+																	      
+				</div>
+
+              
+			<div class="span10">
+			<table class="table">
+				<thead>
+					<tr>
+					<td colspan="2">Billing Information</td>
+				</tr>
+				</thead>	
+				<tbody>
+					<!-- <tr>
+						<td> Open Order Amount:</td>
+						<td> $ $!number.format('#,###.00',$!customerDTO.arSummary.openOrderAmount)</td>
+					</tr> -->
+					<tr class="warning">
+						<td> Amount Due:</td>
+						<td> $ $!number.format('#,###.00',$!customerDTO.arSummary.amountDue)</td> 
+					</tr>
+					<tr>
+						<td> Billing Period Amount:</td>
+						<td> $ $!number.format('#,###.00',$!customerDTO.arSummary.billingPeriodAmt)</td>
+					</tr>
+					<tr>
+						<td> Future Due Amount:</td>
+						<td> $ $!number.format('#,###.00',$!customerDTO.arSummary.futureAmount)</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<table class="table">
+				<thead>
+					<tr>
+					<td colspan="2">Payment Information</td>
+				</tr>
+				</thead>	
+				<tbody>
+					<tr>
+						<td> Last Payment Date:</td>
+						<td> $date.format('M/d/yyyy',$customerDTO.arSummary.lastPaymentDate)</td> 
+					</tr>
+					<tr>
+						<td> 30 Days:</td>
+						<td> $!number.format('#,###.00',$!customerDTO.arSummary.agePeriod1Amt)</td>
+					</tr>
+					<tr>
+						<td> 60 Days:</td>
+						<td> $!number.format('#,###.00',$!customerDTO.arSummary.agePeriod2Amt)</td>
+					</tr>
+					<tr>
+						<td> 90 Days:</td>
+						<td> $!number.format('#,###.00',$!customerDTO.arSummary.agePeriod3Amt)</td>
+					</tr>
+					<tr>
+						<td> 120 Days:</td>
+						<td> $!number.format('#,###.00',$!customerDTO.arSummary.agePeriod4Amt)</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<table class="table">
+				<thead>
+					<tr>
+					<td colspan="2">Sales Information</td>
+				</tr>	
+				</thead>	
+				<tbody>
+					<tr>
+						<td> Sales Month to Date:</td>
+						<td> $ $number.format('#,###,00',$!customerDTO.arSummary.salesMonthToDate)</td>
+					</tr>
+					<tr>
+						<td> Sales Year to Date:</td>
+						<td> $ $number.format('#,###.00',$!customerDTO.arSummary.salesYearToDate)</td>
+					</tr>
+					<tr>
+						<td> Date of First Sale:</td>
+						<td> $date.format('M/d/yyyy',$customerDTO.arSummary.dateOfFirstSale)</td>
+					</tr>
+					<tr>
+						<td> Sales Last Year:</td>
+						<td> $ $!number.format('#,###.00',$!customerDTO.arSummary.salesLastYear)</td>
+					</tr>
+					<tr>
+						<td> Sales Terms:</td>
+						<td> $customerDTO.arSummary.termsDescription</td>
+					</tr>
+				</tbody>
+			</table>
+				
+         </div>
+      
+
+                </div> <!--  end span10 -->              
+            
+        </div><!-- end of row-fluid -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+    </div><!-- end container-fluid -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+  </body>
+</html>
+

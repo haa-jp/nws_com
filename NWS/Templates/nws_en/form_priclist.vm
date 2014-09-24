@@ -1,0 +1,211 @@
+#set( $propName = "SessionCustomerDTO_"+$vid) #set ($customerNumber ="") 
+#if($request.getSession().getAttribute($propName))
+#set($customerNumber = $request.getSession().getAttribute($propName).getProps().get("CustomerNumber")) 
+#end
+
+<div id="form_message">
+	<div class="">
+		<p id="RegisterMessages"></p>
+		<h1 class="warning"></h1>
+		<p id="RegisterErrors"></p>
+	</div>
+</div>
+
+<div id="nws-form">
+	<form name="customerFormData" id="customerFormData" method="post" action="customerformdata.html">
+
+		<input type="hidden" class="systemData" name="emailName" value="NWSrequestPriceList" /> 
+		<input type="hidden" name="customerFormData.formId" value="userData" /> 
+		<input type="hidden" name="customerFormData.vendorId" value='${vid}' /> 
+		<input type="hidden" id="CustomerFormDataInputMode" name="customerFormDataInputMode" value="database email" />
+
+		<!-- <h1> Price List Request Form</h1> -->
+
+		<p> Please, enter in the following information: <br /> 
+		Your price list will be delivered to your email address once we can verify your	information. </p>
+		<p>If you would like us to deliver your price list to a third party, please specify the contact information in the notes field below.</p>
+
+		<div class="form-horizontal">
+			<div class="control-group">
+				<label class="control-label" for="name">Name</label>
+				<div class="controls">
+					<input type="text" name="name" maxlength="50" id="name"	class="formData" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="email">Email Address</label>
+				<div class="controls">
+					<input type="text" name="email" maxlength="50" id="Email" class="formData" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="dealershipname">Dealership Name</label>
+				<div class="controls">
+					<input id="dealershipname" name="dealershipname" type="text" class="formData" />
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label" for="customernumber">Customer Number</label>
+				<div class="controls">
+					<input id="customernumber" name="customernumber" type="text" class="formData" value="$customerNumber" />
+				</div>
+			</div>
+
+			<fieldset>
+				<legend> Information Requested </legend>
+				<div class="row-fluid">
+					<div class="span4">
+						<span class="help-block">Pricing Information:</span>
+						<label class="checkbox">  Dealer Price 
+							<input id="" type="checkbox" class="checkbox formData" name="dlrprc" value="dlrprc" /> 
+						</label>
+						<label class="checkbox">  Retail Price
+							<input id="" type="checkbox" class="checkbox formData" name="rtlprc" value="rtlprc" />
+						</label> 
+					</div>
+					<div class="span4">
+						<span class="help-block">Additional Information:</span>
+						<label class="checkbox"> Bar Code Information
+							<input id="" type="checkbox" class="checkbox formData" name="barcodes" value="barcodes" />
+						</label>
+						<label class="checkbox"> Mfg. Numbers 
+							<input id="" type="checkbox" class="checkbox formData" name="mfgnumbers" value="mfgnumbers" />
+						</label>
+					</div>
+					<div class="span4">
+						<span class="help-block">Product Groups:</span>
+						<label class="checkbox">  RV 
+							<input id="" type="checkbox" class="checkbox formData" name="rvitems" value="rvitems" />
+						</label> 
+						<label class="checkbox"> MH
+							<input id="" type="checkbox" class="checkbox formData" name="mhitems" value="mhitems" /> 
+						</label>
+						<label class="checkbox"> Marine 
+							<input id="" type="checkbox" class="checkbox formData" name="marineitems" value="marineitems" /> 
+						</label>
+						<label class="checkbox"> Snowmobile/ATV 
+							<input id="" type="checkbox" class="checkbox formData" name="snowatvitems" value="snowatvitems" /> 
+						</label>
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset>
+				<legend> File Format Requirements </legend>
+				<div class="row-fluid">
+					<div class="span4">
+						<span class="help-block">We us a Software System:</span> 
+						<label class="radio"> Galaxy - Systems 2000
+							<input id="fileformat1" type="radio" class="checkbox formData" name="fileformat" value="Galaxy - Systems 2000" />
+						</label>
+						<label class="radio"> ADP Lightspeed
+							<input id="fileformat2" type="radio" class="checkbox formData" name="fileformat" value="ADP Lightspeed" />
+						</label>
+						<label class="radio"> EDI
+							<input id="fileformat3" type="radio" class="checkbox formData" name="fileformat" value="EDI" />
+						</label>
+					</div>
+					<div class="span4">
+						<span class="help-block">We require a standard file:</span>
+						<label class="radio"> Microsoft Excel
+							<input id="fileformat4" type="radio" class="checkbox formData" name="fileformat" value="Microsoft Excel" />
+						</label>
+						<label class="radio"> Text, Tab Delimited
+							<input id="fileformat5" type="radio" class="checkbox formData" name="fileformat" value="Text, Tab Delimited" />
+						</label>
+						<label class="radio"> Text, Comma Delimited 
+							<input id="fileformat6" type="radio" class="checkbox formData" name="fileformat" value="Text, Coma Delimited" />
+						</label>
+						<label class="radio"> Fixed Width ASCII
+							<input id="fileformat7" type="radio" class="checkbox formData" name="fileformat" value="Fixed Width ASCII" />
+						</label>
+						<label class="radio"> Other (please specify in notes area below)
+							<input id="fileformat8" type="radio" class="checkbox formData" name="fileformat" value="See Notes" />
+						</label>
+					</div>
+					<div class="span4">
+						&nbsp;
+					</div>
+				</div>
+			</fieldset>
+
+			<fieldset>
+				<legend>Additional Notes</legend>
+				<div class="row-fluid">
+					<div class="control-group">
+						<div class="controls">
+							<textarea id="notes" class="textarea_scroll formData" name="notes" style="width: 400px;"></textarea>
+						</div>
+					</div>
+				</div>
+			</fieldset>
+
+			<div class="form-actions">
+				<div>
+					<input id="Submit" class="btn btn-primary" type="button"
+					value="Submit">
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
+
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+		$("#customerFormData").validate({
+			errorLabelContainer : $("#RegisterErrors"),
+			errorContainer : $("#form_message"),
+			rules : {
+				name : {
+					required : true
+				},
+				email : {
+					required : true,
+					email : true
+				},
+				dealershipname : {
+					required : true
+				},
+				customernumber : {
+					required : true
+				},
+			},
+
+			messages : {
+				name : {
+					required : "Please enter your name <br/>"
+				},
+				email : {
+					required : "Please enter email <br/>",
+					email : "Please enter a valid email address <br/>"
+				},
+				dealershipname : "Please enter your dealership or company name <br/>",
+				customernumber : "Your Customer Number is required <br/>",
+			},
+
+			invalidHandler : function(form, validator) {
+				var errors = validator.numberOfInvalids();
+				if (errors) {
+					var message = 'You missed fields.';
+					appendMsg(message, 'err');
+				}
+			}
+		});
+
+		$("#Submit").bind('click', function() {
+			$("#RegisterMessages").html("");
+			$("#RegisterErrors").html("");
+			if ($("#customerFormData").valid()) {
+				doSendCustomerFormData();
+				$("#customerFormData :text, #customerFormData textarea").each(function() {
+					$(this).val('');
+				});
+				$("#customerFormData select").val(0);
+				toastr.success('Thnak you for your request!');
+			} else {
+				toastr.error('please check your informaton');
+			}
+			return false;
+		});
+	}); 
+</script>

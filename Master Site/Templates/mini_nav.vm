@@ -1,0 +1,34 @@
+#if($miniBasketDTO.details.products.size() > 0)
+  #set($basketItemsTotal = $miniBasketDTO.details.products.size())
+#else
+  #set($basketItemsTotal = 0)
+#end
+#set($totalPrice = $math.toDouble("0.00"))
+#foreach($product in $miniBasketDTO.details.products)
+  #set($totalPrice = $math.add($totalPrice,  $product.totalPrice))
+#end
+
+          <div class="row-fluid" id="mini-nav">
+            <div class="container-fluid">
+              <!-- Top menus -->
+              <div class="row-fluid">
+                <div class="span3 text-right #if(!${welcomeMatDTO.loggedIn}) offset3 #end">
+                  <a href="myaccount.html?mode=vieworder">My Account</a>
+                </div>
+                <div class="span3 text-right">
+                  <div class="mini-basket">
+                    <a class="mini-basket-total" href="$seourl.encodeURL("basket.html?vid=$vendorSettingsDTO.vendorId")"> Cart ($!basketItemsTotal): $number.format('currency', $totalPrice).replace('¤','$')</a>
+                  </div>
+                </div>
+                <div class="span3 text-right">
+                  <a href="yourinfo.html?vid=$vid">Checkout</a>
+                </div>
+                #if(${welcomeMatDTO.loggedIn})
+                <div class="span3 text-right">
+                  <a href="signout.html?vid="$vid>Logout</a>
+                </div>
+                #end
+              </div>
+              <!-- End Top Menus -->  
+            </div>
+          </div>

@@ -1,0 +1,388 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+ #if($request.isSecure())
+        #if ($request.getServerPort() ==443)
+            #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+        #else
+            #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+        #end
+    #else
+        #if ($request.getServerPort() ==80)
+            #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+        #else
+            #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+        #end
+    #end
+
+
+
+#if (!$pageTileDictionaryDTO)
+	#if ($_commandName)
+		#springBind( "${_commandName}.pageTileDictionaryDTO" )
+		#set ($pageTileDictionaryDTO = ${status.value})
+	#end
+#end
+
+#if ($pageTileDictionaryDTO)
+#set ($hotDealsDTO=$pageTileDictionaryDTO.getPageTile("hotDealsDTO") )
+#set ($childItemsHomeDTO=$pageTileDictionaryDTO.getPageTile("childItemsHomeDTO") )
+#set ($vCatsCategoryDTO=$pageTileDictionaryDTO.getPageTile("vCatsCategoryDTO") )
+#set ($catDropMenuDTO=$pageTileDictionaryDTO.getPageTile("catDropMenuDTO") )
+#end
+
+
+     #if(($multiPageViews) && ($__virtualCategory))
+    	#set($itemMultiPageView = $multiPageViews.get($__virtualCategory.getPageTileName()))
+     #end
+
+
+    #if (!$field)	#set($field = $regExp.getParamFromURL($itemMultiPageView.multiPageURL, 'fld')) 	#end
+    #set($vcatsid = $pageTile.getItemObject($vcatinfo, $vcatinfo.items.get(0), 'vcatsid'))
+    
+    #if (!$direction)	#set($direction = $regExp.getParamFromURL($itemMultiPageView.multiPageURL, 'direc'))  	#end
+    #if (!$mpvp)	#set($mpvp = $itemMultiPageView.currentPageIndex)  	#end
+    #set($catid = $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'categoryid'))
+
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<BASE href="$baselink">
+<title>$direction Avetti.com - Java Ecommerce Shopping Cart Software</title>
+
+<script language="javascript">
+
+
+
+function sortRedirect(){
+    var sortselect = document.getElementById("sortselect");
+    window.location.href='$seourl.encodeURL("store.html?cid=$catid&vcid=728&vid=20120606532&fld=$field&direc='+ sortselect.value  +'&mpvp=$mpvp")';
+}
+</script>
+
+
+<link rel="shortcut icon" href="/favicon.png">
+
+<link rel="stylesheet" type="text/css" media="all" href="store/$vendorSettingsDTO.vendorId/assets/css5/main_style.css">
+<link rel="stylesheet" type="text/css" media="all" href="store/$vendorSettingsDTO.vendorId/assets/css5/content_style.css">
+<link rel="stylesheet" type="text/css" media="all" href="store/$vendorSettingsDTO.vendorId/assets/css5/page_style.css">
+
+</head>
+<body>
+
+<div id="page">
+<!-- START HEADER -->
+
+
+<div id="header">
+
+	<a href="http://avetti.com" id="logolink"><img src="store/$vendorSettingsDTO.vendorId/assets/images5/logo2.jpg" alt="Avetti.com" title="Avetti.com"></a>
+
+	<div id="toplinks" >
+
+#if($welcomeMatDTO)
+#if(${welcomeMatDTO.loggedIn})
+     <span style="display:block;width:350px; height:26px;text-align:right;  ">
+#else
+     <span style="display:block;width:215px; height:26px;text-align:right;  ">
+#end
+#end
+
+<table cellpadding=3 cellspacing=3 width=215 border=0 >
+<form action="adsearch.html" method="get" name="searchform" >
+<tr><td align=right>
+<input maxlength="100" name="method.search1" id="request" size="15" style="font-size: 12px; padding-top:5px;"  type="text" value=""  ></td>
+
+<td align=right width=65>
+<img  src="store/${vendorSettingsDTO.vendorId}/assets/images5/search.gif" alt="search" border="0"  onclick="javascript:document.searchform.submit();" ><input type="hidden"  name="searchsetname" value="simplesearch"><input type="hidden" name="type" value="1">
+</td></tr>
+</form></table>
+</span>
+
+
+<!-- ==========top========== -->
+#if($welcomeMatDTO)
+  #if(${welcomeMatDTO.loggedIn})
+	 <b style="color:#666; font-size:12px">Welcome ${welcomeMatDTO.firstName} ! </b>
+
+#if($pageTileDictionaryDTO.templateName == "checkout_completed.vm")
+<a href='https://${appSettingsDTO.host}/${appSettingsDTO.AppName}/signout.html?vid=${vendorSettingsDTO.vendorId}'> Logout</a><span class="line"> | </span>
+#else
+<a href='https://${appSettingsDTO.host}/${appSettingsDTO.AppName}/signout.html?vid=${vendorSettingsDTO.vendorId}&redirecturl=${welcomeMatDTO.currentPage}'> Logout</a><span class="line"> | </span>
+#end
+#else
+#if($pageTileDictionaryDTO.templateName != "logincustomer.vm")
+<a href='https://${appSettingsDTO.host}/${appSettingsDTO.AppName}/signin.html?redirecturl=${welcomeMatDTO.currentPage}'>login</a><span class="line"> | </span>
+#end
+#end
+#end
+
+<a href="myaccount.html?mode=customerinfo&vid=$vendorSettingsDTO.vendorId">my account</a> <span class="line">|</span> <a href="wishlist.html?action=add&vid=$vendorSettingsDTO.vendorId">wishlist</a> <span class="line">|</span> 
+<a href="basket.html?&vid=$vendorSettingsDTO.vendorId"><img src="store/$vendorSettingsDTO.vendorId/assets/templateimages/cart_a.gif" style="border:1px solid #cccccc;"></a>
+
+<!-- ======end top============= -->
+
+	</div>
+<!-- top menu -->
+	<div class="navrow" >	
+
+                <ul id="nav">
+				#foreach($temp in $Menu2DTO.items)
+					#set($category = $pageTile.getItemObject($storeMainCategoriesDTO, $temp, "c"))
+					#set($cc = $pageTile.getItemObject($Menu2DTO, $temp, "cc"))
+					<li>
+						<a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">
+						<span>$category.description</span>
+					    </a>
+						
+					</li>
+				#end
+
+	       </ul>
+
+	</div>
+<!-- end top menu -->
+</div>
+<!-- END HEADER -->
+
+<!-- START MAIN -->
+<div id="main">
+
+<!--start content-->
+  <div id="content">
+	  <!--start category_main_content-->
+		  <div id="category_main_content">
+
+
+					  <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId")">Home</a> 
+				<span class="line">|</span>
+				
+					  #foreach($categoryNameDTO in $categoryNameDTOHQL.getItems() ) 
+					  #set($description=$pageTile.getItemObject($categoryNameDTOHQL,$categoryNameDTO,"description"))
+					  #set($categoryid=$pageTile.getItemObject($categoryNameDTOHQL,$categoryNameDTO,"categoryid"))
+					  <a href="$seourl.encodeURL("store.html?cid=$categoryid&vid=$vendorSettingsDTO.vendorId&pcid=$cc.parent&lang=0")"> 
+					  <span>$description</span> 
+					  </a>
+		                         #end
+<div>
+#parse($categoryHeaderDTO.getItems().get(0).get('category_header'))
+</div>
+				
+		                <!--start category_main_content_cl-->
+					  <div id="category_main_content_cl">
+
+  <ul>
+ #foreach($temp in $Menu1DTO.items)
+ #set($category = $pageTile.getItemObject($Menu1DTO, $temp, "c"))
+#set($cc = $pageTile.getItemObject($Menu1DTO, $temp, "cc"))
+<li>
+<a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">
+$category.description</a>
+</li>
+#end
+</ul>
+
+
+
+
+						  <h1>shop by category</h1>
+                                                         <ul>
+							 #foreach($temp in $Menu2DTO.items)
+							 #set($category = $pageTile.getItemObject($Menu2DTO, $temp, "c"))
+							 #set($cc = $pageTile.getItemObject($Menu2DTO, $temp, "cc"))
+                                                        <li>
+							<a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">
+							$category.description
+							</a>
+                                                        </li>
+						    #end
+							</ul>
+						
+		  #set($pricenum=0)
+			#foreach($vcat in $vCatsCategoryDTO.getItems())
+                                        #set($propprice=$pageTile.getItemObject($vCatsCategoryDTO,$vcat,"prop9"))
+                                         #if($propprice=="price")
+                                              #set($pricenum=1)
+                                         #end
+                                 #end
+
+                                  #if($pricenum > 0)
+						  <h1>shop by price</h1> 
+                                                          <ul>
+				 #foreach($vcat in $vCatsCategoryDTO.getItems())
+				 #set($vcatname = $pageTile.getItemObject($vCatsCategoryDTO, $vcat, "name"))
+				 #set($vcid=$pageTile.getItemObject($vCatsCategoryDTO,$vcat,"vcid"))
+                                                                 #set($curcid=$pageTile.getItemObject($vCatsCategoryDTO,$vcat,"curcid"))
+                                                                 #set($prop9=$pageTile.getItemObject($vCatsCategoryDTO,$vcat,"prop9"))
+							  #if($prop9=="price")
+                                                          <li>
+							  <a href="$seourl.encodeURL("store.html?cid=$curcid&vid=$vendorSettingsDTO.vendorId&vcid=$vcid&fld=listprice&direc=ASC")">$vcatname</a><span class="counter"></span>
+                                                          </li>
+							  #end
+						          #end		
+                                                          </ul>
+                                    #end
+
+                                    #set($brandnum=0)
+		     #foreach($vcat in $vCatsCategoryDTO.getItems())
+                                        #set($propbrand=$pageTile.getItemObject($vCatsCategoryDTO,$vcat,"prop9"))
+                                         #if($propbrand=="brand")
+                                              #set($brandnum=1)
+                                         #end
+                                 #end
+                                 #if($brandnum > 0)
+
+                                            
+						  <h1>shop by brand</h1>
+						    #foreach($vcat in $vCatsCategoryDTO.getItems())
+					 #set($vcatname = $pageTile.getItemObject($vCatsCategoryDTO, $vcat, "name"))
+					#set($vcid=$pageTile.getItemObject($vCatsCategoryDTO,$vcat,"vcid"))
+                                                                                #set($curcid=$pageTile.getItemObject($vCatsCategoryDTO,$vcat,"curcid"))
+					#set($prop9=$pageTile.getItemObject($vCatsCategoryDTO,$vcat,"prop9"))
+							   #if($prop9=="brand")
+							  <li><a href="$seourl.encodeURL("store.html?cid=$curcid&vid=$vendorSettingsDTO.vendorId&vcid=$vcid&fld=listprice&direc=ASC")">$vcatname</a><span class="counter"></li>
+						#end
+						           #end
+                                                           </ul>	
+	               #end
+	 
+					  </div>
+					  <!--end category_main_content_cl-->
+
+
+
+					  <!--start category_main_content_cr-->
+					  <div id="category_main_content_cr">
+
+                                   
+<span class="category_title">#foreach($categoryNameDTO in $categoryNameDTOHQL.getItems() ) $pageTile.getItemObject($categoryNameDTOHQL,$categoryNameDTO,"description")#end</span>
+
+									  
+							
+									  <div id="categoryBar">
+												<div id="left"></div>
+#parse($categoryExterndealDTO.getItems().get(0).get('categoryExterndeal'))							 
+<div id="right">
+												 #if(($multiPageViews) && ($childItemsDTO))
+												   #set($itemMultiPageView = $multiPageViews.get($childItemsDTO.getPageTileName()))
+											     #end
+											  
+											   <div id="mid"><span class="sp">Page |</span>
+											          
+													  
+														#if($itemMultiPageView && $itemMultiPageView.getPreviousUrl())
+														  #set($previousUrl=$itemMultiPageView.getPreviousUrl())
+														  <a href="$previousUrl"><img src="store/${vendorSettingsDTO.vendorId}/assets/images/tl.gif" title="previous page" border="0" /></a>
+														 #else
+														   <a ><img src="store/${vendorSettingsDTO.vendorId}/assets/images/spacer.gif" border="0" /></a>
+														#end 
+														
+														 
+															 #foreach($pageItem in $itemMultiPageView.indexList) 
+																 #if($itemMultiPageView ) 
+																	#if($velocityCount== $itemMultiPageView.currentPageIndex) 
+																	 <a class="redstyle">$itemMultiPageView.currentPageIndex</a>   
+																	#else  
+																		#if($velocityCount<$itemMultiPageView.pagesCount+1) 
+																			#set($pageurl=$itemMultiPageView.multiPageURL)  
+																			<a class="navleftlink" href="${pageurl}$velocityCount">$velocityCount&nbsp;</a>
+																		 #end
+																	 #end 
+																 #end 
+															 #end 
+															  
+
+											   <!-- <a href="#" class="redstyle">1</a> <a href="#">2</a> <a href="#">3</a> <a href="#">4</a> <a href="#">5</a> <span class="pt">...</span><a href="#">40</a> -->
+												   #if($itemMultiPageView && $itemMultiPageView.getNextUrl())
+															 #set($nextUrl=$itemMultiPageView.getNextUrl())
+															 <a href="$nextUrl"><img src="store/${vendorSettingsDTO.vendorId}/assets/images/tr.gif" title="next page" border="0" /></a>		
+												       #else
+														   <a ><img src="store/${vendorSettingsDTO.vendorId}/assets/images/spacer.gif" border="0" /></a>
+   
+													#end
+												 </div>
+											   </div>
+											   
+									 </div>
+											   
+									 <br/><br/>
+						              <!--start category_content_bottom-->
+									<div id="category_content_bottom">
+										#foreach($itemIter in $childItemsDTO.getItems())
+										#set($childItem = $pageTile.getItemObject($childItemsDTO, $itemIter, "i"))
+
+											  <div class="category_content">
+													<div class="category_content_img">
+													#if($childItem.cimage !="")
+														<a href="$seourl.encodeURL("storeitem.html?iid=$childItem.itemid&vid=$vendorSettingsDTO.vendorId")" alt='$childItem.title'><img src='store$childItem.cimage' border=0 width="75" height="61"></a><br/>
+													#end
+													</div>
+													<div class="category_info"><span class="category_info_title">$childItem.title</span><br />
+													<a class="infoslink" href="$seourl.encodeURL("storeitem.html?iid=$childItem.itemid&vid=$vendorSettingsDTO.vendorId")" alt='$childItem.shortdesc'>$childItem.shortdesc
+							                        </a><br>
+											<!--start price-->
+											#if($!list.get($childItem.properties, 13).propvalue && $list.get($childItem.properties, 13).propvalue!="")
+											$list.get($childItem.properties, 13).propvalue<br/>
+											#end
+											#set($price = $pageTile.getItemObject($childItemsDTO, $itemIter, "price"))
+											#if($math.round($price.listprice) > $math.round($price.price))
+												<span class="STYLE7">
+													<strike>$ $regExp.showPrice($price.listprice)</strike><br/>
+												</span>
+												<span class="STYLE1">
+													$ $regExp.showPrice($price.price)<br/>
+												</span>
+												<span class="STYLE3">
+													you save: $ $regExp.showPrice($math.sub($price.listprice,$price.price)) ($math.round($math.mul($math.div($math.sub($price.listprice,$price.price),$price.listprice),100))%)<br/>
+												</span>
+												#else
+												<span class="STYLE1">
+													$ $regExp.showPrice($price.listprice)<br/>
+												</span>
+												
+											#end
+
+													</div>
+											  </div>
+									   #end
+                                                                     
+									</div>
+  #parse($categoryFooterDTO.getItems().get(0).get('category_footer'))
+									<!--end category_content_bottom-->
+                       </div>
+                      <!--end category_main_content_cr-->
+
+        </div>
+       <!--end category_main_content-->
+
+ </div>
+ <!--end content-->
+
+
+
+
+</div>
+
+
+<!-- END MAIN -->
+
+
+		</div>
+	</div>
+	
+
+</div>
+
+
+<!-- FOOTER -->
+<div id="footer">
+<div id="footerbox">
+<div id="footerlinks"><a href="">About Us</a>&nbsp;&nbsp;???&nbsp;&nbsp;<a href="/">Privacy Policy</a>&nbsp;&nbsp;???&nbsp;&nbsp;<a href="">Terms of Use</a>&nbsp;&nbsp;???&nbsp;&nbsp;<a href="">Contact Us</a></div>
+<div id="copyright">Copyright &copy; 2007, Avetti.com Corporation. All Rights Reserved.<br>
+Java and J2EE are registered trademarks of Sun Microsystems, Inc. </div>
+</div>
+</div>
+<!-- END FOOTER -->
+
+</body>
+</html>

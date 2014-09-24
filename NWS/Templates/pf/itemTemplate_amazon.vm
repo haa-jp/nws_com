@@ -1,0 +1,251 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+#set($itemRow = $singleItemDTO.getItem(0))
+#set($item = $pageTile.getItemObject($singleItemDTO, $itemRow , "i"))
+#set($price = $item.itemPrice)
+#if($request.isSecure())
+#if ($request.getServerPort() ==443)
+#set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+#else
+#set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+#end
+#else
+#if ($request.getServerPort() ==80)
+#set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+#else
+#set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+#end
+#end
+
+
+
+#if (!$pageTileDictionaryDTO)
+#if ($_commandName)
+#springBind( "${_commandName}.pageTileDictionaryDTO" )
+#set ($pageTileDictionaryDTO = ${status.value})
+#end
+#end
+#if ($pageTileDictionaryDTO)
+#set ($storeMainCategoriesDTO=$pageTileDictionaryDTO.getPageTile("storeMainCategoriesDTO") )
+#set ($childItemsHomeDTO=$pageTileDictionaryDTO.getPageTile("childItemsHomeDTO") )
+#set ($catDropMenuDTO=$pageTileDictionaryDTO.getPageTile("catDropMenuDTO") )
+#end
+
+
+
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<BASE href="$baselink">
+<title>Avetti.com - Java Ecommerce Shopping Cart Software</title>
+
+<link rel="shortcut icon" href="/favicon.png">
+
+<link rel="stylesheet" type="text/css" media="all" href="store/$vendorSettingsDTO.vendorId/assets/css5/main_style.css">
+<link rel="stylesheet" type="text/css" media="all" href="store/$vendorSettingsDTO.vendorId/assets/css5/content_style.css">
+<link rel="stylesheet" type="text/css" media="all" href="store/$vendorSettingsDTO.vendorId/assets/css5/page_style.css">
+<link rel="stylesheet" type="text/css" media="all" href="assets/showimage.css">
+<script type="text/javascript" src="assets/showimage.js"></script>
+
+<script>
+
+var ns4 = (document.layers)? true:false;
+var ie4 = (document.all)? true:false;
+
+function PopWindow(myimage,w,h,pos){
+var win=null;
+pos="center";
+if(pos=="random"){myleft=(screen.width)?Math.floor(Math.random()*(screen.width-w)):100;mytop=(screen.height)?Math.floor(Math.random()*((screen.height-h)-75)):100;}
+if(pos=="center"){
+w=(screen.width)?(screen.width-60):760;
+h=(screen.height)?(screen.height-100):540;
+myleft=(screen.width)?(screen.width-w)/2:60;
+mytop=(screen.height)?(screen.height-h-30)/2:60;
+}
+else if((pos!='center' && pos!="random") || pos==null){myleft=10;mytop=10}
+settings="width=" + w + ",height=" + h + ",top=" + mytop + ",left=" + myleft + ",scrollbars=yes,location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=yes";
+win=window.open("","",settings);
+if(win!=null){
+var mypagecontent="<ht"+"ml><bo"+"dy><he"+"ad><ti"+"tle>- Click window to close</ti"+"tle><BASE href="+"$baselink"+"></he"+"ad>";
+mypagecontent+="<bo"+"dy bgcolor=#FFFFFF marginheight=0 marginwidth=0 leftmargin=0 ";
+mypagecontent+="topmargin=0 rightmargin=0 onBlur=javascript:self.close(); onClick=javascript:self.close();>";
+mypagecontent+="<cen"+"ter><ta"+"ble align=center height=460 width=100% border=0><tb"+"ody valign=middle><tr valign=middle><td align=center valign=middle >";
+mypagecontent+="<p><img src="+myimage+" name=image>";
+mypagecontent+="</td></tr></tb"+"ody></tab"+"le></cent"+"er></b"+"ody></ht"+"ml>";
+win.document.write(mypagecontent);
+win.document.close();
+}
+win.focus();
+}
+
+function setAddItems(){
+document.all.addItemsIframe.src='action.html?vid=$vendorSettingsDTO.vendorId&mode=addItems&iid1=$item.itemid&qty1=1&url=basket.html%3Fvid%3D$vendorSettingsDTO.vendorId';
+}
+</script>
+
+
+<script type="text/javascript">
+var panels = new Array('about-content','op-content'#if($item.longdesc2!=""), 'toc-content'#end,'tab-review');
+var tabStubs = new Array('about-tab','op-tab'#if($item.longdesc2!=""), 'toc-tab'#end,'op-review');
+var selectedTab = null;
+var selectedStub = null;
+function swapTab(tab, name, stub) {
+selectedTab = tab;
+for(i = 0; i < panels.length; i++) {
+document.getElementById(panels[i]).style.display = (name == panels[i]) ? 'block':'none';
+}
+selectedStub = stub;
+for(i = 0; i < tabStubs.length; i++) {
+document.getElementById(tabStubs[i]).className = '';
+}
+document.getElementById(selectedStub).className = 'current';
+//return false;
+}
+
+function addItems(obj,objform,i){
+var oo=eval(objform+".basketItems["+i+"].itemToProcess");
+if(obj.checked){
+oo.value="true";
+objform.itemscount.value+=1;
+}
+if(obj.checked==false){
+oo.value="false";
+objform.itemscount.value-=1;
+}
+}
+
+function changevalues(obj,objform,i){
+if(obj.checked){
+objform.elements["basketItems["+i+"].itemToProcess"].value="true";
+}
+
+if(obj.checked==false){
+objform.elements["basketItems["+i+"].itemToProcess"].value="false";
+
+}
+}
+
+</script>
+
+
+<script type="text/javascript" src="assets/attribPriceAjx.js"></script>
+<script type="text/javascript" src="assets/numberFormat.js"></script>
+<script type="text/javascript" src="assets/yahooUI/build/yahoo/yahoo-min.js"></script>
+<script type="text/javascript" src="assets/yahooUI/build/dom/dom-min.js"></script>
+<script type="text/javascript" src="assets/yahooUI/build/event/event-min.js"></script>
+<script type="text/javascript" src="assets/yahooUI/build/connection/connection-min.js"></script>
+<script type="text/javascript" src="assets/yahooUI/build/logger/logger-min.js"></script>
+<script type="text/javascript" src="assets/yahooUI/build/datasource/datasource-beta-min.js"></script>
+
+<script type="text/javascript" src='assets/XT/springxt.js'></script>
+<script type="text/javascript" src='assets/XT/prototype.js'></script>
+<script type="text/javascript" src='assets/XT/scriptaculous.js?load=effects'></script>
+
+
+</head>
+<body>
+
+<div id="page"  >
+	<!-- START HEADER -->
+	<div id="header">
+		<a href="http://avetti.com" id="logolink"><img src="store/$vendorSettingsDTO.vendorId/assets/templateimages/store_temp_imgs/logo.jpg" alt="Avetti.com" title="Avetti.com"></a>
+
+		<div style="float:right; font-size:0.8em" class="internal-link">
+			<A class="internal-link" HREF="javascript:window.print()">Click to Print This Page</A>
+		       <br><br>
+			<a class="internal-link" href="javascript:window.close()">Close the window</a>
+		</div>
+	</div>
+
+	<!-- END HEADER -->
+
+<!-- START MAIN -->
+
+<div id="content">
+	<div><br><br></div>
+	<br><br><br><br><br><br><br><br>
+	#parse($itemHeaderDTO.getItems().get(0).get('item_header'))
+
+<div id="item_content"  >
+	
+	<!--start item_content_left-->
+	<div id="item_content_left">
+	#if($item.image3!="") 
+	#if($item.image3.startsWith("http"))
+	<a href="$item.image3"  rel="showImage" title="$item.title"><img name="slika" src="$item.image3" border="0" width="203" alt="" /></a>
+	#else
+	<a href="store$item.image3"  rel="showImage" title="$item.title"><img name="slika" src="store$item.image3" border="0" width="203" alt="" /></a>
+	#end
+	#end
+	</div>
+	<!--end item_content_left-->
+
+	<!--start item_content_center-->
+
+	<div >
+			<div class="item_content_center_tinfo">$item.title</div>
+
+#if($math.round($price.listPrice) > $math.round($price.price))				 
+			<span class="STYLE7" id="_currentPrice">$$regExp.showPrice($price.listPrice)</span>
+                        <span class="STYLE6" id="_currentPrice">&nbsp;now&nbsp;$$regExp.showPrice($price.price)</span>
+			
+#elseif($price.listPrice.compare($price.listPrice.doubleValue(),0) == 0)	
+			<span class="STYLE6" id="_currentPrice">                                                            
+			Call for pricing<br/>
+			</span>         			 
+			
+#else
+			<span class="STYLE6" id="_currentPrice">
+			$ $regExp.showPrice($price.listPrice)<br/>
+			</span>
+			
+#end
+			<br>
+			<span class="STYLE8">$item.shortdesc</span>
+			<br>
+			<span class="small_font">Product code:&nbsp;$item.code</span>
+			<br><br>
+	</div>
+	<!--end item_content_center-->
+
+	<br><br><br><br>
+
+</div>
+<!-- end item_content -->
+
+</div>
+<!--end content-->
+<!-- END MAIN -->
+<!--===-->
+#if($item.longdesc!="")
+<div>$item.longdesc </div>
+#end
+	<br><br>
+#if($item.longdesc2!="")
+	<div>
+	<b>Specifications</b><br>$item.longdesc2
+	</div>
+#end 
+<!--===-->
+</div>
+<!-- end page -->
+
+
+<!-- START BOTTOMNAV -->
+<br><br>
+<!-- END BOTTOMNAV -->
+
+
+
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-2573634-1";
+urchinTracker();
+</script>
+
+
+
+</body>
+</html>

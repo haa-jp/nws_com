@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+   <title>Price List Request</title>	
+   <meta http-equiv="Expires" content="-1" />
+   <meta http-equiv="Pragma" content="no-cache" />
+   <meta http-equiv="Cache-Control" content="no-cache" />
+   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>   
+
+<body>
+<h2> We have received a Price List Request.</h2>
+<p> We received a request for a new Price List. <br> The following information was received.</p>
+<p> Be sure to verify all dealer information <strong>BEFORE</strong> processing the price list</p>
+
+<hr/>
+   <b> Dealership Name: </b> ${dealershipname}<br/>
+   <b> Customer Number: </b> ${customernumber}<br/>
+   <b>- Name: </b> ${name}<br/>
+   <b>- Email Address: </b> ${email}<br/>
+
+<h3> File Requirements</h3>
+   <b> Dealer Pricing: </b> ${dlrprc}<br/>
+   <b> Retail Pricing: </b> ${rtlprc}<br/>
+   <b> Barcodes: </b> ${barcodes}<br/>
+   <b> MFG. Numbers: </b>${mfgnumbers}<br/>
+
+   <b>RV Items:</b>${rvitems}<br/>
+   <b> MH items:  </b>${mhitems}<br/>
+   <b> Marine Items: </b> ${marineitems}<br/>
+   <b> Powersports items: </b>${snowatvitems}<br/>
+<br/>
+   <b> Additional Notes: </b> ${notes}<br/>
+   <b> File Format: </b> ${fileformat}
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+#if(!${welcomeMatDTO.loggedIn})
+  <b>
+    <a href="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=${welcomeMatDTO.currentEncodePage}">#springMessage('vm.header.login')</a>
+    to create Order
+  </b>
+#else
+
+	#if($approved != 'true')
+<div class="row-fluid">
+  	#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/jscart_notice.vm")
+</div>
+	##parse($order_builder_centerDTO.getItems().get(0).get('order_builder_center'))
+	#else
+<div id="quick-order-section" class="row-fluid">
+	<div class="js-basket">
+	  <div class="span3">
+	  	<div class="well">
+	    	<h3> Build your order</h3>
+		#parse($order_builder_topDTO.getItems().get(0).get('order_builder_top'))
+	           <p> You currently have $!availBasketList.size()  <a href="home/saved-orders?mn=am">Saved Orders</a>.</p>
+			   <div class="js-basket-top"></div>
+	      <div style="margin: -20px 0 10px 0">
+	      	<a class="btn" href="$seourl.encodeURL("nwrevieworders.html?mode=vieworder&vid=$vendorSettingsDTO.vendorId")">#springMessage("vm.checkout_completed.gotomyacc")</a>
+	      </div>
+	    </div> <!-- end well -->
+	  </div> <!-- end3 -->
+	  <div class="span9">
+             <div class="row">
+               	<div class="alert alert-block alert-info">
+               	   <button class="close" type="button" data-dismiss="alert"> x</button>
+               	   <p> If you have a list of part numbers or a PO, this area is designed to help you create and submit your order. Click the "Order Builder Instructions"  button at the left hand corner for detailed instructions on creating an order from a list of part numbers; or enter a PO number, part numbers and quantities below. (<b>Note:</b> You can use the TAB key to move between fields and add new rows. No mouse required) To transfer an existing PO from a spreadsheet like Excel, or from programs like DealerVu, Light Speed, Quick Books, Systems 2000, or Total Control. Click the "PO Transfer" button and follow the instructions to add the items to your cart.  </p>
+               	</div>
+	        
+	           <div class="span6">
+         	      <div class="control-group js-basket-input"></div>
+              </div> 
+	           <div class="span5">
+			      <div class="form-actions js-basket-form-actions"> 
+                     <input type="button" class="btn btn-primary addToCartBtn js-basket-add-btn" value="Add Items to Cart">
+		             <input type="button" value="Clear" class="btn js-basket-clear">
+		             <a data-toggle="modal" href="#example" class="btn btn-primary btn-medium js-basket-po-transfer-btn">PO Transfer</a>
+			      </div>
+	           </div>
+              </div>
+          </div>
+ 	  <div class="span8">
+			<hr/>
+			<div class="js-basket-products"></div>
+	  </div> <!-- end9 -->
+	</div>
+  ##<input class="btn btn-primary" type="button" value="#springMessage('vm.basket.toshop')" onclick="javascript:document.location='store.html?vid=${vendorSettingsDTO.vendorId}'"/>
+</div> <!--end container -->
+#end
+#end

@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>#springMessage("vm.checkout_shipping.title")</title>
+    <meta name="interestgroup" content="tp">
+    <meta name="prodtype" content="">
+#if($vendorSettingsDTO.themeId) 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/commonCSS-JS.vm")
+#else
+  #parse("$vendorSettingsDTO.vendorId/commonCSS-JS.vm")
+#end
+    <script src="store/$checkoutViewDTO.vendorId/assets/toggleDisplay.js"></script>
+    <script src="store/$checkoutViewDTO.vendorId/assets/limitText.js"></script>
+    <script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
+
+    <script>
+    function upAddress(productidx,addressidx,mode) {
+      var addressid="0";
+      if(mode != "split"){
+        addressid=eval("document.frm.ADDRESS_"+productidx+"_"+addressidx+".value");
+      }
+
+      if(mode== "split"  ||
+      (addressid != "-1" &&  mode == "edit" && addressid != "0"  || 
+      addressid != "-1" &&  addressid == "0" && mode != "edit")) {
+        document.frm.t.value=mode;
+        document.frm.productidx.value=productidx;
+        document.frm.addressidx.value=addressidx;
+        document.frm.shipaddressid.value=addressid;
+        document.frm.submit();
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="masterWrapper">
+      <!-- Start header -->
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+#else
+       #parse("$vendorSettingsDTO.vendorId/header.vm")
+#end
+      <!-- End header -->
+      <!--start content-->
+      <div id="bd">
+        <div id="wide-content" class="checkout">
+              <h1>#springMessage("vm.checkout_customerinfo.shipping")</h1>
+              <div class="checkout-bc">
+                <ul>
+                  <li>
+                    <p class="past"><a href="yourinfo.html" target="_top">#springMessage("vm.checkout_customerinfo.infor")</a></p>
+                  </li>
+                  <li>
+                    <p class="current">#springMessage("vm.checkout_customerinfo.shipping")</p>
+                  </li>
+                  <li>
+                    <p>#springMessage("vm.checkout_customerinfo.payment")</p>
+                  </li>
+                  <li>
+                    <p>#springMessage("vm.checkout_customerinfo.placeorder")</p>
+                  </li>
+                  <li>
+                    <p>#springMessage("vm.checkout_customerinfo.confirm")</p>
+                  </li>
+                </ul>
+              </div>
+              <div class="tablediv">
+                <form name="frm" action="shipping.html" method="POST">
+                  <input type="hidden" name="t">
+                  <input type="hidden" name="productidx" value="0">
+                  <input type="hidden" name="addressidx" value="0">
+                  <input type="hidden" name="shipaddressid" value="0">
+#if(!$currencyInUse)
+  #foreach($cur in $storeCurrencies)
+    #if($cur.def==1)
+                  <input type="hidden" name="c" value="$cur.id" />
+    #end
+  #end
+#else
+                  <input type="hidden" name="c" value="$currencyInUse" />
+#end
+                  <table cellspacing="0" cellpadding="0" border="1" class="product-table">
+                    <thead>
+                      <tr>
+                        <th width="5%">#springMessage("vm.register.qty")</th>
+                        <th width="60%">#springMessage("vm.register.description")</th>
+                        <th width="25%">#springMessage("vm.register.shipto")</th>
+                        <th width="10%">#springMessage("vm.register.total") </th>
+                      </tr>
+                    </thead>
+#set($key = 0)
+#foreach($product in $checkoutViewDTO.details.products)
+  #set ($num = 0)
+  #set($needShip = "Y")
+
+  #foreach($property in $product.properties) 
+    #if($property.propName == "no_ship_info")
+      #if($property.propValue == "Y")
+        #set($needShip = "N")
+      #end
+    #end
+  #end
+
+  #foreach($shipaddr in $product.shipAddress)
+                    <tr>
+                      <td>
+                        $shipaddr.qty
+    #if($shipaddr.qty!=1)
+                        <a href="javascript:upAddress($key,$num,'split')">#springMessage("vm.checkout_shipping.split")</a>
+    #end
+                      </td>
+                      <td>
+                        $product.description
+                      </td>
+                    <!--<td>
+                        <label>
+    #if($product.isGiftWrap)
+      #if( ${shipaddr.isgiftwrap}) 
+                              <input type="checkbox" name="GIFTWRAP_${key}_${num}" style="visibility:visible;"  onClick="toggleDisplay(this,'MSG_${key}_${num}')" checked >
+      #else
+                              <input type="checkbox" name="GIFTWRAP_${key}_${num}" style="visibility:visible;"  onClick="toggleDisplay(this,'MSG_${key}_${num}')" >
+      #end
+    #else
+                              <input type="checkbox" name="GIFTWRAP_${key}_${num}" style="visibility:hidden;"  onClick="toggleDisplay(this,'MSG_${key}_${num}')" >
+    #end
+                        </label>
+                      </td>-->
+                      <td>
+    #springBind( "checkoutViewDTO.shipTypes.currentType")
+                        <select name="ADDRESS_${key}_${num}" onChange="upAddress($key,$num,'add')">
+                          <option value="-1" >#springMessage("vm.checkout_shipping.selectadd")</option>
+    #foreach($address in $customerAddressDTO)
+                          <option  value="$address.addressid"
+      #if("$address.addressid"=="$shipaddr.shipaddressid")  selected #end >$address.nickname</option>
+    #end                           
+                          <option value="0" >#springMessage("vm.checkout_shipping.newaddress")</option>
+                        </select>
+                        <a href="javascript:upAddress($key,$num,'edit')">#springMessage("vm.checkout_shipping.editview")</a>
+                      </td>
+                      <td class="price">
+                        $number.format('currency',$checkoutViewDTO.formatter.currency($shipaddr.totalPrice),$request.getLocale())
+                      </td>
+                    </tr>
+    #set($num = $num+1)
+  #end
+  #set($key = $key + 1)
+#end
+                    </table>
+                    
+                    <div class="comment-totals">
+                      <div class="basket-totals notice">
+#if($math.round($checkoutViewDTO.details.totalDiscount )> 0)                      
+                        <div class="yui-gc total-row">
+                          <div class="yui-u first desc">#springMessage("vm.register.discounts"):</div>
+                          <div class="yui-u price">$number.format('currency',$checkoutViewDTO.formatter.currency($checkoutViewDTO.details.totalDiscount),$request.getLocale())</div>
+                        </div>
+                        <!-- End total-row -->
+#end
+                        <div class="yui-gc total-row">
+                          <div class="yui-u first desc">
+                            #springMessage("vm.register.subtotal")
+($checkoutViewDTO.details.totalQty #if($checkoutViewDTO.details.totalQty > 1)#springMessage("vm.register.items") #else #springMessage("vm.register.item") #end):
+                          </div>
+                          <div class="yui-u price">$number.format('currency',$checkoutViewDTO.formatter.currency($checkoutViewDTO.details.totalWithDiscount),$request.getLocale())</div>
+                        </div>
+                        <!-- End total-row -->
+                        <div class="yui-gc total-row">
+                          <div class="yui-u first desc">#springMessage("vm.register.shipping"):</div>
+                          <div class="yui-u price">$number.format('currency',$checkoutViewDTO.formatter.currency($checkoutViewDTO.details.shipTotal),$request.getLocale())</div>
+                        </div>
+                        <!-- End total-row -->
+                        <div class="yui-gc total-row">
+                          <div class="yui-u first desc">#springMessage("vm.register.tax"):</div>
+                          <div class="yui-u price">$number.format('currency',$checkoutViewDTO.formatter.currency($checkoutViewDTO.details.taxTotal),$request.getLocale())</div>
+                        </div>
+                        <!-- End total-row -->
+#set($tempgiftcert=0)
+#if($checkoutViewDTO.giftCertificate.giftCertificates && $checkoutViewDTO.giftCertificate.giftCertificates.size() > 0 )
+                        <div class="yui-gc total-row">
+                          <div class="yui-u first desc">#springMessage("vm.register.giftapplied"):</div>
+                          <div class="yui-u price">$number.format('currency',$checkoutViewDTO.formatter.currency($checkoutViewDTO.giftCertificate.totalAvailable),$request.getLocale())</div>
+                        </div>
+                        <!-- End total-row -->
+  #set($tempgiftcert=$checkoutViewDTO.giftCertificate.totalAvailable)   
+#end
+                        <div class="yui-gc total-row">
+                          <div class="yui-u first desc">#springMessage("vm.register.totalbill"):</div>
+                          <div class="yui-u price"><strong>$$checkoutViewDTO.formatter.currency($math.abs($math.sub($math.add($math.add(${checkoutViewDTO.details.totalWithDiscount},${checkoutViewDTO.details.taxTotal}),${checkoutViewDTO.details.shipTotal}),${tempgiftcert})))</strong></div>
+                        </div>
+                        <!-- End total-row -->
+                      </div>
+                      <!-- end basket-totals notice -->
+                    </div>
+                    <!-- end coment-totals -->
+                  
+                    
+                  <div class="okCancelPos">
+                    <input type="submit" class="btnLogin btnclass" value="#springMessage('button.CONTINUE')" onClick="doSubmit(this.form,this.form.t,'payment')"/>
+                    <input type="submit" class="btnLogin btnclass" value="#springMessage('button.CANCEL')" onClick="javascript:history.back();return false;"/>
+                    <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+                  </div>
+                </form>
+              </div>
+              <!--end tablediv-->
+        </div>
+        <!--end wide-content -->
+      </div>
+      <!--end bd-->
+      <!-- Start footer -->
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+#else
+       #parse("$vendorSettingsDTO.vendorId/footer.vm")
+#end
+      <!-- End footer -->
+    </div>
+    <!-- End doc-->
+  </body>
+</html>

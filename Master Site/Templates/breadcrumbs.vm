@@ -1,0 +1,21 @@
+#set($bcSeparator = "&raquo;") ## Breadcrumbs separator
+        <div class="side-nav">
+          <p class="title">Categories</p>
+          <ul class="top-categories">
+#set($bcMax = $categoryPathDTO.size())
+#foreach($clink in $categoryPathDTO)
+            <li>
+              <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$clink.cid")"><span>$clink.getName()</span></a>
+            </li>
+#end
+#if($childCategoriesDTO.getItems().size() > 0)
+   #foreach($itemIter in $childCategoriesDTO.getItems())
+            <li class="sub-cats">
+   #set($category = $pageTile.getItemObject($childCategoriesDTO, $itemIter, "c"))
+
+              <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")"><strong>$category.name</strong></a>
+            </li>
+  #end
+#end
+          </ul>
+        </div>

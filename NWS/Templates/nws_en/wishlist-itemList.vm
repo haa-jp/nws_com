@@ -1,0 +1,95 @@
+  #if($wishListVectorDTO.items)
+    #if($wishListVectorDTO.items.size()== 0)
+                <div>
+                  <h3>#springMessage("vm.nws.watchlist.info")</h3>
+                  <a href="javascript:history.go(-1)"><img src="store/${vendorSettingsDTO.vendorId}/assets/images/continue.gif" border=0></a>
+                </div>
+    #end
+  #end
+              <table class="table table-bordered" >
+  ## Many of table rows with wishlist's products
+  #if($wishListVectorDTO.items)
+    #if($wishListVectorDTO.items.size() > 0)
+                <thead>
+                  <tr>
+                    <th>&nbsp;</th>
+                    <th>#springMessage("vm.nws.watchlist.items")</th>
+                    <th>#springMessage("vm.nws.watchlist.notes")</th>
+                  </tr>
+                </thead>
+                <tbody>
+  #foreach($node in $wishListVectorDTO.items)
+    #set($title = $pageTile.getItemObject($wishListVectorDTO, $node, "title"))
+    #set($itemid = $pageTile.getItemObject($wishListVectorDTO, $node, "itemid"))
+    #set($shortdesc = $pageTile.getItemObject($wishListVectorDTO, $node, "shortdesc"))  
+    #set($longdesc = $pageTile.getItemObject($wishListVectorDTO, $node, "longdesc"))
+    #set($cimage= $pageTile.getItemObject($wishListVectorDTO, $node, "cimage"))
+    #set($wishlistid= $pageTile.getItemObject($wishListVectorDTO, $node, "wishlistid"))
+    #set($notes= $pageTile.getItemObject($wishListVectorDTO, $node, "notes"))
+    #set($compcode= $pageTile.getItemObject($wishListVectorDTO, $node, "compcode"))
+    #set($item = $pageTile.getItemObject($wishListVectorDTO, $node, "item"))
+    #set($price = $item.itemPrice)
+    
+    ###set($price= $pageTile.getItemObject($wishListVectorDTO, $node, "price"))
+    #set($supplier= $pageTile.getItemObject($wishListVectorDTO, $node, "Supplier"))
+                <tr>     
+                  <td class="ac">
+                    <div>
+                      ##springMessage("vm.nws.watchlist.addremove"): 
+                      <input type="checkbox" name="select"  value="$compcode">
+                    </div>
+                    <input type="hidden" id="item_$itemid" name="$compcode" value="false">
+                  </td>
+    #set($imgsrc="store/$wishListDTO.vendorId/items/images/thumbnail_no_image.gif")
+    #if($cimage)
+      #set($imgsrc=$cimage)
+    #end
+                  <td >
+                    <div class="item_img">
+                      <a href="$seourl.encodeURL("storeitem.html?iid=$itemid&vid=$wishListDTO.vendorId")">
+                        <img src="$imgsrc" alt="$title" onerror="javascript:this.src='store/$vendorSettingsDTO.vendorId/items/thumbnails/na_sm.png'"/>
+                      </a>
+                    </div>
+    #if($supplier == 'catalog')
+                    <div class="item-desc">
+                      <p class="item-title">
+                        <a href="$seourl.encodeURL("storeitem.html?iid=$itemid&vid=$wishListDTO.vendorId")">
+                          $title
+                        </a>
+                      </p>
+                      <p class="code">
+                        Part Number: $compcode.replace("-",".")
+                      <p>
+                    </div>
+                    
+                    <input type="hidden" id="$compcode.$velocityCount" value="catalog">
+    #end      
+                  </td>
+                  <td class="ac">
+    #if($wishListDTO.owner)
+                    <textarea class="span6" rows="4" name="notes_$wishlistid">$notes</textarea>
+                    <p>
+                      <input class ="btn btn-primary" name="submitSaveNote_$wishlistid" type="submit" value="#springMessage("vm.nws.watchlist.savenote")">
+                    </p>
+    #else
+      $notes
+    #end
+                  </td>
+                </tr>
+
+  #end
+
+                </tbody>
+#end
+              </table>
+## Group buttons
+              <div class="form-actions">
+                <input class="btn btn-primary" type="button" name="submitAddToCart" id="submitAddToCart" value="#springMessage("vm.nws.watchlist.addtocart")">
+  #if($wishListDTO.owner)
+                <input class="btn" type="submit" name="submitDeleteItems" value="#springMessage("vm.nws.watchlist.remove")">
+  #end
+  #if($wishListDTO.owner)
+                <input class="btn" type="submit" name="submitClearWishList" value="#springMessage("vm.nws.watchlist.removeall")">
+  #end
+              </div>
+#end

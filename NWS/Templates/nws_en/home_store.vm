@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+  #else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+#set($metadescription= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metadescription'))
+#set($metakeywords= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metakeywords'))
+#set($pagetitle= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'pagetitle'))
+<html  xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <base href="$baselink"/>
+    <meta name="description" content="#if($metadescription!="") $metadescription #else   #end" />
+    <meta name="keywords" content="#if($metakeywords!="")$metakeywords #else   #end" />
+    <title>$!pagetitle</title>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+  <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/avetti.slider.css" type="text/css" media="all" />
+  <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" />
+
+#if(!${welcomeMatDTO.loggedIn})
+<script type="text/javascript">
+<!--
+window.location = "$baselink/signin.html?vid=20120606532&mt=1"
+// -->
+</script>
+#end
+
+  </head>
+  <body class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="main-inner">
+
+         <div class="hero-unit start">
+         	<div class="container">
+         		<h1> Welcome</h1>
+         		<p>Use the tool bar above to search for products by NWS number, manufacturer number, or description, and narrow your search by catalog and category. Use the right hand corner to quickly add items to your cart by part number and quantity. Browse catalogs by clicking an icon below.</p>
+         		<p style="float:right">
+         			<a class="btn btn-large btn-success" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22823")"   
+         			   alt="Go to Quick Order"> Place Order</a>
+        			<a class="btn btn-large" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23046")"  
+         			   alt="Go to Saved Order"> Saved Orders</a>
+         		</p>
+         	</div>
+         </div>
+
+        <div class="row-fluid">
+          <div class="span6">
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/home_main_categories.vm")
+          </div>
+
+          <div class="span6">
+          	
+          	<div class="row-fluid">
+          		<div class="promo">
+          		   <p><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=78975")" title="RV Pro Magazine May 2014"> 
+          		   	<b>We&rsquo;re in RV PRO Magazine, May, 2014</b> </a>
+          		   	</p>
+          		</div>
+          	</div>
+          	
+            <div class="well account-links">
+              <h3>Review Orders</h3>
+              <div class="account-shortcut">
+                <a href="nwrevieworders.html">Review Orders</a> <span>/</span> 
+                <a href="openinvoices.html">Open Invoices</a> <span>/</span> <a href="paidinvoices.html">Paid Orders</a> <span>/</span> 
+                <a href="">Request RMA</a>
+              </div>
+              <h3>Manage Account</h3>
+              <div class="account-shortcut">
+                <a href="accountsummary.html">Account Summary</a> <span>/</span> 
+                <a href="myaccount.html?mode=changepassword&vid=$vendorSettingsDTO.vendorId">Change Password</a> <span>/</span> 
+                <a href="myaccount.html?mode=viewproperties&vid=$vendorSettingsDTO.vendorId">View Preferences</a>
+              </div>
+              <h3>NWS Policies</h3>
+              <div class="account-shortcut">
+                <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22779")" alt="Returns"> Dealer Returns</a> <span>/</span> 
+                <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22776")" alt="Wholesale Terms"> Terms and Conditions</a> <span>/</span> 
+                <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22777")" alt="Your Guarantee"> Personal Guarantee</a>
+              </div>
+              <h3>Account Services</h3>
+              <div class="account-shortcut">
+                <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23068")" alt="Contact Information"> Contact Us</a> <span>/</span> 
+                <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22758")" alt="NWS Price Lists"> Request a Price List</a> <span>/</span> 
+                <a href="$seourl.encodeURL("store.html?cid=22774&vid=$vendorSettingsDTO.vendorId")" alt="News Letter Request"> Email Subscriptions</a> <span>/</span> 
+                <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23067")" alt="Dealer Download Area"> Forms &amp; Downloads</a>
+              </div>
+            </div>
+          </div>
+        </div>
+  #parse($home_centerDTO.getItems().get(0).get('home_center'))
+        <div class="row-fluid">
+          <div class="span12">
+  ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/featureditems.vm")
+  ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/New-products.vm")
+          </div>
+        </div>
+        <div class="row-fluid">
+  #parse($home_bottomDTO.getItems().get(0).get('home_bottom'))
+        </div>
+      </div>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+
+
+    </div>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/megamenu.js"></script>
+    <script type="application/javascript">
+      $('.carousel').carousel({interval: 4000});
+      store.remove('sidenavData');
+    </script>
+  </body>
+</html>

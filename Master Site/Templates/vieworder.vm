@@ -1,0 +1,27 @@
+<h2>#springMessage("vm.myaccount.vieworders")</h2><br>
+<div>
+#if($myAccountDTO.historyOrders.size() < 1)
+   #springMessage("vm.vieworder.msg")
+	<br><br><br><br><br><br><br>
+#else	 
+	<table class="orderTable">	
+		<tr>
+			<th width="6%" scope="col" align="center" class="">#springMessage("vm.vieworder.id")</th>
+			<th width="35%" scope="col" align="center">#springMessage("vm.vieworder.date")</th>
+			<th width="30%" scope="col" align="center">#springMessage("word.email")</th>
+			<th width="14%" scope="col" align="center">#springMessage("vm.basket.total")</th>
+			<th width="15%" scope="col" align="center">#springMessage("vm.vieworder.shipstatus")</th>
+		</tr>
+	#foreach($order in $myAccountDTO.historyOrders)
+		  #set($rid=$order.rand)
+		<tr>
+			<td align=center><a href="myaccount.html?mode=vieworderdetail&orderid=$order.orderdataid" target="_blank">$order.orderid</a></td>
+			<td align=center><span>$!date.format('default', $order.createtime)</span> </td>
+			<td align=center><span>$order.customer.email</span></td>
+			<td align=center><span>$number.format('currency',$regExp.showPrice($order.paytot),$viewStoreCurrency.locale)</span></td>
+			<td align=center><span>$!list.get($myAccountDTO.orderStates, $order.orderstate)</span></td>   
+		</tr>
+	#end
+	</table>
+#end
+</div>

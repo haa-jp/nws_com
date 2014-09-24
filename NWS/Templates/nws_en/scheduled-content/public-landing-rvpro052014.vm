@@ -1,0 +1,32 @@
+<div class="row-fluid">
+   <h2> See us in RV-Pro Magazine?</h2>
+   <p>Northern Wholesale Supply is proud to be recognized by <a href="http://http://rv-pro.com/" title="the leading business magazine for the RV industry">RV-Pro Magazine</a> for our Items in the <a href="http://rv-pro.com/magazine/digital-version-library">May 2014</a> Product Spotlight </p>
+</div>
+
+<div class="row-fluid">
+   <p>Northern Wholesale Supply, Inc., Lino Lakes, MN, presents the Lock Block and Lock Chock leveler and stabilizer system. Designed to work together to securely level and stabilize RV’s and towables, the system features durable high density molded polypropylene construction, hard or soft ground capability, compact convenient storage and Limited Lifetime Bend/Break Warranty. Lock Block also functions as a tongue jack support and comes with a nylon carrying case.</p>	
+
+   <div class="span12">
+ 
+		<div class="row-fluid">	
+			<div class="span6">
+				<p>
+			   	<a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&iid=375854")" title="Extreme Max Wheel Block">
+			    <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/blog/Lock_Block.jpg" alt="the NEW Lock Block"/>  </a> <br />
+				<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/blog/lock-block-logo.png" alt="Lock Block Logo"/>
+				</p>
+			</div>
+			<div class="span6">
+				<p>
+				<a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&iid=375855")" title="Extreme Max Wheel Chock">
+					<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/blog/Lock_Chock.jpg" alt="the NEW Lock Chock"/>  </a> <br />
+					<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/blog/lock-chock-logo.png" alt="Lock Chock Logo"/>
+				</p>
+			</div>
+		</div> 
+
+		<div class="row-fluid pad70">
+			   <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/blog/NWS_RVPRO_BAL_LockArm.jpg" alt="BAL - stabilizer Br Display"/> 
+		</div>
+   </div> <!--end 12 -->
+</div>

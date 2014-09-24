@@ -1,0 +1,575 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#set($itemRow = $singleItemDTO.getItem(0))
+#if($itemRow)
+  #set($item = $pageTile.getItemObject($singleItemDTO, $itemRow , "i"))
+  #if($item)
+    #set($price = $item.itemPrice)
+  #end
+  #set($printitemid = $pageTile.getItemObject($singleItemDTO, $itemRow , "itemid"))
+#end
+
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+
+#if ($pageTileDictionaryDTO)
+  ###set ($storeMainCategoriesDTO=$pageTileDictionaryDTO.getPageTile("storeMainCategoriesDTO") )
+  #set ($childItemsHomeDTO=$pageTileDictionaryDTO.getPageTile("childItemsHomeDTO") )
+  #set ($catDropMenuDTO=$pageTileDictionaryDTO.getPageTile("catDropMenuDTO") )
+#end
+
+#set($metadescription= $item.metadescription)
+#set($keywords= $item.keywords)
+#set($pagetitle= $item.pagetitle)
+
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="description" content="$!metadescription" />
+    <meta name="keywords" content="$!keywords" />
+    <base href="$baselink" />
+    <title>$!pagetitle</title>
+
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/deliveryoption/deliveryoption.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/showimage/showimage.css">
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/commerce/commerce_shop.css">
+
+#if($vendorSettingsDTO.themeId) 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/commonCSS-JS.vm")
+#else
+  #parse("$vendorSettingsDTO.vendorId/commonCSS-JS.vm")
+#end
+    ##<script language="javascript" src="store/$vendorSettingsDTO.vendorId/assets/js5/jquery.ui.min.js"></script>
+    <script language="javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
+    <script type="text/javascript" src="assets/commercelib/showimage/showimage.js"></script>
+
+    <script type="text/javascript">
+      var $j = jQuery.noConflict();
+      
+      var ns4 = (document.layers)? true:false;
+      var ie4 = (document.all)? true:false;
+      
+      function PopWindow(myimage,w,h,pos)
+      {
+        var win=null;
+        pos="center";
+        if(pos=="random")
+        {
+          myleft = (screen.width)?Math.floor(Math.random()*(screen.width-w)):100;
+          mytop = (screen.height)?Math.floor(Math.random()*((screen.height-h)-75)):100;
+        }
+        if(pos=="center")
+        {
+          w = (screen.width)?(screen.width-60):760;
+          h = (screen.height)?(screen.height-100):540;
+          myleft = (screen.width)?(screen.width-w)/2:60;
+          mytop = (screen.height)?(screen.height-h-30)/2:60;
+        }
+        else if((pos!="center" && pos!="random") || pos==null)
+        {
+          myleft=10;
+          mytop=10;
+        }
+        settings = "width=" + w + ",height=" + h + ",top=" + mytop + ",left=" + myleft + ",scrollbars=yes,location=no,directories=no,status=no,menubar=no,toolbar=no,resizable=yes";
+        win = window.open("","",settings);
+        if(win!=null)
+        {
+          var mypagecontent="<ht"+"ml><bo"+"dy><he"+"ad><ti"+"tle>- Click window to close</ti"+"tle><BASE href="+"$baselink"+"></he"+"ad>";
+          mypagecontent+="<bo"+"dy bgcolor=#FFFFFF marginheight=0 marginwidth=0 leftmargin=0 ";
+          mypagecontent+="topmargin=0 rightmargin=0 onBlur=javascript:self.close(); onClick=javascript:self.close();>";
+          mypagecontent+="<cen"+"ter><ta"+"ble align=center height=460 width=100% border=0><tb"+"ody valign=middle><tr valign=middle><td align=center valign=middle >";
+          mypagecontent+="<p><img src="+myimage+" name=image>";
+          mypagecontent+="</td></tr></tb"+"ody></tab"+"le></cent"+"er></b"+"ody></ht"+"ml>";
+          win.document.write(mypagecontent);
+          win.document.close();
+        }
+        win.focus();
+      }
+
+      function setAddItems()
+      {
+         document.all.addItemsIframe.src="action.html?vid=$vendorSettingsDTO.vendorId&mode=addItems&iid1=$item.itemid&qty1=1&url=basket.html%3Fvid%3D$vendorSettingsDTO.vendorId";
+      }
+
+      function checkSelectEl(matchstr)
+      {
+        var count=0;
+        var alertmsg="";
+        var selectArray = document.getElementsByTagName('select');
+
+        for(var i=0; i<selectArray.length; i++)
+        {
+          var selectAttr = selectArray[i];
+          if (selectAttr && beginWith(selectAttr.name, matchstr))
+          {
+            var opt=selectAttr.options[selectAttr.selectedIndex];
+            if(opt.value=="0")
+            {
+              var selectName=selectAttr.name;
+              var errHiddenId=selectName.substring(0, selectName.lastIndexOf(".") );
+              document.getElementById(errHiddenId).innerHTML="<div class=\"warning\">Please, select value</div>";
+              count++;
+            }
+
+          }
+        }
+
+        if(count==0)
+        {
+          return true;
+        }
+        else
+        {
+          return false;
+        }
+      }
+
+    </script>
+
+  <script type="text/javascript">
+  $j().ready(function (){
+    $j('#tab-set>div').hide();
+    var active = $j('.tab-nav li.selected a').attr('href');
+    $j(active).show();
+      
+    $j('.tab-nav li a').click(function (event){
+      event.preventDefault();
+      $j('.tab-nav li').removeClass('selected');
+      $j(this).parent().addClass('selected');
+      $j('#tab-set>div').hide();
+      active = $j('.tab-nav li.selected a').attr('href');
+      $j(active).show();
+      });
+  });
+
+    
+      function addItems(obj,objform,i)
+      {
+        var oo=eval(objform+".basketItems["+i+"].itemToProcess");
+        if(obj.checked)
+        {
+          oo.value="true";
+          objform.itemscount.value+=1;
+        }
+        if(obj.checked==false)
+        {
+          oo.value="false";
+          objform.itemscount.value-=1;
+        }
+      }
+
+      function changevalues(obj, frm, i){
+        if(obj.checked==true){
+          document.getElementsByName("basketItems["+i+"].itemToProcess")[0].value = "true";
+        }
+        if(obj.checked==false){
+          document.getElementsByName("basketItems["+i+"].itemToProcess")[0].value = "false";
+        }
+      }
+
+      function checkAccesoriesIsSelected(){
+        var count = document.getElementsByName('itemscount')[0].value;
+        //iterate over all accessories exept main item
+        for (i = 1; i < count; i++) {
+          if (document.getElementsByName("basketItems["+i+"].itemToProcess")[0] == null) continue;
+          if (document.getElementsByName("basketItems["+i+"].itemToProcess")[0].value == "true") {
+            return true;
+          }
+        }
+        alert('No accessories were selected to add to the shopping cart!');
+        return false;
+      }
+
+     function addBargain(mainid,vid){
+            var tqty=1;
+            var bargainQtyEl=document.getElementById("bargains_qty");
+            if(bargainQtyEl)
+                 tqty=bargainQtyEl.value;
+            location="action.html?mode=addItems&iid1="+mainid+"&qty1="+tqty+"&vid="+vid+"&url=basket.html?vid="+vid;
+     }
+
+     $j().ready(function(){
+        $j('.thumbs a').click(function (event){
+          event.preventDefault();
+          var src = $j(this).children('img').attr('src');
+          src_l = src.replace("small", "largeimages");
+          src_m = src.replace("small", "images");
+          $j('.item-preview').children('a').attr('href', src_l);
+          $j('.item-preview a').children('img').attr('src', src_m);
+        });
+     });
+
+    </script>
+
+    <script type="text/javascript" src="assets/plugins/prototype/prototype.js"></script>
+    <script language="javascript" src="assets/commercelib/commerce/commerce.js"></script>
+    <script language="javascript" src="assets/commercelib/commerce/commerce_shop.js"></script>
+<script type="text/javascript" >
+Event.observe(window, "load", function(){
+    if (document.getElementById("_price") != undefined && priceAjx != undefined && priceAjx != null) {
+
+    //  priceAjx.getPriceByAttributes(0, document.getElementById("itemCode"));
+}
+    else {
+    //  priceAjx.getPriceByAttributes(0, document.getElementById("itemCode"));
+     
+
+    }
+  }
+  );
+</script>
+
+  </head>
+  <body>
+    <input type="hidden" id="js-vid" value="$vendorSettingsDTO.vendorId">
+    <div id="masterWrapper">
+      <!-- Start header -->
+#if($vendorSettingsDTO.themeId) 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+#else
+  #parse("/$vendorSettingsDTO.vendorId/header.vm")
+#end
+
+      <!-- End header -->
+      <!-- Start Content -->
+      <div id="bd"> 
+        <div id="content">
+              <div id="breadcrumbs">
+
+
+#set($idx = 0)
+#foreach($clink in $categoryPathDTO) 
+  #if($idx > 1)
+                &raquo;
+  #end
+  #if ($idx == 0)
+                <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId")">#springMessage("vm.header.home")</a>
+  #elseif($idx > 1)
+                <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$clink.cid")">$clink.getName()</a>
+  #end
+  #set($idx=$idx+1)
+#end
+              </div>
+                
+#if($item.itemid)
+  #set($formName = "F$item.itemid")
+#end
+              <form method="POST" name="$formName" action="storeitem.html?$vendorSettingsDTO.vendorId&iid=$item.itemid">
+              <input type="hidden" name="productoption" value="productoption.html?vid=$vendorSettingsDTO.vendorId&cid=21&qp=0">
+              <input type="hidden" id="compCode_0" value="$item.code"/>
+               
+#if($request.getSession().getAttribute("havewishlist"))
+#if($request.getSession().getAttribute("havewishlist")=="1")
+<div id="addwishlistdiv" class="warning" style="display:none;"> The item has already been added to the Wishlist.</div>   
+<script type="text/javascript">
+     document.getElementById("addwishlistdiv").style.display='block';
+</script>
+$request.getSession().removeAttribute("havewishlist")
+#else
+<div id="addwishlistdiv" class="warning" style="display:none;"> The item has been added to your Wishlist successfully. </div>   
+<script type="text/javascript">
+     document.getElementById("addwishlistdiv").style.display='block';
+</script>
+$request.getSession().removeAttribute("havewishlist")
+#end
+#end
+ 
+                <div id="item">
+                  <div class="item-desc">
+                    <h1 class="title" id="js-item-title-$item.itemid">$item.title</h1>
+                    <div class="yui-g">
+                      <div class="yui-u first">
+                        <div class="item-img">
+#if($item.itemimage!="")
+  #if($item.itemimage.startsWith("http")) 
+                          <div class="item-preview">
+                            <a href="store$item.largeimage"  rel="showImage" title="$item.title"><img name="slika" src="store$item.itemimage" border="0" alt="" width="100%" /></a>
+                            <a href="store$item.largeimage" rel="showImage" width="100%">#springMessage("vm.itemTemplate.msg1")</a>
+                          </div>
+  #else
+                          <div class="item-preview">
+                            <a href="store$item.largeimage"  rel="showImage" title="$item.title" width="100%"><img name="slika" src="store$item.itemimage" border="0" alt="" width="100%" onerror="javascript:this.src='store/$vendorSettingsDTO.vendorId/items/images/na_med.png'"/></a>
+                            <a href="store$item.largeimage" rel="showImage" width="100%">#springMessage("vm.itemTemplate.msg1")</a>
+                          </div>
+  #end
+#end
+                        <div class="thumbs">
+#if($item.smallimage!="")
+                          <a href="#" rel="tb"><img src="store$item.smallimage" border="0" alt="" /></a>
+#end
+#if($item.smallimage2!="")
+                          <a href="#" rel="tbA"><img src="store$item.smallimage2" border="0" alt="" /></a>
+#end
+#if($item.smallimage3!="")
+                          <a href="#" rel="tbB"><img src="store$item.smallimage3" border="0" alt="" /></a>
+#end
+#if($item.smallimage4!="")
+                          <a href="#" rel="tbC"><img src="store$item.smallimage4" border="0" alt="" /></a>
+#end
+#if($item.smallimage5!="")
+                          <a href="#" rel="tbD"><img src="store$item.smallimage5" border="0" alt="" /></a>
+#end
+
+                        </div>
+
+ 
+
+                        </div>   
+                        <!-- End item-img -->                      
+#*if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_attributes.vm")
+#else
+      #parse("/$vendorSettingsDTO.vendorId/itemT_attributes.vm")
+#end*#
+
+#****************************************
+* input name="redirectmode" 
+* div id="success"  
+* Are used to show a confirmation when 
+* adding an item to the wishlist and  
+* staying on the same page or otherwise
+* redirect to wishlist.
+* value = "true" to add item & redirect
+* value = "false" to add item & stay
+****************************************#
+                        <input type="hidden" name="redirectMode" value="true"/>
+                        <div id="success"></div>
+                      </div><!-- End yui-u -->
+                      <div class="yui-u">
+                        <div class="item-options">
+                          <p class="code" id="js-item-code-$item.itemid">#springMessage("vm.itemTemplate.code"): $item.code</p>
+                          <p class="shortDesc">$!item.shortdesc</p>
+                          <div class="pricing">
+#if($math.round($price.listPrice) > $math.round($price.price))         
+                          <p><span>#springMessage("vm.itemTemplate.listprice"):</span><span id="_listPrice_0" class="list-price"><span id="js-item-listprice-$item.itemid">$number.format('currency', $price.listPrice, $viewStoreCurrency.locale)</span></span></p>
+                          <p>
+                            <span>Price:</span>
+                            <span id="_price_0" class="price">
+                              <span id="js-item-price-$item.itemid">
+                                <span class="symbol">$regExp.currencySymbol($viewStoreCurrency.locale)</span><span class="dollars">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span><span class="cents">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+                              </span>
+                            </span>
+                          </p>
+#elseif($price.listPrice.compare($price.listPrice.doubleValue(),0) == 0)  
+                          <p id="_price_0" class="noPrice">#springMessage("vm.itemTemplate.callprice")</p>               
+#else
+                          <p>
+                            <span>Price:</span>
+                            <span id="_price_0" class="price">
+                              <span id="js-item-price-$item.itemid">
+                                <span class="symbol">$regExp.currencySymbol($viewStoreCurrency.locale)</span><span class="dollars">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span><span class="cents">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+                              </span>
+                            </span>
+                          </p>
+#end
+                          </div>
+                          <ul>
+                            <li class="stock" id="stock_0" style="display:none;">
+                              <label for="stock" id="_instock_0_msg">#springMessage("vm.itemTemplate.availability"):</label>
+                              <span id="_inStock_0" >
+                                #set ($inv=$itemInventoryDTO.getItem(0))
+                                #if($inv)
+                                  #if($inv.instock>0) 
+                                    #springMessage("vm.itemTemplate.instock") 
+                                  #else 
+                                    #springMessage("vm.itemTemplate.outstock") 
+                                  #end
+                                #end
+                             </span>                       
+                            </li>
+                            <li>                              
+                              <div id="js-item-hiddenfields-$item.itemid"></div>
+                              <div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
+                            </li>
+                            <li class="qty">
+                              <label for="qty">#springMessage("vm.itemTemplate.quantity"):</label>
+#if ($basketItemDTO.quantity)  
+  #set($itemqty=$basketItemDTO.quantity)
+#else
+  #set($itemqty=$item.qty)
+#end
+                              <input type='text' id="js-item-qtybox-$item.itemid" VALUE='$itemqty' style="width: 25px;" maxlength="5"  onKeyDown="if (event.keyCode==13){document.VIEWCART.mode.value='updateBasket';document.VIEWCART.submit();event.keyCode=9;}" onchange="clearMessage('basketItems[0].quantity');" />    
+                            </li> 
+#if($price.listPrice.compare($price.listPrice.doubleValue(),0) != 0)
+                            <li>
+                              <input id="js-item-addtocartbtn-$item.itemid" type="button" value="#springMessage('vm.itemTemplate.addtocart')" name="instantadd" class="btnclass basket" style="display:none;" />
+                              <span id = "add-to-cart-button-not-available">This item is not available for purchase at this time, please check back soon</span>
+                              <li><div id="js-item-inventory-$item.itemid" class="inventory"></div></li>
+                            </li>
+#end
+
+#if($inv)
+      <li><strong>#springMessage("vm.itemTemplate.availability")</strong>
+      <span>$inv.instock</span> jp</li>
+#end 
+
+<!--                            <li>
+                              <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank>#springMessage('vm.itemTemplate.printerfriendly')</a>
+                            </li>
+-->                            <li>
+                              <a href="review.html?iid=$item.itemid&vid=$vendorSettingsDTO.vendorId">#springMessage('vm.itemTemplate.addreview')</a>
+                            </li>
+                          </ul>
+                        </div><!-- End item-options -->
+
+#parse($item_topDTO.getItems().get(0).get('item_top'))  
+
+                      </div><!-- End yui-u -->
+                    </div><!-- End yui-ge -->
+                  </div><!-- End item-desc -->
+                  
+#************************
+* the bargina box will only appear if the item have an item related to it
+* with related type "bundleitems"
+*************************#
+
+
+#if($bundleItemsDTO.getItems().size() > 0)  <!-- if_bundle -->
+
+                  <div class="item-section">
+                    <div class="main">
+                        
+                          <div class="productBox">
+                            <h2>#springMessage("vm.itemTemplate.bargain.msg1")</h2>
+                            <p class="desc">#springMessage("vm.itemTemplate.bargain.msg2")</p>
+                            <div class="bundleitems_grid">
+                              <div class="bundle_box">
+                                <img alt="$item.shortdesc" title="$item.title" src="store$item.thumbnail"/>
+                              </div>
+                               
+
+#foreach($bargain in $bundleItemsDTO.getItems())
+ 
+ ##if($bargain != '')
+ #set($itemid_bundle=$pageTile.getItemObject($bundleItemsDTO,$bargain,"i"))
+ #set($itemBundleId = $itemid_bundle.itemid)
+ #set($titleBundle = $itemid_bundle.title)
+ #set($imageBundle = $itemid_bundle.thumbnail)
+  
+                              <div class="bundle_box">
+                                <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$itemBundleId")">
+                                  <img alt="$itemid_bundle.shortdesc" title="$titleBundle" src="store$imageBundle"/>
+                                </a>
+                              </div>
+ ##end
+#end  
+
+                            </div>
+ #set($bundle=$pageTile.getItemObject($bundleItemDTO,$bundleItemDTO.items.get(0),"i"))
+                            <div class="rightcontainer">
+                              <div class="quantityBox yellowBG">
+                                <label for="qty">#springMessage("vm.itemTemplate.quantity"):</label>
+                                <input id="bargains_qty" type='text' class="qty" value='1' maxlength="5" />
+                                <a style="text-decoration:none" class="addToBasket" href="javascript:void(0);" onclick="addBargain('$bundle.itemid','$vendorSettingsDTO.vendorId');"/>#springMessage('vm.itemTemplate.addtocart')</a>
+                              </div>
+                              <!-- End quantityBox -->
+                            </div>
+                          </div>
+                          <!--end productBox-->
+
+                    </div>
+                    <!-- end main -->
+                  </div>
+                  <!-- end item-section -->
+#end <!-- end if_bundle -->
+##end bargain section
+#foreach($prop in $item.properties)
+  #if($prop.propname && ($prop.propname!='' && $prop.propvalue!=''))
+    #set($propTab = true)
+  #end
+#end
+                  <div id="tab-set">
+                    <ul class="tab-nav">
+                      <li class="selected"><a href="#tab1"><em>#springMessage('vm.itemTemplate.description')</em></a></li>
+                      #if($propTab)<li><a href="#tab2"><em>Properties</em></a></li>#end
+                      <li><a href="#tab3"><em>#springMessage("vm.itemT_reviews.title")</em></a></li>
+                    </ul>
+#if($item.longdesc!="" || $item.longdesc2!="" || $item.longdesc3!="") 
+                    <div id="tab1">
+  #if($item.longdesc3!="")              
+                        <p>$item.longdesc3 </p>
+  #end
+  #if($item.longdesc!="")              
+                        <p>$item.longdesc </p>
+  #end
+  #if($item.longdesc2!="")
+                        <ul class="specs">$item.longdesc2</ul> 
+  #end
+                    </div>
+#end
+#if($propTab)
+                    <div id="tab2">
+
+                    </div>
+#end
+                    <div id="tab3">
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_reviews.vm")
+#else
+      #parse("/$vendorSettingsDTO.vendorId/itemT_reviews.vm")
+#end
+                    </div>
+                  </div><!-- End tab-set -->
+                </div><!-- End item -->
+              </form>
+        </div><!-- End content -->
+#if($vendorSettingsDTO.themeId) 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemvertmenu.vm")
+#else
+  #parse("/$vendorSettingsDTO.vendorId/itemvertmenu.vm")
+#end
+      </div>
+      <!-- End bd-->
+
+
+
+
+  <div class="desc">
+          <table style="width: 450px;">
+                  <tbody>
+                          #foreach( $prop in $itemProperties )
+                          #if($prop.propvalue.length() > 0)
+                          <tr>
+                                  <td style="border: none;">$prop.propname:</td>
+                                  <td style="border: none;">$prop.propvalue</td>
+                          </tr>
+                          #end
+                          #end
+                  </tbody>
+          </table>
+  </div>
+
+
+
+      <!-- Start footer -->
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+#else
+      #parse("/$vendorSettingsDTO.vendorId/footer.vm")
+#end
+      <!-- End footer -->
+    </div>
+<div id="deliverypopup" class="popup_menu">
+</div>
+    <!-- End doc-->
+      <script src="store/$vendorSettingsDTO.vendorId/assets/js5/add_to_cart.js" type="text/javascript"></script>
+ </body>
+</html>

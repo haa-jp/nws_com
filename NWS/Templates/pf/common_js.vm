@@ -1,0 +1,38 @@
+<!-- start common_js.vm -->
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/yui/js/yahoo-dom-event.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/yui/js/container-min.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/jquery-1.4.2.min.js"></script>
+<!-- End common_js.vm -->
+
+<script language="JavaScript" type="text/javascript">
+helpTooltip = new YAHOO.widget.Tooltip("ttl", { context: "asearch_help", width:300, preventoverlap: true, 
+              text: "#springMessage('vm.searchBar.helptooltip')" });
+
+function checkKey() {
+  var keyword = document.getElementById('keyword');
+  var key = document.getElementById('key');
+  
+  keyword.value = key.value;
+  if (keyword.value.length==0)
+    keyword.value = $vendorSettingsDTO.vendorId;
+}
+
+function changeLanguage(language)
+{
+  var url=location.href;
+  if(url.match(/&ml=([a-zA-Z]*)/)){
+    url=url.replace(/&ml=([a-zA-Z]*)/,"&ml="+language);
+  }
+  else if(url.match(/\?ml=([a-zA-Z]*)/)){
+    url=url.replace(/\?ml=([a-zA-Z]*)/,"?ml="+language);
+  }
+  else {
+    if(url.indexOf("\?") > 0)
+      url+="&";
+    else
+      url+="?";
+    url+="ml="+language;
+  }
+  document.location=url;
+}
+</script>

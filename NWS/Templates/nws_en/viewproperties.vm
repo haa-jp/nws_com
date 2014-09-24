@@ -1,0 +1,38 @@
+<h1>#springMessage("vm.myaccount.accountpref")</h1>
+
+<div class="form-horizontal">
+#set($rowcount = 0)
+#foreach($properties in $myAccountDTO.customerProperties)
+  #if($properties.customprops.custview && ($properties.customprops.custview.intValue() > 0))
+  <div class="control-group">
+    #if($properties.customprops.propdesc != "")
+    <label class="control-label">$properties.customprops.propdesc</label>
+    #else
+    <label class="control-label">View AR Data</label>
+    #end
+    #if($properties.customprops.custview && ($properties.customprops.custview.intValue() > 0))
+    <div class="controls">
+      <input type="hidden" name="customerProperties[${rowcount}].customprops.propid" value="$properties.customprops.propid" />
+      #if($properties.customprops.propname==$properties.comCustomerpropdef.propname&&$properties.comCustomerpropdef.valuetype==1)
+        <select name="customerProperties[${rowcount}].customprops.propvalue" type="text"  #if($properties.customprops.custedit && ($properties.customprops.custedit.intValue() <=0)) disabled #end >
+        #foreach($option in$properties.comCustomerpropdef.options)
+          <option value="$option.value" #if($properties.customprops.propvalue==$option.value) selected #end style="width:67px">$option.value</option>                                                        
+        #end
+        </select>
+      #else
+        <input name="customerProperties[${rowcount}].customprops.propvalue" type="text" #if($properties.customprops.custedit && ($properties.customprops.custedit.intValue() <=0)) disabled #end value="$properties.customprops.propvalue" />
+      #end
+    </div>
+    #else
+      $properties.customprops.propvalue
+    #end
+  </div>
+  #end
+#set($rowcount = $rowcount+1)
+#end
+</div>
+<p>
+  <input type="hidden" name="_targetviewproperties" value="myaccount.html?mode=viewproperties&vid=$vendorSettingsDTO.vendorId"/>
+  <input type="hidden" name="submit" value="update"/>
+  <button class="btn-large btn-primary" type="submit"  name="TODO">#springMessage('button.UPDATE')</button>
+</p>

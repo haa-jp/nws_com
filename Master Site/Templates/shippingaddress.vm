@@ -1,0 +1,82 @@
+<h1>#springMessage("vm.shippingaddress.title")</h1>
+
+#if( $myAccountDTO.shippingAddress.size() > 0 )
+<table class="table">
+  <colgroup>
+    <col class="col1" />
+    <col class="col2" />
+    <col class="col3" />
+    <col class="col4" />
+    <col class="col5" />
+    <col class="col6" />
+    <col class="col7" />
+  </colgroup>
+  <thead>
+    <tr>
+      <th scope="col">#springMessage("vm.editshippingaddress.nickname")</th>
+      <th scope="col">#springMessage("vm.register.address")</th>
+      <th scope="col">#springMessage("vm.register.city")</th>
+      <th scope="col">#springMessage("vm.register.province")</th>
+      <th scope="col">#springMessage("vm.register.postal")</th>
+      <th scope="col">#springMessage("vm.register.country")</th>
+      <th scope="col">&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+  #foreach($address in $myAccountDTO.shippingAddress)
+    <tr>
+      <th scoper="row">$address.nickname</th>
+      <td >$address.address1</td>
+      <td >$address.city</td>
+    #foreach($country in $myAccountDTO.countyInUse)
+      #if($country.country.id==$address.countryid)
+        #set($isoCountry = $country)
+      #end
+    #end
+      <td>
+    #if($address.provinceid != 0)
+      #foreach($province in $isoCountry.provinces)
+        #if($address.provinceid == $province.province.id)
+          $province.province.name &nbsp;
+        #end
+      #end
+    #else
+      $address.anotherprovince &nbsp;
+    #end
+      </td>
+      <td >
+    #if($address.postal.length() > 0)
+      $address.postal
+    #end
+
+    #if(($address.provinceid > 0) || ($address.postal.length() > 0))
+    #end
+      </td>
+      <td >
+    #if($isoCountry)
+      $isoCountry.country.name
+    #end
+      </td>    
+      <td>
+        <a href="myaccount.html?mode=editshippingaddress&addressid=$address.addressid&vid=$vendorSettingsDTO.vendorId">#springMessage("word.edit")</a>
+        <br>
+        <a href="myaccount.html?mode=delshippingaddress&addressid=$address.addressid&vid=$vendorSettingsDTO.vendorId">#springMessage("word.delete")</a>
+      </td>
+    </tr>
+  #end  
+  </tbody>
+</table>
+#else
+<br />
+<p>Currently there are no shipping address defined</p>
+<br />
+#end
+<a class="btn-large btn-primary" name="add" href="myaccount.html?mode=newshippingaddress&vid=$vendorSettingsDTO.vendorId">#springMessage('vm.shippingaddress.newadd')</a>  
+<div class="row-fluid">
+  <div class="span11">
+    <div class="alert alert-warning">
+      <h4>Note</h4>
+      <p>Text with instructions to change shipping address.</p>
+    </div>
+  </div>
+</div>

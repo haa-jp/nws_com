@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Invoice</title>
+  </head>
+  <body style="font-family: Arial; font-size: 11pt;">
+    <table width="100%" border="0">
+      <table width="100%" border="0">
+        <tr>
+          <td width="60%" valign="top"><img width="90%" src="http://test.northernwholesale.com/preview/store/20120606532/assets/themes/pf/images/logo.png" /></td>
+          <td width="40%" valign="top">
+            <center><h1>INVOICE</h1></center>
+            <table width="100%" style="margin-top: 10px;" cellspacing="0" cellpadding="5">
+              <thead>
+                <tr bgcolor="#999999">
+                  <th style="font-size: 0.6em; font-weight: bold; border: 1px solid #000000; color: #ffffff;">ACCOUNT NO.</th>
+                  <th style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">DATE</th>
+                  <th style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">INVOICE NO.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td width="33%" align="center" style="font-family: Courier New; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">$!customerOrderDTO.orderOutput.header.customerNumber</td>
+                  <td width="33%" align="center" style="font-family: Courier New; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">$!date.format('short',$customerOrderDTO.orderOutput.header.invoiceDate)</td>
+                  <td width="33%" align="center" style="font-family: Courier New; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">$!customerOrderDTO.orderOutput.header.invoiceNumber</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
+      </table>
+      <table width="100%" border="0">
+        <tr>
+          <td width="50%">
+            <table width="100%" border="0">
+              <tr>
+                <td width="30%" valign="top">SOLD TO</td>
+                <td width="70%" valign="top" style="font-family: Courier New;">
+                  $!customerOrderDTO.orderOutput.header.billToName <br>
+                  $!customerOrderDTO.orderOutput.header.billToLine1 <br>
+                  #if($customerOrderDTO.orderOutput.header.billToLine2 != "") $!customerOrderDTO.orderOutput.header.billToLine2 <br> #end
+                  #if($customerOrderDTO.orderOutput.header.billToLine3 != "") $!customerOrderDTO.orderOutput.header.billToLine3 <br> #end
+                  $!customerOrderDTO.orderOutput.header.billToCity, $!customerOrderDTO.orderOutput.header.billToState $!customerOrderDTO.orderOutput.header.billToZip
+                  #if($customerOrderDTO.orderOutput.header.billToCountry != "") <br> $!customerOrderDTO.orderOutput.header.billToCountry #end
+                </td>
+              </tr>
+            </table>
+          </td>
+        <td width="50%">
+          <table width="100%" border="0">
+            <tr>
+              <td width="30%" valign="top">SHIP TO</td>
+              <td width="70%" valign="top" style="font-family: Courier New;">
+                $!customerOrderDTO.orderOutput.header.shipToName<br>
+                $!customerOrderDTO.orderOutput.header.shipToLine1 <br>
+                  #if($customerOrderDTO.orderOutput.header.shipToLine2 != "") $!customerOrderDTO.orderOutput.header.shipToLine2 <br> #end
+                  #if($customerOrderDTO.orderOutput.header.shipToLine3 != "") $!customerOrderDTO.orderOutput.header.shipToLine3 <br> #end
+                  $!customerOrderDTO.orderOutput.header.shipToCity, $!customerOrderDTO.orderOutput.header.shipToState $!customerOrderDTO.orderOutput.header.shipToZip
+                  #if($customerOrderDTO.orderOutput.header.billToCountry != "") <br> $!customerOrderDTO.orderOutput.header.shipToCountry #end
+                <br><br><br><br>
+              </td>
+            </tr>
+            <tr>
+              <td width="30%" valign="top">SHIP VIA</td>
+              <td width="70%" valign="top" style="font-family: Courier New;">
+                #foreach($shippinItem in $customerOrderDTO.orderOutput.shipping)
+                  #set($shipvia = $shippinItem.method)
+                #end
+                $!shipvia
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <br /><br />
+    <table width="100%" cellspacing="0" cellpadding="3" border="0" style="margin-top: 30px;">
+      <thead>
+        <tr bgcolor="#c9c9c9">
+          <th align="center" style="font-size: 0.6em; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">REP.</th>
+          <th align="center" style="font-size: 0.6em; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">CUSTOMER ORDER NO.</th>
+          <th align="center" style="font-size: 0.6em; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">OUR ORDER NO.</th>
+          <th align="center" style="font-size: 0.6em; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">ORDER DATE</th>
+          <th align="center" style="font-size: 0.6em; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">SHIP DATE</th>
+          <th align="center" style="font-size: 0.6em; border-top-width: 1px; border-top-style: solid; border-top-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">TERMS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td align="center" style="font-family: Courier New; border-left-width: 1px; border-left-style: solid; border-left-color: #000000; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">&nbsp;</td>
+          <td align="center" style="font-family: Courier New; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">$!customerOrderDTO.orderOutput.header.poNumber</td>
+          <td align="center" style="font-family: Courier New; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">$!customerOrderDTO.orderOutput.header.orderNumber / $!customerOrderDTO.orderOutput.header.generation</td>
+          <td align="center" style="font-family: Courier New; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">$!date.format('short',$customerOrderDTO.orderOutput.header.orderDate)</td>
+          <td align="center" style="font-family: Courier New; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">$!date.format('short',$customerOrderDTO.orderOutput.header.shipDate)</td>
+          <td align="center" style="font-family: Courier New; border-right-width: 1px; border-right-style: solid; border-right-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000;">&nbsp;</td>
+        </tr>
+      </tbody>
+    </table>
+    <table width="100%" cellspacing="0" cellpadding="3" border="0" style="margin-top: 30px;">
+      <thead>
+        <tr bgcolor="#999999">
+          <th align="center" style="font-size: 0.6em; font-weight: bold; border: 1px solid #000000; color: #ffffff;">QUANTITY</th>
+          <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">ITEM NO.</th>
+          <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">DESCRIPTION</th>
+          <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">UNIT PRICE</th>
+          <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">AMOUNT</th>
+        </tr>
+      </thead>
+      <tbody>
+      #foreach($item in $customerOrderDTO.orderOutput.detail)
+        <tr>
+          <td align="center" style="border-right-width: 1px; border-right-style: solid; font-family: Courier New; padding: 5px; border-left-width: 1px; border-left-style: solid; border-right-color: #000000; border-left-color: #000000;">$item.orderQty</td>
+          <td style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$item.itemNumber</td>
+          <td style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$item.description1 $item.description2</td>
+          <td align="right" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$item.sellPrice</td>
+          <td align="right" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$item.total</td>
+        </tr>
+      #end
+      </tbody>
+      <tfoot>
+        <tr>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+        </tr>
+      </tfoot>
+    </table>
+    <table width="70%" border="0" cellspacing="0">
+      <tr>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-left-width: 1px; border-left-style: solid; border-top-width: 1px; border-top-style: solid; border-right-color: #000000; border-left-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">NON TAX MDSE</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right">$!customerOrderDTO.orderOutput.header.invoiceAmount</p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">TAXABLE MDSE</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">SALES TAX</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right">.00</p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">MISCELLANEOUS</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+      </tr>
+      <tr bgcolor="#c9c9c9">
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-left-width: 1px; border-left-style: solid; border-top-width: 1px; border-top-style: solid; border-right-color: #000000; border-left-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">AMOUNT DUE</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right">$!customerOrderDTO.orderOutput.header.invoiceAmount</p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border: 1px solid #000000;">
+          <center style="font-size: 0.8em; height: 14px;">DUE DATE</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+      </tr>
+    </table>
+  </table>
+  <p style="font-size:0.6em;">
+    THE PURCHASER AGREES TO PAY ALL COLLECTION COSTS & REASONABLE ATTORNEYS FEES IF LITIGATION IS REQUIRED TO COLLECT PAST DUE AMOUNTS. THIS INVOICE IS SUBJECT TO A LATE CHARGE OF 1 &#189;% PER MONTH, ANNUAL RATE OF 18% ON ALL AMOUNTS NOT PAID WITHIN 60 DAYS OF THE DATE OF THIS INVOICE
+  </p>
+</body>
+</html>

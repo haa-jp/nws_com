@@ -1,0 +1,8 @@
+<div class="span10 offset1">
+   <div class="alert alert-error alert-block">
+      <h3>We&apos;re sorry, </h3>
+      <p>Your account is not authorized to pay with an Open Account and will require you to make other arangement for payment. 
+  	    You must use the <a href="$seourl.encodeURL("basket.html?vid=$vendorSettingsDTO.vendorId")" alt="Order Checkout">standard checkout</a> process. 
+     	If you feel that is is a mistake, please contact the Northern Wholesale Supply, Inc. Credit Department at <strong> 1-800-666-1111</strong> to review your qualifications.</p>
+   </div>
+</div>

@@ -1,0 +1,179 @@
+											<!-- Start Item Attributes -->
+ 
+#springBind( "storeItemDTO.basketItems.*" )
+#if($status.errors.errorCount>0)
+	#set($bindStatus=true)
+#else
+	#set($bindStatus=false)
+#end
+
+#if($executedAction && $actionStatus)
+	 #if($executedAction == "editItem")
+		  #if($actionStatus=="true")
+				Item was edited
+		  #else
+				Item was not edited
+		  #end 
+	 #end
+
+	 #if($executedAction == "addItem")
+		  #if($actionStatus=="true")
+				Item was added
+		  #else
+				Item was not added
+		  #end 
+	 #end
+
+#end
+
+#if($compCode2Edit)
+	#if($editItemStatesMap.get($compCode2Edit))
+		#set($itemFormData = $editItemStatesMap.get($compCode2Edit))
+	#end
+#else
+	#if( $item.itemid && $storeItemStatesMap.get($item.itemid))
+		#set($itemFormData = $storeItemStatesMap.get($item.itemid))
+	#end
+#end
+												<div class="item-attr-section">												
+#springBind("storeItemDTO.viewMode")	
+													<input type="hidden" name="${status.expression}" value="item"/>	
+#springBind("storeItemDTO.actionMode")	
+#set($actionModeHiddenName = ${status.expression})
+													<input type="hidden" name="$actionModeHiddenName" value="buy"/>
+#springBind("storeItemDTO.selfUri")	
+													<input type="hidden" name="${status.expression}" value="storeitem.html"/>
+#springBind("storeItemDTO.targetUri")	
+													<input type="hidden" name="${status.expression}" value="basket.html"/>
+#springBind("storeItemDTO.vendorId")	
+													<input type="hidden" name="${status.expression}" value="$!status.value"/>
+#springBind("storeItemDTO.categoryId")
+						
+#if($status.value)
+													<input type="hidden" name="${status.expression}" value="$status.value"/>
+#end
+						                        	<input type="hidden" id="_attributeCount_0" value="$item.attributes.size()"/>
+						                        	<input type="hidden" id="itemCode" value="$item.code"/>
+						
+													<!---default currency--->
+#foreach($viewCurrencyDTO in $storeCurrencies)
+						
+	#if( $viewCurrencyDTO.def == 1 )
+													<input type="hidden" name="c" id="c" value="$viewCurrencyDTO.id" />
+	#end
+#end	
+													<input type="hidden" name="basketItems[0].itemId" value="$item.itemid"/>
+													<input type="hidden" name="basketItems[0].vendorId" id="vendorId" value="$vendorSettingsDTO.vendorId"/>
+													<input type="hidden" name="basketItems[0].itemToProcess" value="true"/>
+				
+#if($compCode2Edit)
+													<input type="hidden" name="basketItems[0].oldCompCode" value="$compCode2Edit"/>
+#end
+						
+													<input type="hidden" name="_targetaddItem" value="basket.html?vid=$vendorSettingsDTO.vendorId"/>
+													<input type="hidden" name="_targetrefresh" value="$selfUrl"/>
+													<input type="hidden" name="_targeteditRefresh" value="$selfUrl"/>
+													<input type="hidden" name="_targeteditItem" value="basket.html?vid=$vendorSettingsDTO.vendorId"/>
+													<input type="hidden" name="productoption" value="productoption.html?vid=$vendorSettingsDTO.vendorId&cid=20175&qp=0">
+													<input type="hidden" name="mode"/>
+										
+													<fieldset class="item-attributes">
+													<!--=========== Start Main item attributes ==========-->	
+
+#************************************************
+	Stores a copy of $item.attributes to set 
+	the warnings below the item attributes html
+************************************************#
+#set($warningAttr = $item.attributes)
+
+#foreach( $attribute in $item.attributes)
+	#if($attribute)
+														<div class="attrib">
+		#set ($storeAttributeDTO = $basketItemDTO.getAttribute($attribute.attributeid))
+		#set($rowNumber = $velocityCount - 1)
+		#set($rowAttribBasketNumber = $rowNumber)
+															<input type="hidden" name="basketItems[0].attributes[$rowNumber].attributeId" value=#if( $attribute.attributeid )"$attribute.attributeid"#else"0"#end/>
+		#if($itemFormData && $itemFormData.attributes.get($rowAttribBasketNumber))
+			#set($itemFormAttribute = $itemFormData.attributes.get($rowAttribBasketNumber))
+		#end
+		#set($attype = $attribute.attype)
+
+<!-- start textarea -->
+		#if($attype && ($attype.trim().equals("3")))
+
+			##$!attribute.screenname
+																<label for="basketItems[0].attributes[$rowNumber].value"><b>$attribute.dataname:</b></label>
+																	<div class="field hide">
+			#if($bindStatus  && $storeItemDTO.basketItems.get(0).itemToProcess)
+
+				#springBind("storeItemDTO.basketItems[0].attributes[$rowNumber].value")
+				#if($storeAttributeDTO)
+				#set($textAreaValue = $!storeAttributeDTO.value)
+				#else
+				#set($textAreaValue = $attribute.defvalue)
+				#end
+
+																		<textarea id="attr-$attribute.dataname" class="myinput" rows="$attribute.rows" cols="$attribute.cols" name="basketItems[0].attributes[$rowNumber].value">$textAreaValue</textarea>
+
+				#springBind("storeItemDTO.basketItems[0].attributes[$rowNumber]" )
+				#foreach($error in $status.errorMessages)
+					$error
+				#end
+
+			#else
+				 #if($storeAttributeDTO)
+ 
+						 #set($textAreaValue = $!storeAttributeDTO.value) #else  #set($textAreaValue = $attribute.defvalue)
+
+			     #end
+
+																		<textarea  id="attr-$attribute.dataname" class="myinput" rows="$attribute.rows" cols="$attribute.cols" name="basketItems[0].attributes[$rowNumber].value">$textAreaValue</textarea>
+			#end
+																	</div>
+																	<!-- end field -->
+		#end
+															<!-- end textarea -->
+
+															<!-- select -->
+		#if($attype && ($attype.trim().equals("2")))
+			##$!attribute.screenname
+			
+															<label for="basketItems[0].attributes[$rowNumber].optionId">
+																<b>$attribute.dataname:</b>
+															</label>
+			##There is changes in function onChange for returning price	
+															<div class="field">
+
+		#foreach($option in $attribute.options)
+
+			 #if($option)   
+				$option.ddtext #if($velocityCount != $attribute.options.size()) , #end
+			 #end	
+
+		#end
+
+																
+																<div id="basketItems[0].attributes[$rowNumber]"></div>																
+															</div>
+															<!-- end field -->
+															<!-- end select -->
+
+			#if($bindStatus)
+				#springBind("storeItemDTO.basketItems[0].attributes[$rowNumber]" )
+				#foreach($error in $status.errorMessages) 
+					$error
+				#end 
+			#end
+		#end
+														</div>
+														<!-- End attrib -->
+	#end
+#end
+													<!--=========== End Main item attributes ==========-->
+													</fieldset>
+													<!-- End item-attributes -->
+													<!-- Offer Price -->
+													<input type="hidden" name="PRICE" value="$price.price"/>	
+												</div>
+												<!-- End item-attr-section-->
+											<!-- End Item Attributes -->

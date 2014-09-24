@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+#set ($wishListVectorDTO=$pageTileDictionaryDTO.getPageTile("wishListVectorDTO") )
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>#springMessage("vm.wishlist.title")</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta content="demo " name="keywords">
+    <meta name="interestgroup" content="tp">
+    <meta name="prodtype" content="">
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+  </head>
+  <body class="wishlist">
+    ############################ Header ####################################
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/a_banner.vm")
+    ############################ End Header ################################
+
+    ############################ Search Bar ################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
+    ############################ End Search Bar ############################
+    <div id="wrapper" class="row-fluid">
+
+      <div class="span2" id="left-col">
+        ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/side_nav.vm")
+      </div>
+
+      <div class="span10" id="right-col">
+        <div class="container-fluid">
+          <h2>Your Watch List</h2>
+          #if(($multiPageViews) && ($wishListVectorDTO))
+            #set($itemMultiPageView = $multiPageViews.get($wishListVectorDTO.getPageTileName()))
+          #end
+          <div class="row-fluid">
+            #if($itemMultiPageView && $itemMultiPageView.getPreviousUrl())
+              #set($previousUrl=$itemMultiPageView.getPreviousUrl())
+              <a href="$previousUrl">
+                <img src="store/${vendorSettingsDTO.vendorId}/assets/images/tl.gif" alt="#springMessage("vm.wishlist.lastpage")"/>
+              </a>
+            #end
+
+            #if($itemMultiPageView.pagesCount && $itemMultiPageView.pagesCount>1)
+              <span>#springMessage("vm.category_template.page") </span>
+              #foreach($pageItem in $itemMultiPageView.indexList)
+                #if($itemMultiPageView )
+                  #if($velocityCount== $itemMultiPageView.currentPageIndex)
+                    <a>$itemMultiPageView.currentPageIndex</a>
+                  #else
+                    #if($velocityCount<$itemMultiPageView.pagesCount+1)
+                      #set($pageurl=$itemMultiPageView.multiPageURL)
+                      <a class="navleftlink" href="${pageurl}$velocityCount">$velocityCount</a>
+                    #end
+                  #end
+                #end
+              #end
+            #end
+
+            #if($itemMultiPageView && $itemMultiPageView.getNextUrl())
+              #set($nextUrl=$itemMultiPageView.getNextUrl())
+              <a href="$nextUrl">
+                <img src="store/${vendorSettingsDTO.vendorId}/assets/images/tr.gif" alt="#springMessage("vm.wishlist.nextpage")" border="0" />
+              </a>
+            #end
+          </div>
+
+          <div class="email row-fluid">
+            #springBind( "wishListDTO.*" )
+            ## Wishlist title
+            #if($wishListVectorDTO.items)
+             #foreach($error in $status.errorMessages) #set($err = 1) #end
+              #if($err == 1)
+                <div class="warning">#foreach($error in $status.errorMessages) $error<br> #end</div>
+              #end
+              <div>
+                #if($wishListVectorDTO.items)
+                  #if($wishListVectorDTO.items.size()!= 0)
+                    #if($wishListDTO.owner)
+                      #if(!$wishListDTO.openEmail)
+                        <a href="wishlist.html?vid=$wishListDTO.vendorId&clientId=$wishListDTO.clientId&openEmail=true">Email your Watch List</a>
+                      #end
+                    #end
+                  #end
+                #end
+              </div>
+            #end
+
+            ## Email part
+            <form action="wishlist.html" class="form-horizontal" method="post" name="wishlist">
+              <input type="hidden" id="vid" name="vid" value="$wishListDTO.vendorId">
+              <input type="hidden" name="clientId" value="$wishListDTO.clientId">
+              <input type="hidden" name="openEmail" value="$wishListDTO.openEmail">
+              <input type="hidden" name="emailSubject" value="Wish list">
+              #if($wishListDTO.owner && $wishListDTO.openEmail)
+                <div class="control-group">
+                  <label class="control-label">#springMessage("vm.wishlist.email"):</label>
+                  <div class="controls"><input type="text" name="emailAddr" value="$wishListDTO.emailAddr"></div>
+                </div>
+                <div class="control-group">
+                  <label class="control-label">#springMessage("vm.wishlist.message"):</label>
+                  <div class="controls">
+                    <textarea cols="30" rows="3" name="emailText">$wishListDTO.emailText</textarea>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <input class ="btn btn-primary" type="submit" name="submitEmail" value="#springMessage("vm.wishlist.send")" onClick='document.wishlist.openEmail.value = "false"; return checkEmailAddr();'>&nbsp;&nbsp;
+                  <input class ="btn" type="submit" name="submitEmailCancel" value="#springMessage("vm.wishlist.cancel")" onClick='javascript:document.wishlist.openEmail.value = "false";'>
+                </div>
+              #end
+            </form>
+          </div><!-- end email section -->
+
+          <form action="wishlist.html" method="post" name="wishlist">
+            <input id="vid" type="hidden" name="vid" value="$wishListDTO.vendorId">
+            <input type="hidden" name="clientId" value="$wishListDTO.clientId">
+            #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/wishlist_itemList.vm")
+          </form>
+
+        </div><!-- container-fluid -->
+      </div><!-- span10 -->
+
+    </div><!-- wrapper-->
+
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################
+
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+
+    ##<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/jq-selectbox/jquery.sb.js"></script>
+   #if($wishListDTO.owner && $wishListDTO.openEmail)
+    <script  type="text/javascript">
+    function checkEmail(emailStr) {
+      if (emailStr.length == 0) {
+        return true;
+      }
+
+      var emailPat=/^(.+)@(.+)$/;
+      var specialChars="\\(\\)<>@,;:\\\\\\\"\\.\\[\\]";
+      var validChars="\[^\\s" + specialChars + "\]";
+      var quotedUser="(\"[^\"]*\")";
+      var ipDomainPat=/^(\d{1,3})[.](\d{1,3})[.](\d{1,3})[.](\d{1,3})$/;
+      var atom=validChars + '+';
+      var word="(" + atom + "|" + quotedUser + ")";
+      var userPat=new RegExp("^" + word + "(\\." + word + ")*$");
+      var domainPat=new RegExp("^" + atom + "(\\." + atom + ")*$");
+      var matchArray=emailStr.match(emailPat);
+
+      if (matchArray == null) {
+        return false;
+      }
+
+      var user=matchArray[1];
+      var domain=matchArray[2];
+
+      if (user.match(userPat) == null) {
+        return false;
+      }
+
+      var IPArray = domain.match(ipDomainPat);
+
+      if (IPArray != null) {
+        for (var i = 1; i <= 4; i++) {
+          if (IPArray[i] > 255) {
+            return false;
+          }
+        }
+        return true;
+      }
+
+      var domainArray=domain.match(domainPat);
+
+      if (domainArray == null) {
+        return false;
+      }
+
+      var atomPat=new RegExp(atom,"g");
+      var domArr=domain.match(atomPat);
+      var len=domArr.length;
+
+      if ((domArr[domArr.length-1].length < 2) ||
+        (domArr[domArr.length-1].length > 3)) {
+        return false;
+      }
+
+      if (len < 2) {
+        return false;
+      }
+
+      return true;
+    }
+
+    function checkEmailAddr() {
+
+      if (wishlist.emailAddr.value == "" || !checkEmail(wishlist.emailAddr.value)) {
+        alert("Incorrect email address");
+        return false;
+      }
+
+      document.wishlist.openEmail.value = 'false';
+      return true;
+    }
+
+    </script>
+    #end
+
+    <script type="text/javascript">
+      function buyItems(els){
+        var url="action.html?mode=addItems",
+        vid = $('#vid').val(),
+        items = '',
+        param = "&vid="+vid+"&url=basket.html?vid="+vid;
+
+        for(var i = 0; i < els.length; i++){
+          items += '&ic' + (i+1) + '=' + $(els[i]).val() + '&qty' + (i+1) + '=1';
+        }
+
+        url += items + param;
+        window.location.href=url;
+      }
+
+      $(document).ready(function() {
+        ##$(".filter select").sb(); //jQuery Select Box
+
+        $('#submitAddToCart').bind('click', function(){
+          var els = $('input[type=checkbox]:checked').toArray();
+
+          buyItems(els);
+        });
+      });
+    </script>
+  </body>
+</html>

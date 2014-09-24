@@ -1,0 +1,12 @@
+<div class="alert alert-info alert-block">
+   <button class="close" data-dismiss="alert" type="button">×</button>
+
+     <h3>Important Notice:</h3>
+   <p>Only customers with active accounts will be able to register for access to northernwholesale.com. Please note that registration will not immediately activate your account. We will contact you to confirm account activation within 1 business day. For expedited access, please contact your sales representative.</p>
+   <p> <b>No retail or consumer-direct sales are available through northernwholesale.com.</b></p>
+   <p>If you do not have an active account number or need assistance to find your Customer Number, please contact our credit department by telephone: <strong>1-800-666-1111</strong> or by using our <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20599")" alt="contact Northern Wholesale"> Contact Request Form</a>. All existing customers registering for online access should already be familiar with, and agree to <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22776")" alt="terms and conditions"> Wholesale Account Terms &amp; Conditions</a>.</p>
+</div>
+
+<div style="margin-bottom:20px">
+   <strong> Important</strong>: All fields below are required. 
+</div>

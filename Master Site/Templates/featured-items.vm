@@ -1,0 +1,5 @@
+<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/js/featured-items.js"></script>
+<script type="text/javascript">
+	var featured_items = "242607,220079,219651,239070";
+	new app.FeaturedItems(featured_items);
+</script>

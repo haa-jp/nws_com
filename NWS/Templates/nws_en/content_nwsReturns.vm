@@ -1,0 +1,26 @@
+<h3>We are alway available to help you</h3>
+<div class="row-fluid">
+   <div class="span6">
+   </div>
+
+   <div class="span6">
+      <ul class="nav nav-tab" id="prodTab">
+         <li>
+            <a href="#sales" data-toggle="tab">Sales Department</a>
+         </li>
+
+         <li>
+            <a href="#credit" data-toggle="tab">Credit / Administrative</a>
+         </li>
+      </ul>
+   </div> 
+</div>
+<div class="tab-content">
+   <div id="sales" class="tab-pane">
+
+   </div>
+
+   <div id="credit" class="tab-pane">
+      
+   </div>
+</div>

@@ -1,0 +1,52 @@
+    #if ($availBasketList)
+                <div id="basketdata" class="form">
+      #if($basketDTO.basketdatamessage1!='')
+        <p><strong>$basketDTO.basketdatamessage1</strong></p>
+      #end
+      #if($basketDTO.basketdatamessage2!='')
+        <p><strong>$basketDTO.basketdatamessage2</strong></p>
+      #end                        
+                  <input type="hidden" id="bd_nickname" name="bd_nickname" >
+                  <input type="hidden" name="_targetupdateBasketData" value="basket.html?vid=$vendorSettingsDTO.vendorId"/>
+                  <div id="warning"></div>
+      #if($productsDetails.products.size()>0)
+                  <div class="control-group">
+                    <label for="save"><input id="save" type="radio"  name="bd_mode" value="s"/> #springMessage('vm.nws.basket.savebasket')</label>
+                    <div id="nicknameInputBox" class="basketList hide">
+                      <input id="basketinputbox" type="text"/>
+                      <div class="f-field">
+                        <label for="basketinputbox">#springMessage('vm.nws.basket.promp1'):</label> 
+                      </div>
+                    </div>
+                  </div>
+      #end
+      #if($availBasketList.size()>0)
+                  <div class="control-group">
+                    <label for="delete"><input id="delete" type="radio" name="bd_mode" value="d" /> #springMessage('vm.nws.basket.delbasket')</label>
+                    <div id="nicknameSelectList1" class="basketList hide">
+                      <label for="basketlist1">#springMessage('vm.nws.basket.promp2'):</label> 
+                      <select id="basketlist1" >
+                        <option value="">#springMessage('vm.nws.contact_us.select')</option>
+        #foreach($nickname in $availBasketList)
+                        <option value="$nickname">$nickname</option>
+        #end
+                      </select>
+                    </div> 
+                  </div>
+                  <div class="f-row">
+                    <label for="restore"><input id="restore" type="radio"  name="bd_mode" value="r" /> #springMessage('vm.nws.basket.restoresavedbasket')</label>
+                    <div id="nicknameSelectList2" class="basketList hide">
+                      <label for="basketlist2">#springMessage('vm.nws.basket.promp2'):</label>  
+                      <select id="basketlist2" >
+                        <option value="">#springMessage('vm.nws.contact_us.select')</option>
+        #foreach($nickname in $availBasketList)
+                        <option value="$nickname">$nickname</option>
+        #end
+                      </select>
+                    </div>
+                  </div>
+      #end
+                  <input type="button" id="saveBasket" name="saveBasket" class="btn" value="#springMessage("button.UPDATE")" />
+                </div>
+<br/>
+    #end

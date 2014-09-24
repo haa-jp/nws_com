@@ -1,0 +1,9 @@
+<!-- start common_css.vm -->
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/reset.css" />
+	<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/fonts.css" />
+	<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/grids.css" />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/global.css" media="all" />
+	<link rel="stylesheet" type="text/css" href="assets/plugins/yahooUI/build/container/assets/container.css" />
+  <!--[if IE 6]> <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/ie6.css" type="text/css" media="all" /> <![endif]-->
+  <!--[if IE 7]> <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/ie7.css" type="text/css" media="all" /> <![endif]-->
+<!-- End common_css.vm -->

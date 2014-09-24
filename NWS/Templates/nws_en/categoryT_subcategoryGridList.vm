@@ -1,0 +1,17 @@
+
+#if($childCategoriesDTO.getItems().size() > 0)
+<div class="sub-cats grid">
+   #foreach($itemIter in $childCategoriesDTO.getItems())
+   #set($category = $pageTile.getItemObject($childCategoriesDTO, $itemIter, "c"))
+   <div class="cat">
+      <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")"><img src="${category.thumbimage}" /></a>
+##   <div class="text-bg opacity-50"></div>
+         <br />    
+      <div class="text">
+         <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")"><strong>$category.name</strong></a>
+##     <small>$category.description</small>
+      </div>
+   </div>
+  #end
+</div>
+#end

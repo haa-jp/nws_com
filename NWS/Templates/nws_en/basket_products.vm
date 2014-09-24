@@ -1,0 +1,206 @@
+<div class="warning"></div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="description-col">#springMessage('vm.basket.desc')</th>
+                      <th scope="col" class="msrp-col">#springMessage('vm.basket.msrp')</th>
+                      <th scope="col" class="dealer-col">#springMessage('vm.basket.dealer')</th>
+                      <th scope="col" class="qty-col">#springMessage('vm.basket.qty')</th>
+                      <th scope="col" class="total-col">#springMessage('vm.basket.total')</th>
+                      <th scope="col" class="update-col">&nbsp;</th>
+                    </tr>
+                  </thead>
+  #set($key = 0)
+  #set($listpricetotal = $math.toDouble("0.00"))
+  #set($subtotal = $math.toDouble("0.00"))
+  #springBind( "basketDTO.basketItems.*" )
+
+  #if($status.errors.errorCount>0)
+    #set($bindStatus=true)
+  #else
+    #set($bindStatus=false)
+  #end
+
+  #set($totalQty = 0)
+  #set($regsubtotal = 0)
+                  <tbody>
+  #foreach( $product in $productsDetails.products)
+    #set($myCount = $velocityCount - 1)
+                    <tr data-item-index="$myCount">
+                      <input type="hidden" id="compCode_$myCount" value="$product.compCode">
+                      <input type="hidden" name="basketItems[$myCount].itemId" value="$product.itemid"/>
+                      <input type="hidden" id="vid" name="basketItems[$myCount].vendorId" value="$product.vendor"/>
+                      <input type="hidden" name="basketItems[$myCount].itemToProcess" value="true"/>
+                      <input type="hidden" name="basketItems[$myCount].editMode" value="true"/>
+                      <input type="hidden" name="basketItems[$myCount].basketItemId" value="$!product.basketItemId"/>
+                      <input type="hidden" data-inv-history-id-$myCount="$!product.inventoryHistory.invhistid" id="basketItems[$myCount].inventoryHistoryId" name="basketItems[$myCount].inventoryHistoryId" value="$!product.inventoryHistory.invhistid"/>
+                      <input type="hidden" name="basketItems[$myCount].oldCompCode" value="$product.compCode"/>
+                      <input type="hidden" name="basketItems[$myCount].removal" value="false"/>
+                      <input type="hidden" name="fasterMsg" id="fasterMsg" value="#springMessage('deliveryoption.popup.note')"/>
+    #set ($basketItemDTO=$basketMap.get($product.basketItemId))
+
+    #foreach($attribute in $basketItemDTO.getAttributes())
+      #set($rowNumber = $velocityCount - 1)
+                      <input type='hidden' name='basketItems[$myCount].attributes[$rowNumber].attributeId' value='$!attribute.attributeId' />
+                      <input type='hidden' name='basketItems[$myCount].attributes[$rowNumber].optionId' value='$!attribute.optionId'/>
+                      <input type='hidden' name='basketItems[$myCount].attributes[$rowNumber].value' value='$!attribute.value' />
+    #end
+                      <td>
+  #if ($product.parentProduct)
+    #if($product.cimage!= "")
+                        <div class="item-img" style="float:left">
+                          <a href="$seourl.encodeURL("storeitem.html?iid=$product.itemid&vid=$vendorSettingsDTO.vendorId")?biid=$product.basketItemId">
+                            <img src="store$product.cimage" alt='$product.title'/>
+                          </a>
+                        </div>
+    #end
+                        <div class="item-desc custom-item">
+                          <p class="item-title"><a href="$seourl.encodeURL("storeitem.html?iid=$product.itemid&vid=$vendorSettingsDTO.vendorId")?biid=$product.basketItemId">$product.title</a></p>
+                          <p class="code"> #springMessage('vm.basket.code'): $product.compCode.replace("-",".")</p>
+                        </div>
+  #else
+                        <div class="item-img">
+    #if($product.cimage!= "")
+                          <a href="$seourl.encodeURL("storeitem.html?iid=$product.itemid&vid=$vendorSettingsDTO.vendorId")?biid=$product.basketItemId">
+                            <img src="store$product.cimage" alt="$product.title" height="50px" width="50px"/>
+                          </a>
+    #else
+                          <a href="$seourl.encodeURL("storeitem.html?iid=$product.itemid&vid=$vendorSettingsDTO.vendorId")?biid=$product.basketItemId">
+                            <img src="store$vendorSettingsDTO.vendorId/assets/items/thumbnails/noimage.jpg" alt='$product.title'/>
+                          </a>
+    #end
+                        </div>
+                        <div class="item-desc">
+                          <p class="item-title"><a href="$seourl.encodeURL("storeitem.html?iid=$product.itemid&vid=$vendorSettingsDTO.vendorId")?biid=$product.basketItemId">$product.title</a></p>
+                          <p class="code"> #springMessage('vm.basket.code'):&nbsp;$product.compCode.replace("-",".")</p>
+                        </div>
+
+
+
+#*
+                        <div class="item-attributes">
+    #if($product.attributesCollection)
+      #foreach($productAttrib in $product.attributesCollection)
+        #set($attype = $productAttrib.attype)
+        #set($attrNum  = $velocityCount - 1)
+        #if($attype && ($attype == 2 ||$attype == 1 ))
+                          <p class="attrib">
+            $productAttrib.dataName : $productAttrib.option.ddText
+                          </p>
+        #end
+        #if($attype && $attype == 3)
+                          <span>$productAttrib.dataName</span>
+                          <b>$productAttrib.option.ddText</b>
+        #end
+      #end
+    #end
+                        </div>
+*#
+    #foreach($error in $product.errors)
+                        <img src="store/$vendorSettingsDTO.vendorId/assets/theme/images/error_small.png" />&nbsp; $error.message
+    #end
+  #end
+                      </td>
+                      <td class="ar">
+    #if($math.toInteger($math.sub($product.listprice, $product.price)) > $math.toInteger(0))
+                        <p class="list-price right">$$basketDTO.formatter.currency($product.listprice)</p>
+    #end
+                      </td>
+                      <td class="ar">
+                        #if($math.toInteger($product.price)==$math.toInteger(0))
+                        <p class="price right">#springMessage('vm.basket.free')</p>
+                      #else
+                        <p class="price right">$$basketDTO.formatter.currency($product.price)</p>
+                      #end
+                      </td>
+                      <td class="ac">
+                        <input type="hidden" id="type-${key}" value="checks">
+    <!--QTY-->
+    #if ($product.parentProduct)
+                        <input class="span1" type='text' name='basketItems[$myCount].quantity' id='qty_${key}' VALUE='$product.qty' maxlength="5" disabled/>
+    #else
+                        <input class="span1" type='text' name='basketItems[$myCount].quantity' id='qty_${key}' VALUE='$product.qty' maxlength="5" />
+    #end
+    <!-- MODjp add notification of backorder -- <br/> <a class="" href="#" alt="backorder"> backordering x </a> -->
+    <!--end QTY-->
+
+     <!--start delivery date-->
+    #if ($product.inventoryHistory)
+    <p class="ship_msg">
+      <a>
+##$product.inventoryHistory.invhistid
+      #if ($product.inventoryHistory.ship2qty>0)
+        Ship Now: $product.inventoryHistory.ship1qty <br/>
+        Back Order: $product.inventoryHistory.ship2qty
+      #elseif (!$product.inventoryHistory.ship1date)
+        Ship Now: 0 <br/>
+        Back Order: $product.inventoryHistory.qty
+      #end
+      </a>
+    </p>
+    #end
+ <!--Edit Requested Delivery Date removed-->
+ <input type="hidden" size="15" value="$!product.comment" name="basketItems[$myCount].comment" id="basketItems[$myCount].comment">
+        <!--end deliver date-->
+
+
+
+                      </td>
+                      <td class="ar">
+                        <p class="total right">
+  $$basketDTO.formatter.currency($product.totalPrice)
+                        </p>
+                      </td>
+                      <td>
+  #if ($product.parentProduct)
+        &nbsp;
+    #else
+                        <p>
+                          ##<a href="#" onclick="if(checkQty('qty_${key}'))showToastr('update');checkMinOrderQTY($myCount, null, 'checks', 'document.VIEWCART.mode.value=\'updateBasket\';document.VIEWCART.submit();'); return false;" >#springMessage('vm.basket.update')</a>
+                          ##<a href="#" onClick="if(checkQty('qty_${key}')){document.VIEWCART.mode.value='updateBasket';document.VIEWCART.submit();} return false;" >#springMessage('vm.basket.update')</a>
+                          <a href="#" onClick="if(checkQty('qty_${key}'))checkMinOrderQTY($myCount,1,'$vendorSettingsDTO.vendorId', 'checks',$product.inventoryHistory.deliveryoption,'basketItems[$myCount].inventoryHistoryId','$product.qty','redirect','document.VIEWCART.mode.value=\'updateBasket\';document.VIEWCART.submit();' ); return false;">#springMessage('vm.basket.update')</a>
+                        </p>
+                        <p>
+                          <a onclick="showToastr('remove');removeFromBasket($key)">#springMessage('vm.basket.remove')</a>
+                        </p>
+    #end
+                      </td>
+                    </tr>
+    #set($subtotal = $math.add($subtotal , $product.totalPrice))
+    #set($regtotal = $math.mul($product.listprice, $product.qty))
+    #set($regsubtotal = $math.add($regsubtotal, $regtotal))
+    #set($totalQty = $math.add($totalQty, $product.qty))
+    #set($key = $key+1)
+  #end
+  #set($savings = $math.roundTo(2, $math.sub($regsubtotal, $subtotal)))
+                    <input type="hidden" value="$subtotal" id="subtotal" name="subtotal">
+  #if($productsDetails.totalDiscount > 0)
+    #set($subtotal = $math.roundTo(2,$math.sub($subtotal,$productsDetails.totalDiscount)))
+                    <input type="hidden" value="$productsDetails.totalDiscount" id="totalDiscount" name="totalDiscount">
+  #end
+#*                    <tr class="tax hide">
+                      <td colspan="4" class="empty-cel">&nbsp;</td>
+                      <td class="ar vat lbl">
+                     #if($preLocationDTO.usebillingaddress=='true')
+                        <span id="shippinglab1"><strong>#springMessage("vm.basket.shipping")</strong></span>
+                        <span id="shippinglab2"><strong>#springMessage("vm.basket.shipping")</strong></span>
+                     #else
+                        <span id="shippinglab1"><a href="#"><strong>#springMessage("vm.basket.estimate.shipping")</strong></a></span>
+                     #end
+                      </td>
+                    </tr>
+                    <tr class="tax hide">
+                      <td colspan="4" class="empty-cel">&nbsp;</td>
+                      <td class="ar vat lbl">
+                    #if($preLocationDTO.usebillingaddress=='true')
+                        <span id="taxlab1">#springMessage('vm.basket.tax'):</span>
+                        <span id="taxlab2" class="hide">#springMessage('vm.basket.tax'):</span>
+                    #else
+                      <span id="taxlab1">#springMessage('vm.basket.estimate.tax'):</span>
+                      <span id="taxlab2" class="hide">#springMessage('vm.basket.estimated.tax'):</span>
+                    #end
+                      </td>
+                      <td class="ar vat val" id="estimatedtax"></td>
+                    </tr>
+*#
+                </table>

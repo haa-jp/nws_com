@@ -1,0 +1,84 @@
+#foreach($property in $categoryPropertiesDTO.getItems())
+  #if($property.propname == 'ct' && $property.catid == $category.categoryid)
+    #set($ct = $property.propvalue)
+  #end
+#end
+
+#if ($CookiesNWDTO && $CookiesNWDTO.getCookieValue('ct'))
+  #if($CookiesNWDTO.getCookieValue('ct')=="rv")
+    #set($catselect = $Menu2DTO)
+    #set($ct="rv")
+  #elseif($CookiesNWDTO.getCookieValue('ct')=="mh")
+    #set($catselect = $Menu3DTO)
+    #set($ct="mh")
+  #elseif($CookiesNWDTO.getCookieValue('ct')=="mr")
+    #set($catselect = $Menu4DTO)
+    #set($ct="mr")
+  #elseif($CookiesNWDTO.getCookieValue('ct')=="ps")
+    #set($catselect = $Menu5DTO)
+    #set($ct="ps")
+  #end
+#else
+  #set($ct="rv")
+  #set($catselect = $Menu2DTO)
+#end
+
+
+## Moved the create cookie script to the common_js file as it is going to be called on all the templates
+
+  <!-- <div class="side-nav"> -->
+    <a class="spromos" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22793")" title="Check out the Deals">#springMessage("vm.vertmenu.homeenter")</a>
+    <p class="title" >Distributed Products</p>
+    <ul class="top-categories">
+#foreach($temp in $Menu7DTO.items)
+  #set($category = $pageTile.getItemObject($Menu7DTO, $temp, "c"))
+  #if($category.name.toLowerCase().indexOf('rv') != -1)
+    #if($ct == 'rv')
+      #set($activeCat = "class=active")
+    #else
+      #set($activeCat = "")
+    #end
+      <li><a data-topid="${category.categoryid}"data-ck="rv" $!activeCat href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")" onclick="jQuery.cookie('ct', 'rv', {expires: 365*20, path: '/'});">${category.name}</a></li>
+  #elseif($category.name.toLowerCase().indexOf('manufactured') != -1)
+    #if($ct == 'mh')
+      #set($activeCat = "class=active")
+    #else
+      #set($activeCat = "")
+    #end
+      <li><a data-topid="${category.categoryid}" data-ck="mh" $!activeCat href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")" onclick="jQuery.cookie('ct', 'mh', {expires: 365*20, path: '/'});">${category.name}</a></li>
+  #elseif($category.name.toLowerCase().indexOf('marine') != -1)
+    #if($ct == 'mr')
+      #set($activeCat = "class=active")
+    #else
+      #set($activeCat = "")
+    #end
+      <li><a data-topid="${category.categoryid}" data-ck="mr" $!activeCat href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")" onclick="jQuery.cookie('ct', 'mr', {expires: 365*20, path: '/'});">${category.name}</a></li>
+  #elseif($category.name.toLowerCase().indexOf('powersport') != -1)
+    #if($ct == 'ps')
+      #set($activeCat = "class=active")
+    #else
+      #set($activeCat = "")
+    #end
+      <li><a data-topid="${category.categoryid}" data-ck="ps" $!activeCat href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")" onclick="jQuery.cookie('ct', 'ps', {expires: 365*20, path: '/'});">${category.name}</a></li>
+  #end
+#end
+    </ul>
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/categoryT_recentlyViewed.vm")
+
+    <ul class="sub-categories">
+#foreach($temp in $catselect.items)
+  #set($category = $pageTile.getItemObject($catselect, $temp, "c"))
+      <li data-crumbid="$category.categoryid">
+        <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")" data-catid="$category.categoryid">$category.name<i class="icon-chevron-right opacity-50 hard-right"></i></a>
+      </li>
+#end
+    </ul>
+
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/categoryT_recentlyViewed.vm")
+##if($category_leftDTO.getItems().get(0).get('category_left'))
+##parse($category_leftDTO.getItems().get(0).get('category_left'))
+##end
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/Pre-orderitems.vm")
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/Cat_Best_Sellers.vm")
+  <!-- </div> -->

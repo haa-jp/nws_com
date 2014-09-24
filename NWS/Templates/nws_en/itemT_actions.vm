@@ -1,0 +1,74 @@
+
+#foreach($prop in $item.properties)
+  #if($prop.propname == "Replacement_Item" && $prop.propvalue!='')
+      #set($r_item = $prop.propvalue)
+  #end
+  #if($prop.propname == "Replacement_Message")
+    #set($r_message = $prop.propvalue)
+  #end
+#end
+
+
+#if($r_item != '')
+<div class="alert alert-error">
+   <p><strong>Notice</strong> $r_message </p>
+   <p><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$r_item")"> View Replacement Item </a></p>
+</div>
+#else
+
+   #if($math.round($price.listPrice) > $math.round($price.price))
+                    <div class="retail list-price">
+                    	<b>#springMessage("vm.itemTemplate.msrp"):</b>
+                      <em id="_listPrice_0">
+                        <span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+                        <span id="js-item-listprice-$item.itemid">$regExp.showPrice($math.roundTo(2,$price.listPrice))</span>
+                      </em>
+                    </div>
+                    <div class="price">
+                      <b>#springMessage("vm.itemTemplate.dealer"):</b>
+                      <span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+                      <em>
+                        <span id="js-item-pricedollar-$item.itemid" class="integer">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span><span>.</span><span id="js-item-pricecent-$item.itemid" class="decimal">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+                      </em>
+                    </div>
+   #end
+   #if($item.itemid)
+      #set($formName = "F$item.itemid")
+   #end
+                    <form method="post" name="$formName" action="storeitem.html?$vendorSettingsDTO.vendorId&iid=$item.itemid" class="form-inline">
+                      <input type="hidden" name="productoption" value="productoption.html?vid=$vendorSettingsDTO.vendorId&cid=20609&qp=0">
+                      <input type="hidden" id="replaceditemmsg_0" name="replaceditemmsg_0" value=""/>
+                      <input type="hidden" id="compCode_0" value="$item.code"/>
+   #set ($found = 'false')
+                      <div id="js-item-hiddenfields-$item.itemid"></div>
+                      <div id="js-item-inventory-$item.itemid" class="inventory"></div>
+  ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_attributes.vm")
+                      <input type="hidden" name="redirectMode" value="false"/>
+  #springBind( "storeItemDTO.*" )
+  
+   #if($status.errors.errorCount>0)
+                      <div class="msg">
+      #foreach($error in $status.errorMessages)
+                        $error
+      #end
+                      </div>
+   #end
+                      <div>
+                        <label for="qty_0"><b>Order #springMessage("vm.itemTemplate.quantity"):</b></label>
+                        <input class="qty-input span2 align-center" type='text' id="js-item-qtybox-$item.itemid" maxlength="3" />
+                        <br/><br/>
+<!-- btn removed -->                        
+                        <div class="btnclass addToCartBtn" id="js-item-addtocartbtn-$item.itemid" style="display: block;"><span class="btn btn-success">Add to Cartz</span></div>
+                        
+                        
+                        
+                        <div class="btnclass hide" id="lost-sale"><br /><span class="btn btn-warning">Lost Sale</span></div>
+                        <span class="addToCartDummy">
+                          <button class="btn btn-primary hide  addToCartBtn">#springMessage('vm.itemTemplate.addtocart')test</button>
+                        </span>
+                      </div>
+                    </form>
+	
+
+
+#end

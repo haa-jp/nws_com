@@ -1,0 +1,34 @@
+        <div class="row-fluid">
+#if($approved != "true")
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_notice.vm")
+#end
+          <div class="span4">
+            <h3> #springMessage('vm.nws.savedorders.title')</h3>
+            <p> You currently have $!availBasketList.size() saved orders:</p>
+            <form>
+<!-- Saved Basket List-->
+              <div id="savedBasket">
+                <ul id="basketlist" >
+  #foreach($nickname in $availBasketList)
+                  <a class="savedBasket" href="#"><li name="$nickname">$nickname</li></a>
+  #end
+                </ul>
+              </div>
+
+<!-- End Saved Basket List-->
+              <input type="hidden" name="orderType" value="P"/>
+              <input type="hidden" name="_targetcheckout" value="checkout.html?vid=$vendorSettingsDTO.vendorId"/>
+            </form>
+          </div> <!-- end4 -->
+          <div class="span8" id="wishlist">
+            <div class="container-fluid">
+              <h3> #springMessage('vm.nws.watchlist.title')</h3>
+              <p> <a href="wishlist.html?vid=$vendorSettingsDTO.vendorId">#springMessage('vm.nws.watchlist.link')</a></p>
+              <form action="wishlist.html" method="post" name="wishlist">
+                <input id="vid" type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+                <div id="container">Getting Wishlist Information...</div>
+              </form>
+            </div>
+          </div> <!-- end8 -->
+          ##<input class="btn" type="button" value="#springMessage('vm.basket.toshop')" onclick="javascript:document.location='store.html?vid=${vendorSettingsDTO.vendorId}'"/>
+        </div> <!--end container -->

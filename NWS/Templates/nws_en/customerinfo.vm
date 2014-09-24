@@ -1,0 +1,118 @@
+<h1>#springMessage("vm.myaccount.customeradd")</h1>
+##<div class="info_needed">#springMessage("vm.billingaddress.msg1")(<span class="needed_star">*</span>)#springMessage("vm.billingaddress.msg2")  </div>
+<br/>
+#springBind( "myAccountDTO.*" )
+#foreach($error in $status.errorMessages)
+  #set($errorCount = $velocityCount)
+#end
+#foreach($error in $status.errorMessages) 
+  #if($velocityCount == 1)
+                      <div class="row-fluid">
+                        <div class="alert alert-error span6">
+                          <button data-dismiss="alert" class="close" type="button">&times;</button>
+                          <p><strong>Warning!</strong></p>
+                          <ul>
+  #end
+                            <li>$error</li>
+  #if($velocityCount == $errorCount)
+                          </ul>
+                        </div>
+                      </div>
+  #end
+#end
+<div class="container-fluid">
+  <div class="span6">
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.firstname" )
+      <div class="span3">
+      #springMessage("vm.register.firstname")
+      </div>
+      <div class="span9">
+        $status.value
+      </div>
+    </div>
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.middlename" )
+      <div class="span3">
+        #springMessage("vm.register.midname")
+      </div>
+      <div class="span9">
+        $status.value
+      </div>
+    </div>
+    <div class="row-fluid">
+    #springBind( "myAccountDTO.customerAddress.lastname" )
+      <div class="span3">#springMessage("vm.register.lastname")</div>
+      <div class="span9">$!status.value</div>
+    </div>
+  </div>
+  <div class="span6">
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.company" )
+      <div class="span3">#springMessage("vm.register.company")</div>
+      <div class="span9">$!status.value</div>
+    </div>
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.address1" )
+      <div class="span3">#springMessage("vm.register.address") 1</div>
+      <div class="span9">$!status.value</div>
+    </div>
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.address2" )
+      <div class="span3">#springMessage("vm.register.address") 2</div>
+      <div class="span9">$!status.value</div>
+    </div>
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.city" )
+      <div class="span3">#springMessage("vm.register.city")</div>
+      <div class="span9">$!status.value</div>
+    </div>
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.countryid" )
+      <div class="span3">#springMessage("vm.register.country")</div>
+      <div class="span9">
+      #set($curcountry=$status.value)
+      #foreach($country in ${myAccountDTO.countyInUse}) 
+        #if($country.country.id == $curcountry)
+          $country.country.name
+        #end
+      #end
+      </div>
+    </div>
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.provinceid" )
+      <div class="span3">#springMessage("vm.register.province")</div>
+      <div class="span9">
+      #if(${myAccountDTO.customerAddress.provinceid}!=-1)
+        #foreach($country in $myAccountDTO.countyInUse)
+          #if(${curcountry} == ${country.country.id})
+            #foreach($province in ${country.provinces})   
+              #if( ${province.province.id} == ${status.value})
+                ${province.province.name}
+              #end    
+            #end
+          #end
+        #end            
+      #end
+      #springBind( "myAccountDTO.customerAddress.anotherprovince" )
+      #if(${myAccountDTO.customerAddress.provinceid}==-1 )
+        $!status.value
+      #end
+      </div>
+    </div>
+    <div class="row-fluid">
+      #springBind( "myAccountDTO.customerAddress.postal" )
+      <div class="span3">#springMessage("vm.register.postal")</div>
+      <div class="span9">$!status.value</div>
+    </div>
+  </div>
+  <div class="span11">
+    <div class="alert alert-warning">
+      <h4>Note</h4>
+      <p>Text with instructions to change address.</p>
+    </div>
+  </div>
+</div>
+
+##</div> <!-- end g -->
+

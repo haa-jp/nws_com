@@ -1,0 +1,49 @@
+<h3>Learn More about Northern Wholesale Policies.</h3>
+<div class="row-fluid">
+	<div class="span6">
+		<ul class="nav nav-tab" id="poltab">
+			<li>
+			<a href="#terms" data-toggle="tab">Wholesale Terms &amp; Conditions</a>
+			</li>
+
+			<li>
+			<a href="#guarantee" data-toggle="tab">Personal Guarante</a>
+			</li>
+
+			<li>
+			<a href="#returns" data-toggle="tab">Return Policy</a>
+			</li>
+
+			<li>
+			<a href="#privacy" data-toggle="tab">NWS Privacy Policy</a>
+			</li>
+		</ul>
+	</div> 
+
+	<div class="span6">
+	</div>
+
+</div>
+<div class="tab-content">
+	<div id="terms" class="tab-pane">
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/content_terms_conditions.vm")
+	</div>
+
+	<div id="guarantee" class="tab-pane">
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/content_personal_guarantee.vm")
+	</div>
+
+	<div id="returns" class="tab-pane">
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/content_return_policy.vm")
+	</div>
+
+	<div id="privacy" class="tab-pane">
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/content_privacy_policy.vm")
+	</div>
+</div>
+
+<script>
+	$(function () {
+		$('poltab a:last').tab('show');
+	})
+</script>

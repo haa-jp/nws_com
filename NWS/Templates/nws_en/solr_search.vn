@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+ #if($request.isSecure())
+  #if ($request.getServerPort() ==443)  
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/") 
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+#if($CookiesDTO && $CookiesDTO.getCookieValue('preferences'))
+  #if($CookiesDTO.getCookieValue('preferences')=="grid")
+    #set($itemViewClass= "grid")
+  #else
+    #set($itemViewClass= "list")
+  #end
+#else
+  #set($itemViewClass= "grid")
+#end
+<html>
+  <!-- solr_search.vm-->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <base href="$baselink"/>
+    <meta name="description" content="#if($metadescription && $metadescription!="") $metadescription #else   #end" />
+    <meta name="keywords" content="#if($metakeywords && $metakeywords!="")$metakeywords #else   #end" />
+    <title>#springMessage("vm.solr_advanced_search.title")</title>
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+  </head>
+  <body id="search" class="nws">
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="row-fluid">
+        <div class="span2">
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/side_nav.vm")
+        </div>
+        <div class="span10">
+          <div class="content">
+
+##set($itemsDTO = $AdvancedSearchUsingSolr)
+##set($itemsPaginationDTO = "AdvancedSearchUsingSolr") 
+ #set($itemsDTO = $nwsSolrDTO)
+ #set($itemsPaginationDTO = "nwsSolrDTO") 
+
+##set($facet_cat_searchDTO = $facet_simple_searchDTO)
+#set($facet_cat_searchDTO = $nwsFacetDTO)
+
+#if($itemsDTO.getItems().size() >1)
+<div class="alert" style="overflow: auto;">
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/facets_menu.vm")
+</div>
+#end
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/categoryT_itemList.vm")
+          </div><!-- end content -->                
+        </div><!-- end span10 -->
+      </div>  
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+    </div><!-- end container-fluid -->
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quicklook_ext.vm")
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quickadd_ext.vm")
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/category.js"></script>
+    <script type="text/javascript" language="javascript">
+      Category.initialize();
+    </script>
+  </body>
+</html>

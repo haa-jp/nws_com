@@ -1,0 +1,3 @@
+SELECT i AS i,  i.itemid as itemid, inv.instock as instock
+FROM com.avetti.simplemerce.store.domain.StoreItem i, Inventory inv
+WHERE inv.itemid=i.itemid AND i.itemid IN <<%%keyword%%&qt=dismax&qf=Search_Terms_%%ml%%_ml^8+keywords^8+title_%%ml%%_ml^4+mfgpartno^3+shortdesc^0.1+shortdesc_%%ml%%_ml^0.1+vendorid^0.1+code^0.1+Barcode_%%ml%%_ml^0.1&pf=Search_Terms_%%ml%%_ml^8+keywords^8+title_%%ml%%_ml^4+mfgpartno^3+shortdesc^0.1+shortdesc_%%ml%%_ml^0.1+vendorid^0.1+code^0.1+Barcode_%%ml%%_ml^0.1&fl=itemid&bq=(+vendorid:%%vid%% AND cname:"%%cname%%" AND Brand_p:"%%brand%%" AND Item_Class_dim_p:"%%itemclass%%" AND Catalog_dim_p:"%%catalog%%" AND origcat:%%origcatid%% AND available:true)&mm=1>>

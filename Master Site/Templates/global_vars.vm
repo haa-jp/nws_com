@@ -1,0 +1,49 @@
+#set($vid = $vendorSettingsDTO.vendorId)
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+  #else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+#set($propName = "SessionCustomerDTO_"+$vid)
+#if($request.getSession().getAttribute($propName))
+  #set($storeDealer = $request.getSession().getAttribute($propName).getCustomerProperty("Store Dealer"))
+  #if($storeDealer == 'Yes')
+    #set($isAdmin = true)
+  #end
+#end
+
+#set($masterSkinId = 1825)
+#set($masterSkinName = "master_en")
+#set($storeSkinId = 1867)
+#set($storeSkinName = "lewies_en")
+
+#set($customerNumber = 56401)
+#set($storeName = "Lewie's RV Center")
+#set($storeMail = "rv-parts@b2cparts.com")
+#set($storePhone = "(800) 627-2160")
+
+#set($offercode = "retail")
+#set($storetype = $request.getParameter('sd'))
+
+#if($storetype == "rv")
+  #set($storeclass = "a")
+  #set($menuCategories = $Menu2DTO)
+#elseif ($storetype == "marine")
+  #set($storeclass = "b")
+  #set($menuCategories = $Menu4DTO)
+#elseif ($storetype == "power")
+  #set($storeclass = "c")
+  #set($menuCategories = $Menu5DTO)
+#else
+  #set($storeclass = "a")
+  #set($menuCategories = $Menu2DTO)
+#end

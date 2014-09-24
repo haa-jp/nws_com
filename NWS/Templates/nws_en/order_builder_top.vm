@@ -1,0 +1,48 @@
+<div class="container">
+
+<a data-toggle="modal" href="#instructions" class="link" >Order Builder Instructions</a> 
+
+<!-- Modal -->
+
+<div id="instructions" class="modal hide fade in" data-dismiss="modal" style="display: none;">
+
+   <div class="modal-header">
+     <a class="close" data-dismiss="modal">×</a>
+      <h3>Order Builder Instructions</h3>
+   </div>
+
+   <div class="modal-body">
+ 
+     <div>
+         <h4>Step 1: Required</h4>
+           <p> Enter in your Purchase order number.</p>
+     </div>
+ 
+      <div>
+         <h4>Step 2</h4>
+            <p>Start entering part numbers and quantities in the form on the right. Continue to press the tab key. Your order will start to build below.</p>
+            <p><b>Or</b> you may choose to copy and paste your purchase order into the test field. First activate the copy/paste function by clicking the "<a>Paste products and quantities</a>" link.
+               To copy/paste items, the information you enter MUST be one item per line in the following order: (NWS Part Number)  (Information* <small>not required</small> ) (Quantity). <p>
+<ul>
+   <li>Sample File: <a href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/Sample_Purchase_Order.xls"> Microsof Excal spreadsheet</a></li>
+   <li>Sample File: <a href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/Sample_Purchase_Order.txt"> Text file ( tab delimited )</a></li>
+   <li>Sample File: <a href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/Sample_Purchase_Order.csv"> CSV File format</a></li>
+</ul>
+         <p><em> Be Careful, the Clear button will drop your entire order</em></p>
+      </div>
+
+      <div>
+         <h4>Step 3</h4>
+         <p>To place your order, click the green &quot;Place Order Button&quot; on the bottom right of the page. This will automatically create an order and take you directly to the order confirmation.</p>
+         <p>All orders placed using the NWS Order Builder use your account's default shipping method. To make adjustments, please contact your sales representative.</p>
+      </div>
+
+   </div>
+
+   <div class="modal-footer">
+      <a href="order-builder" id="btnCloseInstructions" class="btn" data-dismiss="modal">Close</a> 
+   </div>
+</div>
+<!-- end Modal -->
+
+</div>

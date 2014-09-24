@@ -1,0 +1,81 @@
+<div>
+	<h3> The products we distribute</h3>
+	<div>
+		<p> It’s our job to bring you the best products available, so that you can offer the best to your customers. Our buying team knows the industry, knows the trends, and knows what the next &quot;big thing&quot; will be so we&apos;re the first to bring it to you. We offer more than 50,000 products in the RV, Manufactured Home, Marine, Snowmobile and ATV industries.  In addition, our partnerships with Sierra&reg; and Mallory&reg; Marine allow us to drop ship an additional 200,000 marine parts and components.</p>
+		<p> Our products are available to you online or through our expert sales team. We’ve created a shipping system to deliver your products efficiently and economically. Northern Wholesale has a fleet running throughout the Midwest every day, partnerships with major delivery services and freight networks available to ship nationwide.</p>
+	</div>
+
+	<ul class="nav nav-tab" id="prodTab">
+<!-- do we need a class=active to begin ? -->
+		<li><a href="#rv" data-toggle="tab"> RV Parts &amp; Accessories</a></li>
+		<li><a href="#mr" data-toggle="tab"> Marine Parts &amp; Accessories</a></li>
+		<li><a href="#mh" data-toggle="tab"> Manufactured Housing Parts &amp; Accessories</a></li>
+		<li><a href="#ps" data-toggle="tab"> Powersports Parts &amp; Accessories</a></li>
+		<li><a href="#em" data-toggle="tab"> Extreme Max&trade;</a></li>
+	</ul>
+
+	<div class="tab-content">
+		<div class="tab-pane" id="rv">
+			<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/public/rv700x175.jpg"
+			height="175" width="700" 
+			alt="Recreational Vehicle Parts and Accessories" /> <br />
+			<p> Northern Wholesale Supply takes recreation and the RV lifestyle seriously.  We are the upper Midwest’s top distributor for RV parts &amp; accessories. We earned that spot by stocking the variety of quality parts our dealers expect along with unsurpassed customer service.</p>
+			<p> The RV industry changes daily.  Northern Wholesale Supply watches for the newest products and delivers them.  We integrate current technology into every area of our business: whether you prefer to place orders online, by phone or by fax, receive invoices via USPS or sent directly to your email, we’re prepared to work with your company.</p>
+			<p> Northern Wholesale Supply has spent years developing relationships with the best names in the industry. Our long-term partnerships have resulted in exclusive access to vendors and products. </p>
+		</div>
+
+		<div class="tab-pane" id="mr">
+			<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/public/marine700x175.jpg"
+			height="175" width="700"
+			alt="Marine Parts and Accessories" /> <br />
+			<p> Northern Wholesale Supply leads the upper Midwest as the distributor of Marine parts and accessories. Our experienced staff uses our products and constantly undergoes rigorous training. Whether you want to know the technical specs of an electronics unit or which towables are going to fly off the shelves, every member of our staff is prepared to help you. We integrate current technology into every area of our business: whether you prefer to place orders online, by country or by fax, receive invoices via USPS or sent directly to your email, we&apos;re prepared to work with your company.</p>
+			<p> The marine industry breaks new ground every year. From established vendors to up-and-comers, our buying team is watching and evaluating so that we offer you new products that combine innovation and quality.</p>
+		</div>
+
+		<div class="tab-pane" id="mh">
+			<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/public/mh700x175.jpg"
+		       	height="175" width="700"
+			alt="Manufactured Housing Parts and Accessories" /> <br />
+			<p> Northern Wholesale Supply has what you need for your Manufactured Housing business: experience and inventory.  We&apos;ve sold Manufactured Housing supplies since the the 1960&apos;s, so we know what you need to sell, set, and supply Manufactured Housing customers.</p>
+			<p> Our inventory covers the entire home.  We carry all set-up materials including anchors, skirting, and steps.  Our full line of heaters, air conditioners and water heaters are designed specifically for manufactured homes.  We also supply repair and maintenance parts - doors, windows, hardware, plumbing fixtures and accessories.</p>
+			<p> We integrate current technology into every area of our business: whether you prefer to place orders online, by phone or by fax, receive invoices via USPS or sent directly to your email, we&apos;re prepared to work with your company.</p>
+			<p> Our long-term work in this industry gives us the opportunity to work exclusively with established vendors.</p>
+		</div>
+
+		<div class="tab-pane" id="ps">
+			<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/public/ps700x175.jpg"
+			height="175" width="700"
+			alt="Powersports Parts & Accessories" /> <br />
+			<h3> Snow</h3>
+			<p> Snowmobiling can be a hobby, a passion, or a lifestyle.  Most Northern Wholesale employees fall somewhere in that spectrum. That&apos;s why we entered the market. Our staff rides and uses the same products we sell, because we only carry popular parts from the most reliable snowmobile aftermarket manufacturers. </p>
+			<p> Northern Wholesale Supply is also the exclusive distributor for Extreme Max Products&trade;.  Extreme Max offers a high profit margin, and a two year, no-hassle replacement warranty.</p>
+			<p> We integrate current technology into every area of our business: whether you prefer to place orders online, by phone or by fax, receive invoices via USPS or sent directly to your email, we&apos;re prepared to work with your company.</p>
+			<h3> ATV/UTV</h3>
+			<p> ATVs and UTVs are year-round machines. Customers want more than high quality machines; they want to customize them for specialized use. That&apos;s why Northern Wholesale stocks a full spectrum of specialty parts.  We bring you the toughest, most diverse ATV and UTV products, from winches and mounts to fender bags and gun mounts and snow plows or cab enclosures. </p>
+			<p> Northern Wholesale Supply is also the exclusive distributor for Extreme Max Products&trade;.  Extreme Max offers a high profit margin, and a two year, no-hassle replacement warranty.</p>
+			<p> We integrate current technology into every area of our business: whether you prefer to place orders online, by phone or by fax, receive invoices via USPS or sent directly to your email, we&apos;re prepared to work with your company.</p>
+		</div>
+
+		 <div class="tab-pane" id="em">
+			 <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/public/exmax700x175.jpg"
+			 height="175" width="700"
+			 alt="Extreme Max Products" /> <br />
+			 <p> Northern Wholesale Supply is the exclusive distributor for Extreme Max Products&trade;.  Extreme Max offers a high profit margin, and a two year, no-hassle replacement warranty.</p>
+			 <p> Extreme Max employees are the first on the water in the morning and last off the trail at night.  They’re the in the woods after dusk if there’s a job to be done. Everyone at Extreme Max does more than develop, sell and service these products – they use them.</p>
+			 <p> We integrate current technology into every area of our business: whether you prefer to place orders online, by phone or by fax, receive invoices via USPS or sent directly to your email, we’re prepared to work with your company.</p>
+
+		</div>
+	</div>
+	<div class="well">
+		<h4> Are you a vendor looking to do business?</h4>
+		<p> We are always looking for new and innovative products that fit our industry. If you need distribution assistance and would like to discuss the many options we have to work with you then please <a href="$seourl.encodeURL('store.html?vid=vendorSettingsDTO.vendorid&cid=20599')" title="vendor inquires"> Contact us regarding our product requirements</a> and start some dialogue about becoming a product supplier</p>
+	</div>
+</div>
+
+
+   <script type="text/javascript" src="store/$VendorSettingsDTO.vendorId/themes/vendorSettingsDTO.skinname/js/bootstrap-tab.js"></script>
+<script>
+	$(function () {
+		$('prodTab a:last').tab('show');
+	})
+</script>

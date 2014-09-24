@@ -1,0 +1,364 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><!-- start control heading -->
+#if (!$pageTileDictionaryDTO)
+	#if ($_commandName)
+		#springBind( "${_commandName}.pageTileDictionaryDTO" )
+		#set ($pageTileDictionaryDTO = ${status.value})
+	#end
+#end
+#if ($pageTileDictionaryDTO)
+#set ($facetBrands=$pageTileDictionaryDTO.getPageTile("facetBrands") )
+#set ($vCatsCategoryDTO=$pageTileDictionaryDTO.getPageTile("vCatsCategoryDTO") )
+#set ($Menu2DTO=$pageTileDictionaryDTO.getPageTile("Menu2DTO") )
+#set ($Menu3DTO=$pageTileDictionaryDTO.getPageTile("Menu3DTO") )
+#set ($MenuMainDTO=$pageTileDictionaryDTO.getPageTile("MenuMainDTO") )
+#set ($facet_catDTO=$pageTileDictionaryDTO.getPageTile("facet_catDTO") )
+#set ($Menu4DTO=$pageTileDictionaryDTO.getPageTile("Menu4DTO") )
+#set ($vendorInfoDTO=$pageTileDictionaryDTO.getPageTile("vendorInfoDTO") )
+#set ($category_leftDTO=$pageTileDictionaryDTO.getPageTile("category_leftDTO") )
+#set ($category_centerDTO=$pageTileDictionaryDTO.getPageTile("category_centerDTO") )
+#set ($category_bottomDTO=$pageTileDictionaryDTO.getPageTile("category_bottomDTO") )
+#set ($categoryNameDTOHQL=$pageTileDictionaryDTO.getPageTile("categoryNameDTOHQL") )
+#set ($childCategoriesDTO=$pageTileDictionaryDTO.getPageTile("childCategoriesDTO") )
+#set ($childItemsDTO=$pageTileDictionaryDTO.getPageTile("childItemsDTO") )
+#set ($category_topDTO=$pageTileDictionaryDTO.getPageTile("category_topDTO") )
+#set ($cookieDTO=$pageTileDictionaryDTO.getPageTile("cookieDTO") )
+#set ($Menu1DTO=$pageTileDictionaryDTO.getPageTile("Menu1DTO") )
+#set ($strapsDTO=$pageTileDictionaryDTO.getPageTile("strapsDTO") )
+#end
+<!-- end control heading --> 
+
+#set($pageURI = "store.html")
+#macro ( hrefNewParameter $paramName $paramValue )
+         #set($hrefString = "${pageURI}?")
+   #if($request.getParameterMap().size()>0)
+           #foreach($parName in $request.getParameterNames())
+                   #foreach($parVal in $request.getParameterValues($parName))
+                            #if(!$parName.equals($paramName))
+                                 #set($hrefString = "${hrefString}${parName}=${parVal}&")
+                            #end
+                   #end
+           #end
+   #end
+    #set($hrefString = "${hrefString}${paramName}=${response.encodeURL($paramValue)}")
+$hrefString
+#end
+
+#macro ( hrefNewRangeParameter $param1Name $param1Value $param2Name $param2Value)
+         #set($hrefString = "${pageURI}?")
+   #if($request.getParameterMap().size()>0)
+           #foreach($parName in $request.getParameterNames())
+                   #foreach($parVal in $request.getParameterValues($parName))
+                             #if(!$parName.equals($param1Name) && !$parName.equals($param2Name))
+                                       #set($hrefString = "${hrefString}${parName}=${parVal}&")
+                             #end
+                   #end
+           #end
+   #end
+#set($tempMax = "${param2Value}.99")
+    #set($hrefString = "${hrefString}${param1Name}=${response.encodeURL($param1Value)}&${param2Name}=${response.encodeURL($tempMax)}")
+$hrefString
+#end
+
+#macro ( formParameters $param1Name $param2Name)
+         #set($hrefString = "")
+   #if($request.getParameterMap().size()>0)
+           #foreach($parName in $request.getParameterNames())
+                   #foreach($parVal in $request.getParameterValues($parName))
+                             #if(!$parName.equals($param1Name) && !$parName.equals($param2Name))
+                                        #set($hrefString = "${hrefString}<input type=hidden name=${parName} value='${parVal}'>")
+                             #end
+                   #end
+           #end
+   #end
+$hrefString
+#end
+
+#macro ( hrefRemoveParameter $paramName )
+         #set($hrefString = "${pageURI}?")
+   #if($request.getParameterMap().size()>0)
+           #foreach($parName in $request.getParameterNames())
+                   #foreach($parVal in $request.getParameterValues($parName))
+                           #if(!$parName.equals($paramName))
+                                 #set($hrefString = "${hrefString}${parName}=${parVal}&")
+                           #end
+                   #end
+           #end
+   #end
+$hrefString
+#end
+
+#macro ( hrefRemoveRangeParameter $param1Name $param2Name )
+         #set($hrefString = "${pageURI}?")
+   #if($request.getParameterMap().size()>0)
+           #foreach($parName in $request.getParameterNames())
+                   #foreach($parVal in $request.getParameterValues($parName))
+                           #if(!$parName.equals($param1Name) && !$parName.equals($param2Name) )
+                                 #set($hrefString = "${hrefString}${parName}=${parVal}&")
+                           #end
+                   #end
+           #end
+   #end
+$hrefString
+#end
+
+
+ #if($request.isSecure())
+        #if ($request.getServerPort() ==443)  
+            #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+        #else
+            #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+        #end
+    #else
+        #if ($request.getServerPort() ==80)
+            #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+        #else
+            #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+        #end
+    #end
+
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+
+#if ($pageTileDictionaryDTO)
+#set ($vCatsCategoryDTO=$pageTileDictionaryDTO.getPageTile("vCatsCategoryDTO") )
+#end
+
+
+     #if(($multiPageViews) && ($__virtualCategory))
+      #set($itemMultiPageView = $multiPageViews.get($__virtualCategory.getPageTileName()))
+     #end
+
+
+    
+    #if (!$direction) #set($direction = $regExp.getParamFromURL($itemMultiPageView.multiPageURL, 'direc'))    #end
+    #if (!$mpvp&&$itemMultiPageView&&$itemMultiPageView.currentPageIndex) 
+           #set($mpvp = $itemMultiPageView.currentPageIndex)  
+    #else
+           #set($mpvp = "")  
+    #end
+
+#set($catid = $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'categoryid'))
+
+#set($metadescription= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metadescription'))
+#set($metakeywords= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metakeywords'))
+#set($pagetitle= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'pagetitle'))
+
+#set($categoryImage= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'image'))
+#set($categoryThumb= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'thumbimage'))
+#set($categoryName= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'name'))
+#set($category= $pageTile.getItemObject($childCategoriesDTO, $childCategoriesDTO.getItems(), "c"))
+
+#foreach($property in $categoryPropertiesDTO.getItems())
+  #if($property.propname == 'ct' && $property.catid == $category.categoryid)
+    #set($ct = $property.propvalue)
+  #end
+#end
+
+#*********************************************
+* The following block of code is used together with the 
+* redirect to item option in category properties
+* this should automatically redirect the category to
+* the single item in that category.
+*********************************************#
+##
+#set($category1= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'c'))
+#set($childItemsViewDTO = $multiPageViews.get("childItemsDTO"))
+#if($category1.autoview==1 && $childItemsViewDTO.itemsCount==1)
+    #foreach($itemIter in $childItemsDTO.getItems())
+  #set($childItem = $pageTile.getItemObject($childItemsDTO, $itemIter, "i"))
+    #end
+    $response.sendRedirect($seourl.encodeURL("store.html?cid=$catid&vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid"))
+#end
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<base href="$baselink"/>
+<meta name="description" content="#if($metadescription!="") $metadescription #else   #end" />
+#if(false)
+<meta name="keywords" content="#if($metakeywords!="")$metakeywords #else   #end" />
+#end
+<title>$!pagetitle</title>
+
+
+#if($vendorSettingsDTO.themeId) 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/commonCSS-JS.vm")
+#else
+  #parse("$vendorSettingsDTO.vendorId/commonCSS-JS.vm")
+#end
+
+    <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/css5/tables.css">
+
+<script type="text/javascript" language="javascript">
+#if($CookiesDTO && $CookiesDTO.getCookieValue('itemView'))
+  #set($itemView = $CookiesDTO.getCookieValue('itemView'))
+#else
+  #set($itemView = 'list')
+#end
+function changeView(view, event)
+{
+  if (event.preventDefault) { 
+    event.preventDefault(); 
+  } 
+  else { 
+    event.returnValue = false; 
+  }
+  var viewLink = $j("." + view);
+  var gridView= $j("#item-gd");
+  var listView= $j("#item-ls");
+
+  if((viewLink.hasClass('selected') && gridView.hasClass('show')) == true){
+    return;
+  }
+  else if((viewLink.hasClass('selected') && listView.hasClass('show')) == true){
+    return;
+  }
+
+  if(gridView.hasClass("show")){
+    createCookie('itemView', 'list');
+    gridView.addClass('hide');
+    gridView.removeClass('show');
+    listView.addClass('show');
+    listView.removeClass('hide');
+  }
+  else
+  {
+    createCookie('itemView', 'grid');
+    listView.addClass('hide');
+    listView.removeClass('show');
+    gridView.addClass('show');
+    gridView.removeClass('hide');
+  }
+
+  if(viewLink.hasClass("list"))
+  {
+    $j(".list").addClass('selected');
+    $j(".grid").removeClass('selected');
+  }
+  else
+  {
+    $j(".list").removeClass('selected');
+    $j(".grid").addClass('selected');
+  }
+}
+
+function sortRedirect()
+{
+    var sortselect = document.getElementById("sortselect");
+    if (sortselect.value == 'stitleASC'){
+            window.location.href='$baselink$regExp.removeStr("#hrefNewParameter('sortci' 'stitle+asc')",'(^\s+)|(\s+$)')';
+    }
+    if (sortselect.value == 'newestDESC'){
+            window.location.href='$baselink$regExp.removeStr("#hrefNewParameter('sortci' 'newest+desc')",'(^\s+)|(\s+$)')';
+    }
+    if (sortselect.value == 'priceASC')
+  {    
+    window.location.href="$baselink$regExp.removeStr("#hrefNewParameter('sortci' 'price+asc')", '(^\s+)|(\s+$)')";
+    }
+    if (sortselect.value == 'priceDESC')
+  {
+    window.location.href="$baselink$regExp.removeStr("#hrefNewParameter('sortci' 'price+desc')", '(^\s+)|(\s+$)')";
+    }
+    if (sortselect.value == 'topsellers')
+  {
+    window.location.href="$baselink$regExp.removeStr("#hrefNewParameter('sortci' 'topsellers+asc')", '(^\s+)|(\s+$)')";
+    }
+    if (sortselect.value == 'averagereview')
+  {
+    window.location.href="$baselink$regExp.removeStr("#hrefNewParameter('sortci' 'averagereview+desc')", '(^\s+)|(\s+$)')";
+    }
+    if (sortselect.value == 'orderscount')
+  {
+    window.location.href="$baselink$regExp.removeStr("#hrefNewParameter('sortci' 'orderscount+desc')", '(^\s+)|(\s+$)')";
+    }
+}
+
+</script>
+
+</head>
+#if($categoryName=="Snowmobile Traction")
+  #set($isHome=true)
+#elseif($categoryName=="Ramps")
+  #set($isHome=true)
+#elseif($categoryName=="Accessories")
+  #set($isHome=true)
+#else
+  #set($isHome=false)
+#end
+
+<body#if($isHome) id="home"#{end}>
+  <div id="masterWrapper">
+  <!-- Start header -->
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+#else
+       #parse("$vendorSettingsDTO.vendorId/header.vm")
+#end
+  <!-- End header -->
+  <div id="bd">
+    <div id="content">  
+      <div id="crumbs">
+#set($idx =0)
+#set($currcat = "")
+#foreach($clink in $categoryPathDTO) 
+  #set($prevcat = $currcat)
+  #if($idx > 1)
+       :
+  #end
+  #if ($idx==0)
+        <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId")">Home</a>
+  #elseif($idx > 1)
+        <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$clink.cid")">$clink.getName()</a>
+  #end
+  #set($idx=$idx+1)
+  #set($currcat=$clink.cid)
+#end
+#set( $propertyNames = ["Stud_Length", "Head_Diameter", "Inside_Length", "Overall_Length", "Stud_Quantity", "Stud_Style", "Backer_Style", "Backer_Shape", "Backer_Material", "Backer_Color", "Backer_Diameter", "Backer_Thickness", "Backer_Quantity", "Wear_Bar_Style", "Ski_Manufacturer", "Ski_Type", "Carbide_Length", "Wear_Bar_Studs", "Ramp_Style", "Ramp_Class", "Ramp_Length", "Ramp_Weight_Capacity", "Protrusion_Length", "block_height", "block_mfg", "block_style"] )
+#foreach($propName in $propertyNames)
+  #set($propParam = $propName.toLowerCase().replace("_", ""))
+  #if($request.getParameter(${propParam}))
+&raquo;&nbsp;<a href="#hrefRemoveParameter("${propParam}")">$request.getParameter("${propParam}")</a>&nbsp;<a href="#hrefRemoveParameter("${propParam}")"><img  src='store/$vendorSettingsDTO.vendorId/assets/images/delete_button.gif'></a>
+  #end
+#end
+      </div>
+      <!-- end crumbs -->
+
+      <!-- Personalization modjp start -->
+         #parse("$strapsDTO.getItems().get(0).get('test2jp')")
+      <!-- Personalization modjp end -->
+
+#if($vendorSettingsDTO.themeId) 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/subcategories_descList.vm")
+#else
+  #parse("$vendorSettingsDTO.vendorId/subcategories_descList.vm")
+#end
+    </div>
+    <!-- end content -->
+#if(!$isHome)
+    <div id="leftNav">
+  #if($vendorSettingsDTO.themeId) 
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/vertmenu.vm")
+  #else
+    #parse("$vendorSettingsDTO.vendorId/vertmenu.vm")
+  #end
+    </div>
+    <!-- end leftNav -->
+#end
+  </div>
+  <!-- end bd -->
+    <!-- start ft -->
+#if($vendorSettingsDTO.themeId) 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+#else
+  #parse("$vendorSettingsDTO.vendorId/footer.vm")
+#end
+    <!-- end ft -->
+</div>
+<!-- end masterWrapper-->  
+  </body>
+</html>

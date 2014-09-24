@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+#set($tmp= $vendorInfoDTO.getItem(0))
+#set($vendor= $pageTile.getItemObject($vendorInfoDTO, $tmp, "v"))
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+
+		<title>Avetti.com - Java Ecommerce Shopping Cart Software</title>
+		<link rel="shortcut icon" href="/favicon.png">	
+		<link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/css5/printer_friendly.css" type="text/css" media="all" />	
+#if($vendorSettingsDTO.themeId) 
+	#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/commonCSS-JS.vm")
+#else
+	#parse("/$vendorSettingsDTO.vendorId/commonCSS-JS.vm")
+#end
+
+	</head>
+
+	<body>
+		<div id="doc2" class="yui-t2">
+			<!-- START TOPNAV -->
+			<div id="hd">
+				<div id="logoMenu" class="yui-gf">
+					<div class="yui-u first">
+						<div id="logo"></div> 
+					</div> 
+					
+					<div class="yui-u">
+						<div style="float:right;font-size:1em;">
+							<a class=internal-link href="javascript:window.print()">Click to Print The Receipt</a>
+							<br><Br>
+							<a class="internal-link" href="javascript:window.close()">Close the window</a>
+						</div>
+					</div> 
+				</div>	
+			</div>
+			<!-- END TOPNAV -->
+
+			<div id="bd">
+				<div id="yui-main">
+					<div class="yui-u">					
+						<div id="content" >
+							<h1>Receipt</h1>						
+								<div id="basket_content_text">
+									<b>
+										<span style="text-transform: uppercase;">$checkoutViewDTO.customerInformation.firstName&nbsp;
+$checkoutViewDTO.customerInformation.lastName
+										</span>
+									</b>
+									<br />
+$!checkoutViewDTO.addresses.billingAddress.address1 
+									<br />
+#if($!checkoutViewDTO.addresses.billingAddress.address2!="")$!checkoutViewDTO.addresses.billingAddress.address2<br>#end
+	$!checkoutViewDTO.addresses.billingAddress.city, #foreach ($prov in $checkoutViewDTO.addresses.billingAddress.provinces)
+	#if ($prov.id == $!checkoutViewDTO.addresses.billingAddress.provinceId )
+		$prov.name
+	#end
+#end
+, $!checkoutViewDTO.addresses.billingAddress.postal
+									<br />
+#foreach ($country in $checkoutViewDTO.addresses.billingAddress.countries)
+	#if ($country.id == $!checkoutViewDTO.addresses.billingAddress.countryId )
+		$country.name				
+									<br />
+	#end
+#end
+									<br />
+
+									<!--br>
+									<B>Customer address</B>
+									<br-->
+									<div>
+										<b>Order Confirmation Number:</b> $!checkoutViewDTO.details.orderid
+									</div>
+									
+									<!--b>Date:</b>$!checkoutViewDTO.details.date</div-->
+										<br>
+										<table  border="0" cellspacing="0" cellpadding="0" class="productTable">
+											<tr>
+												<th width="6%" scope="col"><H2>Qty.</H2></th>
+												<th width="31%" scope="col"><H2>Decription</H2></th>
+												<th width="21%" scope="col"><H2>Ship To</H2></th>
+												<th width="19%" scope="col"><H2>Shipping Method </H2></th>
+												<th width="13%" scope="col"><H2>Total</H2></th>
+											</tr>
+											<tr>
+#set($creditneed = "N")
+#set($groupidx = 0)
+#set($productidx = 0)
+
+#foreach($productgroup in $$checkoutViewDTO.details.shippinggroup)
+	#if($groupidx > 0)
+											<div class="divider"></div>
+	#end
+	#set($itemidx = 0)
+	#foreach($productitem in $productgroup.shipItems)
+											<tr>
+												<td>${productitem.shipaddr.qty}</td>
+												<td >${productitem.product.title}</td>
+												<td class="STYLE12">                       
+		#if($itemidx == 0 )
+			$productgroup.address.address.nickname &nbsp;&nbsp; <br/>
+
+			$productgroup.address.address.address1&nbsp;$!productgroup.address.address.address2<br>
+			$productgroup.address.address.city		<br/>
+			$productgroup.address.address.postal	<br/>
+			$productgroup.address.province.name
+			$productgroup.address.country.name		<br/>	
+		#end
+													</td>
+
+												<td class="STYLE12">										
+		#if($itemidx == 0 )
+			#if($productgroup.singleship)
+				${productgroup.shipmethod.shippingmethod.methodname}
+			#else
+				#foreach($shipmethod in ${productgroup.shipmethods}) 
+					#if( ${productgroup.shipmethod.shippingmethod.id} == ${shipmethod.shippingmethod.id})
+						${shipmethod.shippingmethod.methodname}
+					#end 
+				#end
+			#end
+		#end
+												</td>
+												<td>
+													<span  class="STYLE5">&#36;$checkoutViewDTO.formatter.currency(${productitem.shipaddr.totalPrice})</span>
+												</td>
+											</tr>
+	#set($itemidx = $itemidx + 1)
+	#end
+#set($productidx = $productidx+1)
+#end
+										</table>
+										
+						
+										<div class="notice editPayment">
+											<b>Payment Method</b>
+											
+#if($checkoutViewDTO.creditCard.ccNumber.length() > 0)
+											<div class="review_card">
+												<div >
+											        <div class="title">Credit Card Number: </div>
+											        <div class="desc">$checkoutViewDTO.creditCard.ccSecureNumber </div>
+										        </div>        	
+	#set ($cardtypekeys = $checkoutViewDTO.creditCard.ccTypes.keySet())
+	#foreach ($cardtypekey in $cardtypekeys)
+		#if ($cardtypekey == $checkoutViewDTO.creditCard.ccType)
+												<div >		
+											      	<div class="title">Card Type: </div> 
+													<div class="desc">$checkoutViewDTO.creditCard.ccTypes.get($cardtypekey) </div>
+												 </div>			
+		#end  
+	#end
+#else
+												<br>
+	$!checkoutViewDTO.ccPreferencesDTO.currentPaymentgateway.displayname
+	#if($checkoutViewDTO.customerInput && $checkoutViewDTO.customerInput!="")
+	    :$checkoutViewDTO.customerInput
+	#end
+#end
+												</div>
+											<!-- end review_card -->
+										</div>
+										 <!-- end notice editPayment -->
+						
+										<div class="comment-totals">
+											<div class="basket-totals notice">
+#if($math.round($checkoutViewDTO.details.totalDiscount )> 0)											
+												<div class="yui-gc totalRow">
+													<div class="yui-u first desc">Discounts Applied:</div>
+													<div class="yui-u price">$$checkoutViewDTO.formatter.currency($checkoutViewDTO.details.totalDiscount)</div>
+												</div>
+												<!-- End totalRow -->
+#end
+												<div class="yui-gc totalRow">
+													<div class="yui-u first desc">
+														Subtotal
+($checkoutViewDTO.details.totalQty item#if($checkoutViewDTO.details.totalQty > 1)s#end):
+													</div>
+													<div class="yui-u price">$$checkoutViewDTO.formatter.currency($checkoutViewDTO.details.totalWithDiscount)</div>
+												</div>
+												<!-- End totalRow -->
+												<div class="yui-gc totalRow">
+													<div class="yui-u first desc">Shipping:</div>
+													<div class="yui-u price">$ $checkoutViewDTO.formatter.currency($checkoutViewDTO.details.shipTotal)</div>
+												</div>
+												<!-- End totalRow -->
+												<div class="yui-gc totalRow">
+													<div class="yui-u first desc">Tax:</div>
+													<div class="yui-u price">$ $checkoutViewDTO.formatter.currency($checkoutViewDTO.details.taxTotal)</div>
+												</div>
+												<!-- End totalRow -->
+#set($tempgiftcert=0)
+#if($checkoutViewDTO.giftCertificate.giftCertificates && $checkoutViewDTO.giftCertificate.giftCertificates.size() > 0 )
+												<div class="yui-gc totalRow">
+													<div class="yui-u first desc">Gift Certificates Applied:</div>
+													<div class="yui-u price">$ $checkoutViewDTO.formatter.currency($checkoutViewDTO.giftCertificate.totalAvailable)</div>
+												</div>
+												<!-- End totalRow -->
+	#set($tempgiftcert=$checkoutViewDTO.giftCertificate.totalAvailable)   
+#end
+												<div class="yui-gc totalRow">
+													<div class="yui-u first desc">Total to be billed:</div>
+													<div class="yui-u price">$ $checkoutViewDTO.formatter.currency($math.abs($math.sub($math.add($math.add(${checkoutViewDTO.details.totalWithDiscount},${checkoutViewDTO.details.taxTotal}),${checkoutViewDTO.details.shipTotal}),${tempgiftcert})))</div>
+												</div>
+												<!-- End totalRow -->
+											</div>
+											<!-- end basket-totals notice -->
+										</div>
+										<!-- end coment-totals -->
+						
+										<br><br>
+										<br><br>
+								</div>
+							</div>
+					</div>
+					<!--  END  yui-b-->
+				</div>
+				<!--  END  yui-main-->
+			</div>
+			<!--  END  BD -->
+			
+			<div id="ft">
+			
+			<div style="text-align: center;">
+				<b>Avetti.com</b>
+				<br>
+$vendor.address1, #if($vendor.address2!="")$!vendor.address2, #end
+$vendor.city, $vendor.prov, $vendor.postal,
+$vendor.country
+<br />
+demostoresupport@avetti.com 
+				</div>
+			
+			</div>
+			
+		</div>
+		<!--  END  DOC2 -->
+	</body>
+</html>

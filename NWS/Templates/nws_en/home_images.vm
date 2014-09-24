@@ -1,0 +1,37 @@
+#if(!${welcomeMatDTO.loggedIn})
+
+<div class="main-categories">
+   <a href="signin.html?vid=20120606532&mt=1" id="rv" title="Northern Wholesale RV Mobile Home Parts &apos; Accessories"> 
+      <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/rv.png" /> </a>
+   <a href="signin.html?vid=20120606532&mt=1" id="mr" title="Northern Wholesale Marine Parts &apos; Accessories"> 
+   	  <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/marine.png" /> </a>
+   <a href="signin.html?vid=20120606532&mt=1" id="mh" title="Northern Wholesale Manufactured Housing Parts &apos; Accessories"> 
+   	  <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/mh.png" /> </a>
+   <a href="signin.html?vid=20120606532&mt=1" id="ps" title="Northern Wholesale Powersports Parts &apos; Accessories"> 
+   	  <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/powersports.png" /> </a>
+</div>
+
+
+#else
+
+<div class="main-categories">
+   #foreach($temp in $Menu7DTO.items)
+   #set($category = $pageTile.getItemObject($Menu7DTO, $temp, "c"))
+   <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")"
+      #if($category.name.toLowerCase().indexOf('rv') != -1)
+         onclick="jQuery.cookie('ct', 'rv', {expires: 365*20, path: '/'});"> 
+            <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/rv.png" /> 
+      #elseif($category.name.toLowerCase().indexOf('marine') != -1)
+         onclick="jQuery.cookie('ct', 'mr', {expires: 365*20, path: '/'});"> 
+            <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/marine.png" /> 
+      #elseif($category.name.toLowerCase().indexOf('manufactured') != -1)
+         onclick="jQuery.cookie('ct', 'mh', {expires: 365*20, path: '/'});"> 
+            <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/mh.png" /> 
+      #elseif($category.name.toLowerCase().indexOf('powersport') != -1)
+         onclick="jQuery.cookie('ct', 'ps', {expires: 365*20, path: '/'});"> 
+            <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/powersports.png" /> 
+      #end </a>
+   #end
+</div>
+
+#end

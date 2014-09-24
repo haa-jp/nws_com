@@ -1,0 +1,1 @@
+SELECT c as c, cc as cc, c.categoryid as categoryid, c.name as name FROM com.avetti.commerce.domainmodel.Categories c , com.avetti.commerce.domainmodel.Catcat cc WHERE cc.parent = %%cid%% AND c.categoryid=cc.categoryid

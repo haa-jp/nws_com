@@ -1,0 +1,1 @@
+select o as o from com.avetti.commerce.domainmodel.Ordergiftcard o where o.orderitemid in (select i as i from com.avetti.commerce.domainmodel.OrderItem i where i.orderdataid = '%%orderDataId%%')

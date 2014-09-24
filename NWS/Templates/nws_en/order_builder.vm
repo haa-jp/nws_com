@@ -1,0 +1,165 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+## ------------------------------------------------------------------------------------------
+## this template is a place holder for the order builder (ajax based chopping cart
+## please note that this page will not be available to users who are not logged in
+## or they have not been approved. Approval based on customer property
+## Approved = True or False
+##
+## For testing purposes please feel free to use my test account
+## name: jamesp@northernwholesale.com
+## pass: testtest
+## ------------------------------------------------------------------------------------------
+
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+  #else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+ 
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>#springMessage("vm.nws.order_builder.title")</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <base href="$baselink">
+    <link rel="shortcut icon" href="/favicon.png">
+
+ #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/jsbasket.css" />
+  <script type="text/javascript">
+    var vid = '$vendorSettingsDTO.vendorId';
+  </script>
+
+#if(!${welcomeMatDTO.loggedIn})
+<script type="text/javascript">
+<!--
+window.location = "$baselink/signin.html?vid=20120606532&mt=1"
+//-->
+</script>
+#end
+
+  </head>
+  <body class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+    <div class="row-fluid">
+
+         <input type="hidden" id="js-vid" value="${vendorSettingsDTO.vendorId}">
+  ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-shipping.vm")
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/jsbasket.vm")
+  
+    </div>
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/order_builder_popup.vm")
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/order_builder_shipping_popup.vm")
+##<a data-toggle="modal" href="#shipToModal" class="btn btn-primary btn-medium js-basket-po-transfer-btn">Test new modal</a>
+
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+    </div><!-- end container-fluid -->
+
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+
+
+<script language="javascript" src="assets/plugins/lowpro/lowpro.js"></script>
+    <script language="javascript" src="assets/plugins/jshashtable/jshashtable.js"></script>
+    <script language="javascript" src="assets/plugins/domec/domec.js"></script>
+    <script language="javascript" src="assets/commercelib/commerce/commerce_jQuery.js"></script>
+    <script language="javascript" src="assets/commercelib/commerce/commerce_shop_jQuery.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/jsbasket.js"></script>
+<!--    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/bootstrap-modal.js"></script> -->
+#set($currentCurrency = $request.session.getAttribute("storeCurrency_${vendorSettingsDTO.vendorId}"))
+<script type="text/javascript">
+   jQuery(document).ready(function(){
+      
+      jQuery('.js-basket').jsbasket({
+         currencyId: '$currentCurrency'
+// un comment line if need change default values
+//type: 'fields' // input type, textarea/fields, default is 'fields'
+
+// Error text
+//empty_textarea_error   : 'Please enter one part number per line',
+//empty_fields_error     : 'Please enter your part numbers',
+//format_textarea_error  : 'Format error. Please see instruction to enter correct data',
+//duplicate_error        : 'This product $id already in basket',
+//products_not_found_error : 'Item not found',
+//wrong_code_error       : 'Wrong Part Number',
+//purchase_error         : 'your Purchase Order Number is Required',
+
+// Labels
+//textarea_switch_label  : 'Paste products and quantities fool',
+//fields_switch_label    : 'Build order line by copy and paste',
+
+//remove_confirm         : 'Are you sure to want to remove product from basket?',
+//loading_label          : 'Loading',
+//add_cart_label         : 'Add To Cart',
+//place_order_label      : 'Place Order',
+//process_order_label    : 'Please wait'
+                              });
+    });
+jQuery('#closemodal').click(function() {
+    jQuery('#example').modal('hide');
+});
+  
+  </script>
+
+<script type="text/javascript>">
+
+   function showhideShipping(){
+#if($checkoutViewDTO.billingandshippinginonepage)
+            var sameasbilling = document.getElementById("sameasbilling");
+            if(sameasbilling && sameasbilling.checked){
+              document.getElementById("notSameAsBilling").style.display="none";
+            }
+            else{
+              document.getElementById("notSameAsBilling").style.display="";
+            }
+#end
+          }
+
+          function shippingaddressChanged(addressid){
+            $("#notSameAsBilling").append(window.inputsShipping);
+
+            document.getElementById("addresses.shippingAddress.addressId").value=addressid;
+            if(addressid>0){
+#foreach($address in $customerAddressDTO)
+              if(addressid == ${address.addressid}){
+                 document.getElementById("nickName").value = "${address.nickname}";
+                 document.getElementById("addresses.shippingAddress.firstName").value="${address.firstname}";
+                 document.getElementById("addresses.shippingAddress.middleName").value="${address.middlename}";
+                 document.getElementById("addresses.shippingAddress.lastName").value="${address.lastname}";
+                 document.getElementById("addresses.shippingAddress.company").value="${address.company}";
+                 document.getElementById("addresses.shippingAddress.address1").value="${address.address1}";
+                 document.getElementById("addresses.shippingAddress.address2").value="${address.address2}";
+                 document.getElementById("addresses.shippingAddress.city").value="${address.city}";
+                 document.getElementById("addresses.shippingAddress.countryId").value="${address.countryid}";
+                 //changeRegion1("${address.countryid}");
+                 document.getElementById("province").value="${address.provinceid}";
+                 document.getElementById("otherregionForShipping").value="${address.anotherprovince}";
+                 document.getElementById("addresses.shippingAddress.postal").value="${address.postal}";
+                 document.getElementById("addresses.shippingAddress.phone").value="${address.phone}";
+               }
+#end
+            }
+            else{
+              window.location = 'shippingaddress.html?vid=${vendorSettingsDTO.vendorId}&t=add&p=0&a=0&s=0&targetURL=shipping.html&fromURL=shipping.html';
+            }
+
+            window.inputsShipping = $("#notSameAsBilling input").detach();
+          }
+</script>
+
+
+  </body>
+</html>

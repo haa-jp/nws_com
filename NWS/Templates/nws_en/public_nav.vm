@@ -1,0 +1,10 @@
+#if($LearnMoreDTO.getItems().size() != 0)
+<div class="side-nav">
+	<ul class="top-categories">
+		#foreach($temp in $LearnMoreDTO.items)
+		#set($category = $pageTile.getItemObject($LearnMoreDTO, $temp, "c"))
+			<li><a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSetingsDTO.vendorId")" title="$category.description"> $category.name</a></li>
+		#end
+	</ul>
+</div>
+#end

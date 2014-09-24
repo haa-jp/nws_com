@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+
+#if($request.isSecure())
+#if ($request.getServerPort() ==443)
+  #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+#else
+  #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+#end
+#else
+#if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+#if($memberType)
+#set($memberType = $registerViewDTO.memberType)
+#else
+#set($memberType = 1)
+#end
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+ <!-- register.vm-->
+   
+    <title>Register - #springMessage("vm.nws.register.title")</title>
+    <link rel="shortcut icon" href="/favicon.ico">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+
+#if($registerViewDTO.onepagecheckout)
+  <link rel="stylesheet" href="/C7pcisecureorderform/assets/pcisecureorderform.css" type="text/css" media="all" />
+  <script type="text/javascript" src="/C7pcisecureorderform/assets/pcisecureorderform.js"></script>
+#end
+
+<script language="javascript">
+    
+    /** variable indicates whether register successfully*/
+    var login = #if($registerViewDTO.islogin) true #else false #end;
+    /** variable indicates if only one payment method exists */
+    var onePaymentMethod = #if($registerViewDTO.ccPreferencesDTO.paymentgateways && $registerViewDTO.ccPreferencesDTO.paymentgateways.size() == 1) true #else false #end;
+    
+     /** submit the post. If payment method is PCI, then call PCI secure order form for processing payment. */
+         function doContinue(frmName,actFieldName,btn,todo){
+        var thisAddressSelect =  document.getElementById("rdoThisAddr").checked;
+        #if($registerViewDTO.onepagecheckout)
+               var pgcode=$("input[name=selectedPaymentGatewayCode]:checked").val();
+         if(onePaymentMethod)
+             pgcode = $("input[name=selectedPaymentGatewayCode]").val();
+        #else
+               var pgcode=""
+        #end
+               if(thisAddressSelect && (pgcode == "PCINONE" || pgcode == "PCICC")){
+                    doConfirm(frmName,actFieldName,btn,todo);
+               }else{
+                   $("input[name='"+actFieldName+"'][type='hidden']").val(todo);
+                   $("form[name='"+frmName+"']").unbind('submit');
+                   $("form[name='"+frmName+"']").submit();
+               }
+          }
+</script>
+</head>
+#set($authenticationSubmitURL="store.html")
+<body id="register" class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header_public.vm")
+    <div class="container-fluid main-container">
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="row-fluid">
+        <div class="span10 offset1">
+          <div class="container-fluid main-content pad70">
+            <h2>#springMessage("vm.register.title")</h2>
+
+        #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_notice.vm")
+
+            <form id="nws-form" name="registerForm" method="post" action="" class="f-group horizontal custom-lbl-width">
+              <input type="hidden" name="mid" id="mid" value="demo"/>
+              <input type="hidden" name="mode" id="mode" value="register"/>
+              <input type="hidden" id="anchorName_id" name="anchorName" value="">
+#springBind("registerViewDTO.doSubmit")
+              <input type="hidden" id="hiddensubmit" name="$status.expression">
+              <input type="hidden"  name="register" value="$authenticationSubmitURL">
+              <input type="hidden" name="customerDTO.allCustomerProperties['OFFERCODE']" value="dealer">
+              <input type="hidden" name="customerDTO.allCustomerProperties['approved']" value="false">
+
+#springBind( "registerViewDTO.*" )
+
+
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_form.vm")
+
+#if($memberType&&$memberType != '1')
+              <div>
+                <div class="shipped-to">
+  #springBind("registerViewDTO.customerDTO.customerProperties['Subscribe to Newsletter']")
+                  <span style="padding-left: 10px;"><input type="checkbox" id="$status.expression" name="$status.expression" value="yes" #if(${status.value}&&"${status.value}"=="yes") checked #end ></span>
+                  <label for="$status.expression"><b>#springMessage("vm.register.subscribe")</b></label>
+                  <input type="hidden" name="customerDTO.allCustomerProperties['Subscribe to Newsletter']" id="customerDTO.allCustomerProperties['Subscribe to Newsletter']" value="no">
+                </div>
+                <div>
+                  <label for="${status.expression}">#springMessage("vm.register.question")<span class="needed_star">*</span></label>
+  #springBind("registerViewDTO.securityQuestion")
+                  <select size="1" id="${status.expression}" name="${status.expression}" style="width:215px;">
+  #foreach($question in $registerViewDTO.securityQuestions)
+                    <option value="$question">#if($question) $question #end</option>
+  #end
+                  </select>
+                </div>
+  #springBind("registerViewDTO.securityAnswer")
+                <div>
+                  <label for="securityAnswer">#springMessage("vm.register.answer")<span class="needed_star">*</span></label>
+                  <input size="30" maxlength="50" value="${status.value}" id="securityAnswer" name="securityAnswer" type="text">
+                </div>  
+              </div>
+              <!-- need modjo -->
+              <div class="f-row newsletter">
+  #springBind("registerViewDTO.customerDTO.customerProperties['Subscribe to Newsletter']")
+                <input type="checkbox" id="$status.expression" name="$status.expression" value="yes" #if(${status.value}&&"${status.value}"=="yes") checked #end >
+                <div class="f-field">
+                  <label for="$status.expression" class="auto-width"><b>#springMessage("vm.register.subscribe")jpjpjp</b></label>
+                  <input type="hidden" name="customerDTO.allCustomerProperties['Subscribe to Newsletter']" value="no">
+                </div>
+              </div>
+              <!-- jp end -->
+  #if($productsDetails.products.size() > 0)
+              <input type="hidden" name="customerDTO.allCustomerProperties['SHIP_WHERE']" value="0">
+    #if($registerViewDTO.allNoneShippableItems)
+              <input id="rdoThisAddr" style="display:none;" type="radio" name="customerDTO.customerProperties['SHIP_WHERE']" value="1" checked >
+    #else
+              <div class="shipped-to">
+                <span>#springMessage("vm.register.msg2"):</span><br>
+      #springBind("registerViewDTO.customerDTO.customerProperties['SHIP_WHERE']")            
+                <div class="f-row">
+                  <div class="f-field"><input id="rdoThisAddr" name="$status.expression" value="1" #if(${status.value}&&"${status.value}"=="1") checked #end type="radio" onclick="javascript:setregister('payment.html?vid=$vendorSettingsDTO.vendorId');showhidepayment_info(this.value);"> </div>
+                  <label for="rdoThisAddr" class="radiobtn">#springMessage("vm.register.this")</label><br>  <!-- Send to payment if this is selected -->
+                </div>
+                <div class="f-row">
+                  <div class="f-field"><input id="rdoDiffAddr" name="$status.expression" value="2" #if(${status.value}&&"${status.value}"=="2") checked #end type="radio" onclick="javascript:setregister('pickaddress.html?vid=$vendorSettingsDTO.vendorId');showhidepayment_info(this.value);"> </div>
+                  <label for="rdoDiffAddr" class="radiobtn">#springMessage("vm.register.another")</label><br> <!-- Send to single address pick if this is selected -->
+                </div>
+                <div class="f-row">
+                  <div class="f-field"><input id="rdoMultAddr" name="$status.expression" value="3" #if(${status.value}&&"${status.value}"=="3") checked #end type="radio" onclick="javascript:setregister('shipping.html?vid=$vendorSettingsDTO.vendorId');showhidepayment_info(this.value);"> </div>
+                  <label for="rdoMultAddr" class="radiobtn">#springMessage("vm.register.multiple")</label>
+                </div>
+      #foreach($recount  in $registerViewDTO.retailers)
+        #set($retailcount=$recount)
+      #end
+      #if($retailcount)
+                <div class="f-row">
+                  <div class="f-field">
+                    <input id="rdoMultAddr" name="$status.expression" value="4" type="radio" #if($status.value&&$status.value==4)checked#end onclick="javascript:setregister('payment.html?vid=$vendorSettingsDTO.vendorId');showhidepayment_info(this.value);">
+                  </div>
+                  <label for="rdoMultAddr">#springMessage("vm.register.shipretailers")&nbsp;</label>
+        #springBind( "registerViewDTO.retailerid")
+                  <select id="selretailer"  name="$status.expression">
+                    <option value="0">#springMessage("vm.register.plselectretailer")</option>
+        #foreach($retail  in $registerViewDTO.retailers)
+                    <option value="$retail.retailer.id" #if($status.value&&$status.value==$retail.retailer.id) selected  #end>$retail.retailer.name</option>
+        #end
+                  </select>
+                </div>
+      #end
+              </div>
+    #end
+  #end
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_onepage_checkout.vm")
+
+#if($checkOutQuestionDTO.productOptionPageDTOs && $productsDetails.products.size() > 0)
+                <div class="question">
+                  <!-- START QUESTION CONTENT -->
+                  <input type="hidden" name="mode" value="answerQuestion"/>
+  #foreach($popage in $checkOutQuestionDTO.productOptionPageDTOs)
+    #foreach($question in $popage.questions)
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/$question.template")
+    #end
+  #end
+                  <!-- END QUESTION CONTENT -->
+                </div>
+#end
+
+#end  <!-- END OF mt=3 elements -->
+
+
+
+<div class="row-fluid">
+  <div class="alert alert-error span12 #if($status.errors.errorCount&&$status.errors.errorCount<=0)hide#end">
+    <button type="button" class="close" data-dismiss="alert">&times;</button>
+    <h4>#springMessage("vm.register.error")</h4>
+    <br/>
+    <ul>
+#if($status.errors.errorCount&&$status.errors.errorCount>0)      
+  #foreach($error in $status.errorMessages)
+      <li>$error   </li>
+  #end
+#end
+
+#if($status.errors.getAllErrors())      
+  #foreach($error in $status.errors.getAllErrors())
+      <li>$error.defaultMessage   </li>
+  #end
+#end
+
+
+    </ul>
+  </div>
+</div>
+
+
+
+
+                <br />
+  #if($memberType == '1' || !($productsDetails.products.size() > 0) || !$productsDetails)
+                <div class="form-actions">
+                  <input class="btn btn-primary" type="submit" value="#springMessage('button.CONTINUE')" onclick="javascript:document.getElementById('hiddensubmit').value='register';"/>
+                  <input class="btn" type="button" value="#springMessage('button.CANCEL')" onclick="javascript:document.location='signin.html?vid=$vendorSettingsDTO.vendorId&mt=$memberType'"/>
+                </div>
+  #else
+                <div class="form-actions">  
+                  <input type="hidden" id="onepagecheckout" name="onepagecheckout" value="${registerViewDTO.onepagecheckout}" />  
+    #if($registerViewDTO.onepagecheckout)         
+                  <input class="btn btn-primary" data-toggle="modal" data-target="#customerNumberModal" type="submit" value="#springMessage('button.CONTINUE')" onclick="javascript:submitWithAsynRegister();"/>
+    #else
+                  <input class="btn btn-primary" data-toggle="modal" data-target="#customerNumberModal" type="submit" value="#springMessage('button.CONTINUE')" onclick="javascript:document.getElementById('hiddensubmit').value='register';"/>
+    #end
+                  <input class="btn" type="button" value="#springMessage('button.CANCEL')" onclick="javascript:document.location='signin.html?vid=$vendorSettingsDTO.vendorId&mt=$memberType'"/>
+                </div>
+  #end
+<!-- External Login -->
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.firstName")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.lastName")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.email")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.userName")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.userId")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.systemName")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.externalLocationDTO.country")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.externalLocationDTO.state")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+
+#springBind("registerViewDTO.customerDTO.externalLoginDTO.externalLocationDTO.city")
+                <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
+<!-- END OF External Login -->
+              </form>
+            </div><!-- end content -->    
+          </div><!-- end span10 -->      
+        </div><!-- end row-fluid -->  
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+    </div><!-- container-fluid -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+  <script type="text/javascript" src="assets/commercelib/ajax/ajax_object.js"></script>
+  <script type="text/javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/jquery.validate.min.js"></script>
+  <script type="text/javascript">
+    var isBillingAddressChanged=false;
+    var address1_val="$!registerViewDTO.customerDTO.customerAddresses.get("1").address1";
+    var city_val="$!registerViewDTO.customerDTO.customerAddresses.get("1").city";
+    var zip_val="$!registerViewDTO.customerDTO.customerAddresses.get("1").postal";
+    var anotherprovince_val="$!registerViewDTO.customerDTO.customerAddresses.get("1").anotherprovince";
+  
+    function fieldBlurred(el, idx)
+    {
+       switch(idx)
+       {
+         case 1:
+              if(el.value != address1_val)
+              {
+                cleanPaymentMethod();
+                address1_val=el.value;
+                isBillingAddressChanged=true;
+              }
+              break;
+              
+         case 2:
+              if(el.value != city_val)
+              {
+                cleanPaymentMethod();
+                city_val=el.value;
+                isBillingAddressChanged=true;
+              }
+              break;
+              
+         case 3:
+              if(el.value != zip_val)
+              {
+                cleanPaymentMethod();
+                zip_val=el.value;
+                isBillingAddressChanged=true;
+              }
+              break;
+         case 4:
+              if(el.value != anotherprovince_val)
+              {
+                cleanPaymentMethod();
+                anotherprovince_val=el.value;
+                isBillingAddressChanged=true;
+              }
+              break;
+       }
+    
+    }
+    
+    function setAnchorName(name)
+    {
+      document.getElementById("anchorName_id").value=name;
+    }
+    
+    function scrollToAnchor(name)
+    {
+       if(name && name!="")
+           location=location+"#"+name;
+    }
+    
+    function preSelectCCMethod(id)
+    {
+      if(id!="0")
+         return;
+      var noshowccinput =new Array("NCC","GL","PP","IB","");
+      var pmradio=document.getElementsByName("selectedPaymentGatewayCode");
+      for(i=0;i<pmradio.length;i++)
+      {
+        var flag=true;
+        var tmpel=pmradio[i];
+        for(var ii=0;ii<noshowccinput.length;ii++)
+        {
+           if( noshowccinput[ii] == tmpel.value || tmpel.value.indexOf("NCC") == 0)
+           {
+             flag=false;
+             break;
+           }
+        }
+    
+        if(flag)
+        {
+           document.getElementById("payment_method").style.display="";
+           tmpel.checked=true;
+           document.getElementById("hidden_radioid").value=tmpel.id;
+           break;
+        }
+      }
+    }
+    
+    var thisAddressSelected=true; 
+  /**
+  * check whether payment method is selected. When "this address" radio element is not selected,
+  * then checkout follow the regular process and always return <code> true</code>.
+  * 
+  * If no payment method is select, show the warning about payment is needed and return false
+  */
+    function checkPaymentMethod()
+    { 
+        if(!thisAddressSelected)
+            return true;
+    var result = false;
+        var pmradio=document.getElementsByName("selectedPaymentGatewayCode");
+        var gift = document.getElementById("giftCertificateCode").value;
+        var prom = document.getElementById("promotionCode").value;
+        for(i=0;i<pmradio.length;i++)
+       {
+         if(pmradio[i].checked)
+         {
+           result=true;
+           break;
+         }
+       }
+        if(gift!=""||prom!="" ||onePaymentMethod)
+       {
+           result=true;
+       }
+    if(result)
+      $("#registerErrors").hide();
+    else{
+      $("#registerErrors").html("<ul><li>#springMessage('vm.register.msg4')</li></ul>").show();
+      $("html").scrollTop(100);
+    }
+       return result; 
+    }
+    
+    #if($memberType != '1' && $registerViewDTO.onepagecheckout && $productsDetails.products.size() > 0 )
+    
+      function cleanPaymentMethod()
+      {
+         var pmradio=document.getElementsByName("selectedPaymentGatewayCode");
+         for(i=0;i<pmradio.length;i++)
+           pmradio[i].checked=false;
+      }
+    
+    function CVCWin() 
+    {
+      mywin = window.open('store/${vendorSettingsDTO.vendorId}/assets/html/whatsthis.html',"popup","width=380,height=210,location=no,toolbar=no,scrollbars=yes,resizable=yes,menubar=no,status=yes,directories=no" );
+    }
+    
+    /**
+  * according to payment gateway code and its corresponding radio id value to hide credit card
+  */
+    function showhidecc(pgcode,radioid)
+    {
+      var noshowccinput =new Array("NCC","GL","PP","IB","");
+        var flag=false;
+        for(var i=0;i<noshowccinput.length;i++){
+           if( noshowccinput[i]==pgcode || pgcode.indexOf("NCC")==0){
+             flag=true;
+             break;
+          }
+        }
+
+        if(flag)
+        {
+            $("#cc").hide();
+          $("#ccsubmitted").hide();
+            $("#payment_method").hide();
+            clearccinfo();
+        } else
+        {
+          if(pgcode=='PCICC' || pgcode=='PCINONE')
+          {
+            showhidelast4cc();
+          }else
+          {
+            $("#payment_method").show();
+          }
+        }
+
+        var radiobutton=document.getElementById(radioid);
+        if(radiobutton)
+        {
+            radiobutton.checked=true;
+            document.getElementById("hidden_radioid").value=radioid;
+        }
+         
+    }
+    
+    function showhide(pgid,pgcode,radioid,inputid)
+    {
+       //document.getElementById("hidden_pgid").value=pgid;
+     showhidecc(pgcode,radioid);
+       showhideci(inputid);
+    }
+    
+    
+    function showhideci(inputid)
+    {
+        var allciinput=new Array();
+    #foreach($paymentgateway in ${registerViewDTO.ccPreferencesDTO.paymentgateways})
+      #if($paymentgateway.inputtype && $paymentgateway.inputtype==1)
+        allciinput.push("input_$velocityCount");
+      #end
+    #end
+    
+        var inputfield=document.getElementById(inputid);
+        document.getElementById("hidden_inputid").value=inputid;
+        if(inputfield)
+        {
+             inputfield.style.display="";
+             inputfield.disabled=false;
+        }
+    
+        for(var i=0;i<allciinput.length;i++)
+        {
+            if(allciinput[i]!= inputid)
+            {
+                var tempfield=document.getElementById(allciinput[i]);
+                tempfield.disabled=true;
+                tempfield.style.display="none";
+                tempfield.value="";
+            }
+        }
+    }
+  /** 
+  * reset PCI order information
+  */       
+    function clearccinfo()
+    {
+            //clear normal cc form data
+            $("#CARDNO").val("");
+            $("#nameoncard").val("");
+            $("#cvv").val("");
+
+            //clear pci form data
+            $("#reviewAndPay-cardNumber").val("");
+            $("#reviewAndPay-level2Code").val("");
+            $("#creditCard.ccHolderName").val("");
+    }
+    
+    function setFocus(pidx,sidx,fomode) 
+    {
+      if(fomode == "1")
+      {
+        var shiptoid="SHIPTYP_"+pidx+"_"+sidx;
+        if(document.getElementById(shiptoid)) 
+        {
+          document.getElementById(shiptoid).focus();
+          document.getElementById(shiptoid).click();
+        }
+      }else if(fomode == "2") 
+      {
+        if(document.getElementById("CARDNO")) 
+        {
+          document.getElementById("CARDNO").focus();
+        }
+      }else if(fomode == "3") 
+      {
+        var msgid="MESSAGE_"+pidx+"_"+sidx;
+        if(document.getElementById(msgid)) 
+        {
+          document.getElementById(msgid).focus();
+        }
+      }
+    }
+    
+    function showhidepayment_info(val)
+    {
+       if(val &&(val==1))//show it
+       {
+           document.getElementById("payment_info").style.display="";
+            thisAddressSelected=true;
+       }
+       else
+       {
+            document.getElementById("payment_info").style.display="none";
+            thisAddressSelected=false;
+        }
+    }
+    #end
+    
+    function changeResion(countryid)
+    { 
+    var c = document.getElementById("region");
+    var otherregion = document.getElementById("otherregion");
+    var state = document.getElementById("state");
+    var province = document.getElementById("province");
+    c.length=0;
+           
+     if(countryid > 0){
+#foreach($country in ${registerViewDTO.countriesInUse})
+                  if(countryid == ${country.country.id})  {
+  #if( $country.provinces.size() > 0)
+                    c.options[0]=new Option("Choose State/Province", "0");
+    #foreach($province in ${country.provinces})
+      #if( ${province.defprovince} )
+                    c.options[c.length]=new Option("$province.province.name","$province.province.id");
+      #else
+                    c.options[c.length]=new Option("$province.province.name","$province.province.id");
+      #end
+    #end
+  #end
+                    state.style.display = "inline-block";
+                    province.style.display = "none";
+                  }                                    
+#end
+        }
+     if(c.length == 0){
+       c.options[c.length]= new Option("Other Region","0");
+       c.style.display = "none"; 
+       otherregion.style.display = "inline-block"; 
+     }else {
+       c.style.display = "inline-block"; 
+       otherregion.style.display = "none"; 
+     } 
+     if(countryid == 48){  
+        c.style.display = "none"; 
+        otherregion.style.display = "inline-block";
+        state.style.display = "none";
+        province.style.display = "inline-block";
+       }   
+    
+    }
+
+function changeRegion(countryid)
+{ 
+var c = document.getElementById("region");
+var otherregion = document.getElementById("otherregion");
+var state = document.getElementById("state");
+var province = document.getElementById("province");
+ c.length=0;
+       
+ if(countryid > 0){
+            #foreach($country in ${registerViewDTO.countriesInUse})
+              if(countryid == ${country.country.id})  {
+                 #if($country.provinces.size()>0)
+                                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");## -1 stand for this country has region but select none
+                          #foreach($province in ${country.provinces})                         
+                                               c.options[c.length]=new Option("$province.province.name","$province.province.id");
+                          #end
+                        #else
+                                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","0"); ## 0 stand for this country dont have region which need display input field and go around back-end validation
+#end
+                   }                                    
+           #end
+    }else{
+                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");
+   }
+   
+  if(c.options[0].value== 0){
+          c.style.display = "none";
+          otherregion.style.display = "block";
+     } else {
+          c.style.display = "block";
+          otherregion.style.display = "none";     
+     }
+
+}
+    
+    function setregister(reg) {
+        document.registerForm.register.value = reg;
+    }
+    
+    function initCap(inputObject) {
+       var str = inputObject.value;
+       if (str.length > 0) {
+          var words = str.split(" ");
+          var i = 1;
+          str = words[0].substring(0,1).toUpperCase() + words[0].substring(1, words[0].length);
+          while (i < words.length) {
+             str += " " + words[i].substring(0,1).toUpperCase() + words[i].substring(1, words[i++].length);
+          }
+    
+          inputObject.value = str;
+       }
+    
+    }
+    /** 
+  * change the corresponding regions according to the country selected
+  */
+    function check_country(){
+      if (document.getElementById('country_id'))
+      {
+        var getcountry=document.getElementById('country_id').value;
+        var getregion=document.getElementById('region').value;
+        if (getregion==0)
+        {
+          changeRegion(getcountry);
+        }
+      }
+    }            
+
+  /**
+  * If member type is not quickMemeber, one page checkout is checked and products exist in basket
+  */
+    $(document).ready(function(){
+      $('#nws-form').validate({
+        rules:{
+          "customerDTO.customerProperties['Customer Number']": {
+            required: true,
+            minlength: 7
+          },
+          "customerDTO.loginpassword": {
+            required: true,
+            minlength: 8
+          },
+          "confirmPassword": {
+            required: true,
+            minlength: 8
+          }
+        },
+        messages:{
+          "customerDTO.firstName": "First Name is required.",
+          "customerDTO.lastName": "Last Name is required.",
+          "customerDTO.loginname": "Email is required.",
+          "confirmLogin": "Confirm Email is required.",
+          "customerDTO.customerAddresses['1'].phone": "Phone is required.",
+          "customerDTO.customerAddresses['1'].company": "Company is required.",
+          "customerDTO.customerAddresses['1'].postal": "Billing Zip Code is required.",
+          "customerDTO.loginpassword": "Password can not be less than 8 characters",
+          "confirmPassword": "Confirm Password can not be less than 8 characters",
+          "customerDTO.customerProperties['Customer Number']": "Customer Number can\'t be blank, or 7-10 digit number"
+        },
+        errorContainer: ".alert-error",
+        errorLabelContainer: ".alert-error ul",
+        wrapper: "li",
+        submitHandler: function(form) {
+         // event.returnValue = false;
+         // if(event.preventDefault) event.preventDefault();
+          var modal = $('<div id="customerNumberModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">'+
+            '<div class="modal-header">'+
+              '<h3 id="myModalLabel">Notice</h3>'+
+            '</div>'+
+            '<div class="modal-body">'+
+              '<p>Thank you for registering for your account. All account requests are required to run through our credit approval process. Until your account as been approved and authorized for internet sales, you will not be allowed to to finish the shopping cart checkout feature.  We apologize for the short precautionary delay. We value your privacy, security and we want to verify you contract pricing. Your account will be ready shortly, You will be notified once you account is ready. </p>'+
+            '</div>'+
+            '<div class="modal-footer">'+
+              '<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>'+
+              '<button class="btn btn-primary">Finish Registration</button>'+
+            '</div>'+
+          '</div>');
+          modal.find('button:first').on('click', function(){
+            $('#customerNumberModal').modal('hide');
+            return false;
+          });
+          modal.find('button.btn-primary').on('click', function(){
+            return form.submit();
+          });
+          $('body').append(modal);
+          $('#customerNumberModal').modal('show');
+        }
+      });
+ 	
+      #if($memberType != '1' && $registerViewDTO.onepagecheckout && $productsDetails.products.size() > 0 )
+        #springBind( "registerViewDTO.*" )
+            check_country();
+            setFocus($registerViewDTO.productidx,$registerViewDTO.addressidx,$registerViewDTO.shipaddressid);
+            showhide('$registerViewDTO.selectedPaymentGatewayId','$!registerViewDTO.selectedPaymentGatewayCode','$!registerViewDTO.radioButtonId','$!registerViewDTO.inputFieldId');
+          showhidepayment_info( $registerViewDTO.customerDTO.customerProperties.get('SHIP_WHERE') );
+        #if($status.errors.errorCount>0)
+          cleanPaymentMethod();
+            isBillingAddressChanged=true;
+        #else
+            scrollToAnchor('$!registerViewDTO.anchorName');
+        #end
+      #end
+    if(onePaymentMethod){
+      $(":input[name ='selectedPaymentGatewayCode']").click();
+      if(!login){
+        var paymentGatewayEl = "<input type='hidden' name='selectedPaymentGatewayCode' value='" + $(":input[name ='selectedPaymentGatewayCode']").val() + "'/>";
+        $(paymentGatewayEl).appendTo("form[name='registerForm']");
+      }
+      $(":input[name ='selectedPaymentGatewayCode']").hide();
+    }
+    });
+  </script>
+</body>
+</html>

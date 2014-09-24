@@ -1,0 +1,1 @@
+select a as a from com.avetti.commerce.domainmodel.OrderAddress a where orderdataid='%%orderDataId%%'

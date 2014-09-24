@@ -1,0 +1,212 @@
+<h3>We are  available to help.</h3>
+<p> Northern Wholesale Supply prides itself on the support we provide our dealers. 
+<p>
+<div class="row-fluid">
+   <div class="span6">
+      <address>
+        <strong> Northern Wholesale Supply, Inc.</strong><br>
+         6800 Otter Lake Road<br>
+         Suite 2<br>
+         Lino Lakes, MN 55038<br>
+         Phone: (651) 429-1515<br>
+         Fax: (651) 429-5757    
+      </address>
+   </div>
+   <div class="span6">
+      <ul class="nav nav-tab" id="prodTab">
+         <li>
+            <a href="#sales" data-toggle="tab">Sales Department</a>
+            <address>
+               Toll Free: 800-333-7777<br>
+               National: 800-666-1111<br>
+               Fax: (651) 429-1493<br>
+            </address>
+         </li>
+
+         <li>
+            <a href="#credit" data-toggle="tab">Credit / Administrative</a>
+            <address>
+               Phone: (651) 407-1473<br>
+               Fax: (651) 407-1496<br>
+            </address>
+         </li>
+      </ul>
+   </div> 
+</div>
+<div class="tab-content">
+   <div id="sales" class="tab-pane">
+      <table class="table table-striped">
+         <thead>
+        <th>Representative</th>
+            <th>Division</th>
+            <th>Phone</th>
+            <th>Email</th>
+         </thead>
+         <tbody>
+            <tr>
+               <td>ARMANDO ALVARADO</td>
+               <td>RV/MH SALES</td>
+               <td>651-407-1447 <br/>
+               877-407-1447</td>
+               <td><a href="mailto:armandoa@northernwholesale.com">armandoa@</a></td>
+            </tr>
+            <tr>
+               <td>MIKE CUSHING</td>
+               <td>OUTSIDE SALES MR EXTREME MAX</td>
+               <td>651-303-1035</td>
+               <td><a href="mailto:mikec@northernwholesale.com">mikec@</a></td>
+            </tr>
+            <tr>
+               <td>SCOTT DAHLGREN</td>
+               <td>OUTSIDE MARINE SALES</td>
+               <td>906-282-0265</td>
+               <td>&nbsp;</td>
+            </tr>
+            <tr>
+               <td>BRYAN FRANK</td>
+               <td>MARINE SALES</td>
+               <td>651-407-1453 <br/>
+               877-407-1453</td>
+               <td><a href="mailto:bryanf@northernwholesale.com">bryanf@</a></td>
+            </tr>
+            <tr>
+               <td>TOM FRANSEN</td>
+               <td>RV/MH SALES</td>
+               <td>651-407-1455 <br/>
+               877-407-1455</td>
+               <td><a href="mailto:tomf@northernwholesale.com">tomf@</a></td>
+            </tr>
+            <tr>
+               <td>NICK GARGARO IV</td>
+               <td>MARINE SALES EXTREME MAX</td>
+               <td>651-407-1450 <br/>
+               877-407-1450</td>
+               <td><a href="mailto:nick4@northernwholesale.com">nick4@</a></td>
+            </tr>
+            <tr>
+               <td>PETE HANSON</td>
+               <td>OUTSIDE SALES STORE LAYOUT &amp; DESIGN</td>
+               <td>651-485-1808 </td>
+               <td><a href="mailto:peteh@northernwholesale.com">peteh@</a></td>
+            </tr>
+            <tr>
+               <td>DAN HARRIS</td>
+               <td>RV/MH SALES</td>
+               <td>651-407-1456 <br/>
+               877-407-1456</td>
+               <td><a href="mailto:danh@northernwholesale.com">danh@</a></td>
+            </tr>
+            <tr>
+               <td>TOM HOPPE</td>
+               <td>RV/MH SALES</td>
+               <td>651-407-1445 <br/>
+               877-407-1445</td>
+               <td><a href="mailto:tomh@northernwholesale.com">tomh@</a></td>
+            </tr>
+            <tr>
+               <td>JEFF JANNETTO</td>
+               <td>HVAC/HYDRONICS</td>
+               <td>651-407-1442 <br/>
+               877-407-1442</td>
+               <td><a href="mailto:jeffj@northernwholesale.com">jeffj@</a></td>
+            </tr>
+            <tr>
+               <td>LARRY KOCH</td>
+               <td>MARINE SALES</td>
+               <td>651-407-1448 <br/>
+               877-407-1448</td>
+               <td><a href="mailto:larryk@northernwholesale.com">larryk@</a></td>
+            </tr>
+            <tr>
+               <td>DARREL SCHROEDER</td>
+               <td>RV/MH SALES</td>
+               <td>651-407-1446 <br/>
+               877-407-1446</td>
+               <td><a href="mailto:darrels@northernwholesale.com">darrels@</a></td>
+            </tr>
+            <tr>
+               <td>NORM STODDARD</td>
+               <td>OUTSIDE MARINE SALES</td>
+               <td>920-420-4375</td>
+               <td><a href="mailto:norms@northernwholesale.com">norms@</a></td>
+            </tr>
+            <tr>
+               <td>JOEL THORSTAD</td>
+               <td>MARINE SALES</td>
+               <td>651-407-1441 <br/>
+               877-407-1441</td>
+               <td><a href="mailto:joelt@northernwholesale.com">joelt@</a></td>
+            </tr>
+            <tr>
+               <td>JON WALLACE</td>
+               <td>HVAC/HYDRONICS</td>
+               <td>651-407-1444 <br/>
+               877-407-1444</td>
+               <td><a href="mailto:jonw@northernwholesale.com">jonw@</a></td>
+            </tr>
+            <tr>
+               <td>DAVE WENDINGER</td>
+               <td>EXTREME MAX</td>
+               <td>651-407-1457 <br/>
+               877-407-1457</td>
+               <td><a href="mailto:davew@northernwholesale.com">davew@</a></td>
+            </tr>
+            <tr>
+               <td>ERIC WILLIAMS</td>
+               <td>MARINE SALES</td>
+               <td>651-407-1454 <br/>
+               877-407-1454</td>
+               <td><a href="mailto:ericw@northernwholesale.com">ericw@</a></td>
+            </tr>
+            <tr>
+               <td>JIM WOODRUFF</td>
+               <td>RV/MH SALES</td>
+               <td>651-407-1449 <br/>
+               877-407-1449</td>
+               <td><a href="mailto:jimw@northernwholesale.com">jimw@</a></td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+
+   <div id="credit" class="tab-pane">
+      <table class="table table-striped">
+         <thead>
+        <th>Name</th>
+            <th>Position</th>
+            <th>Phone</th>
+            <th>Email</th>
+         </thead>
+         <tbody>
+            <tr>
+               <td>JULIE CHRISTENSEN</td>
+               <td>CREDIT MANAGER</td>
+               <td>651-407-1473 <br/>
+               800-666-1111</td>
+               <td><a href="mailto:juliec@northernwholesale.com">juliec@</a></td>
+            </tr>
+            <tr>
+               <td>JOHN PERRON</td>
+               <td>GENERAL MANAGER</td>
+               <td>651-407-1464 <br/>
+               800-333-7777</td>
+               <td><a href="mailto:johnp@northernwholesale.com">johnp@</a></td>
+            </tr>
+            <tr>
+               <td>LEAH SALMON</td>
+               <td>WARRANTY &amp; RETURNS</td>
+               <td>651-407-1468 <br/>
+               800-666-1111</td>
+               <td><a href="mailto:leahs@northernwholesale.com">leahs@</a></td>
+            </tr>
+            <tr>
+               <td>DAN STAPLES</td>
+               <td>SALES MANAGER</td>
+               <td>651-407-1452 <br/>
+               877-407-1452</td>
+               <td><a href="mailto:dans@northernwholesale.com">dans@</a></td>
+            </tr>
+         </tbody>    
+      </table>
+   </div>
+</div>

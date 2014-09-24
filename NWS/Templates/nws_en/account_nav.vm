@@ -1,0 +1,27 @@
+#set($menu = $request.getParameter("mn"))
+<div class="accountbar filter">
+#if($menu == "am")
+<div class="back">  <a href="account-home" alt=""> Back to: <br/> Account Home</a></div>
+   <h5 class="title">Account Management</h5>
+   <ul class="top-categories">
+      <li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23046")" alt="saved-orders?mn=am">Saved Orders</a></li>
+      <li><a href="nwrevieworders.html?mn=am">Review Orders</a></li>
+      <li><a href="accountsummary.html?mn=am">Account Summary</a></li>
+      <li><a href="openinvoices.html?mn=am">Open Invoices</a></li>
+      <li><a href="paidinvoices.html?mn=am">Paid Invoices</a></li>
+      <li><a href="myaccount.html?mode=customerinfo&vid=$vendorSettingsDTO.vendorId&mn=am"> #springMessage("vm.myaccount.customeradd")</a></li>
+      <li><a href="myaccount.html?mode=shippingaddress&vid=$vendorSettingsDTO.vendorId&mn=am"> #springMessage("vm.myaccount.shippingadd")</a></li>
+      <li><a href="myaccount.html?mode=changepassword&vid=$vendorSettingsDTO.vendorId&mn=am">Change Password</a></li>
+   </ul>
+#else
+<div class="back"> <a href="account-home" alt=""> Back to: <br/> Account Home</a></div>
+   <h5 class="title">Account Resources</h5>
+   <ul class="top-categories">
+    <li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20606")" alt="store policies">NWS Policies</a></li>
+    <li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23067")" alt="dealer downloads">Dealer Download</a></li>
+    <li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22758")" alt="price list request">Price List Request</a></li>
+    <li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22774")" alt="email subscriptions/">Email Subscription</a></li>
+    <li><a href="myaccount.html?mode=viewproperties&vid=$vendorSettingsDTO.vendorId">Account Preferences</a></li>
+   </ul>
+#end
+</div>

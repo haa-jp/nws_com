@@ -1,0 +1,16 @@
+<h3>Wholesale Account Requirements</h3>
+<p> As a wholesale distributor, neither Northern Wholesale Supply nor northernwholesale.com offer retail or consumer-direct accounts. </p>
+<p> All potential new accounts must complete our application process.&nbsp; Click on the &ldquo;Account Inquiry&rdquo; button to get started, or call us Monday-Friday at 1-800-333-7777 from 8am-5pm CST to speak with an account representative.</p>
+<p> Our account applicants must fill out, sign and return the required application and provide a completed sales tax exemption certificate. You will be notified when these documents are required.<br /><br />To maintain open account status, account holders must meet minimum opening and yearly order totals.</p>
+<div class="row-fluid pad70">
+	<div class="span6">
+		<a href="$seourl.encodeURL("store.html?&vid=vendorSettingsDTO.vendorId&cid=23054")"  
+			title="Northern Wholesale Terms and Conditions"> Wholesale Terms &amp; Conditions</a>
+	</div>
+	<div class="span6">
+		<a class="btn btn-large btn-primary" 
+			href="$seourl.encodeURL("store.html?vid=vendorSettingsDTO.vendorId&cid=23057")"
+			title="Apply for a Wholesale Account"> Start the Application Process</a>
+	</div>
+</div>
+

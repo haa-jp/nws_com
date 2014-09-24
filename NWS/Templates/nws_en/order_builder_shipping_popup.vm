@@ -1,0 +1,21 @@
+<!-- Modal -->
+<div id="shipToModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"> x </button>
+    <h3 id="myModalLabel">Order Shipping Notice</h3>
+  </div>
+  <div class="modal-body">
+    <h4>Please, select your order shipping option:</h4>
+
+    <p>Use the green "Place Order" button to instanly place your order. (this option assumes that your Bill To and Ship To adress are the same.)</p>
+    <p>If your Shipping Address is <b>NOT</b> the same as your Billing Address, use the blue "Continue to Checkout" button. This will allow you to slect your predertermined shipping address or add a dtop ship address.</p>
+    <!-- <p> this is a n exmaple of using small inline button images in a parger body of text. Use the green <span class="btn btn-small btn-success"> Place Order</span> button. or the blue <span class="btn btn-small btn-primary">Continue to Checkout</span> please check to see how the paragraph rolls around the images to prevent undesired effects.</p> -->
+
+  </div>
+  <div class="modal-footer">
+    <button id="btnPlace" class="btn btn-success"> Place Order</button>
+    <button id="btnCheckout" class="btn btn-primary"> Continue to Checkout</button>
+    <button class="btn" data-dismiss="modal" aria-hidden="true"> Cancel</button>
+
+  </div>
+</div>

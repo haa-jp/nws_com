@@ -1,0 +1,247 @@
+<html>
+<head>
+  <style type="text/css">
+    body {
+      font-family: Arial;
+      font-size: 14px;
+    }
+
+    .th-header1 {
+      font-size:0.6em;
+      color:#ffffff;
+    }
+
+    .th-header2 {
+      font-size:0.6em;
+    }
+
+    .font-st {
+      font-family:Courier New;
+    }
+
+    .padding-st {
+      padding:5px;
+    }
+
+    .border-right {
+      border-right:1px solid #000000;
+    }
+    .border-top {
+      border-top:1px solid #000000;
+    }
+    .border-bottom {
+      border-bottom:1px solid #000000;
+    }
+    .border-left {
+      border-left:1px solid #000000;
+    }
+
+    .right {
+      text-align:right;
+    }
+
+    .totals center {
+      font-size:0.8em;
+      height:14px;
+    }
+
+    .totals p {
+      height:17px;
+    }
+  </style>
+  <title>
+    Invoice
+  </title>
+</head>
+<body>
+  <table width="100%" border="0">
+    <!-- Top Table logo and invoice details-->
+    <table width="100%" border="0">
+      <tr>
+        <td width="60%" valign="top">Logo</td>
+        <td width="40%" valign="top">
+          <center><h1>INVOICE</h1></center>
+          <table width="100%" style="margin-top:10px;" cellspacing="0" cellpadding="5">
+            <thead>
+              <tr bgcolor="#999999">
+                <th class="th-header1 border-top border-right border-bottom border-left">ACCOUNT NO.</th>
+                <th class="th-header1 border-top border-right border-bottom">DATE</th>
+                <th class="th-header1 border-top border-right border-bottom">INVOICE NO.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td width="33%" align="center" class="font-st">123456</td>
+                <td width="33%" align="center" class="font-st">03/21/13</td>
+                <td width="33%" align="center" class="font-st">54321</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </table>
+    <!-- Ends Top Table logo and invoice details-->
+    <!-- Sold to, ship to and ship via -->
+    <table width="100%" border="0">
+      <tr>
+        <!-- Sold to -->
+        <td width="50%">
+          <table width="100%" border="0">
+            <tr>
+              <td width="30%" valign="top">SOLD TO</td>
+              <td width="70%" valign="top" class="font-st">
+                HILLTOP TRAILERS SALES INC <br />
+                7810 UNIVERSITY AVE. NE <br />
+                FRIDLEY, MN 55432
+              </td>
+            </tr>
+          </table>
+        </td>
+        <!-- Ends sold to -->
+        <!-- Ship to -->
+        <td width="50%">
+          <table width="100%" border="0">
+            <tr>
+              <td width="30%" valign="top">SHIP TO</td>
+              <td width="70%" valign="top" class="font-st">
+                HILLTOP OFFICE TRAILERS<br />
+                8250 MAIN STREET NE<br />
+                FRIDLEY, MN 55432
+                <br /><br /><br /><br />
+              </td>
+            </tr>
+            <tr>
+              <td width="30%" valign="top">SHIP VIA</td>
+              <td width="70%" valign="top" class="font-st">
+                THURSDAY METRO AM
+              </td>
+            </tr>
+          </table>
+        </td>
+        <!-- Ends ship to -->
+      </tr>
+    </table>
+    <!-- Ends Sold to, ship to and ship via -->
+    <!-- Additional details -->
+    <table width="100%" cellspacing="0" cellpadding="3" border="0" style="margin-top:30px;">
+      <thead>
+        <tr bgcolor="#c9c9c9">
+          <th class="th-header2" align="center">REP.</th>
+          <th class="th-header2" align="center">CUSTOMER ORDER NO.</th>
+          <th class="th-header2" align="center">OUR ORDER NO.</th>
+          <th class="th-header2" align="center">ORDER DATE</th>
+          <th class="th-header2" align="center">SHIP DATE</th>
+          <th class="th-header2" align="center">TERMS</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td align="center" class="font-st">14</td>
+          <td align="center" class="font-st">XCEL ENERGY</td>
+          <td align="center" class="font-st">H9446/00</td>
+          <td align="center" class="font-st">03/20/13</td>
+          <td align="center" class="font-st">03/21/13</td>
+          <td align="center" class="font-st">DUE ON 10TH (NO Frt)</td>
+        </tr>
+      </tbody>
+    </table>
+    <!-- Ends Additional details -->
+    <!-- Order details -->
+    <table width="100%" cellspacing="0" cellpadding="3" border="0" style="margin-top:30px;">
+      <thead>
+        <tr bgcolor="#999999">
+          <th class="th-header1 border-right border-left border-top border-bottom" align="center">QUANTITY</th>
+          <th class="th-header1 border-right border-top border-bottom" align="center">ITEM NO.</th>
+          <th class="th-header1 border-right border-top border-bottom" align="center">DESCRIPTION</th>
+          <th class="th-header1 border-right border-top border-bottom" align="center">UNIT PRICE</th>
+          <th class="th-header1 border-right border-top border-bottom" align="center">AMOUNT</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="font-st padding-st border-right border-left" align="center">1</td>
+          <td class="font-st padding-st border-right">1001.1234</td>
+          <td class="font-st padding-st border-right">TEST DESCRIPTION</td>
+          <td class="font-st padding-st border-right" align="right">274.10</td>
+          <td class="font-st padding-st border-right" align="right">274.10</td>
+        </tr>
+        <tr>
+          <td class="font-st padding-st border-right border-left" align="center">1</td>
+          <td class="font-st padding-st border-right">1001.1234</td>
+          <td class="font-st padding-st border-right">TEST DESCRIPTION</td>
+          <td class="font-st padding-st border-right" align="right">274.10</td>
+          <td class="font-st padding-st border-right" align="right">274.10</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th class="border-top">&nbsp;</th>
+          <th class="border-top">&nbsp;</th>
+          <th class="border-top">&nbsp;</th>
+          <th class="border-top">&nbsp;</th>
+          <th class="border-top">&nbsp;</th>
+        </tr>
+      </tfoot>
+    </table>
+    <!-- Ends Order details -->
+    <!-- Totals -->
+    <table width="70%" border="0" cellspacing="0" class="totals">
+      <tr>
+        <td class="border-right border-top border-left">
+          <center>NON TAX MDSE</center>
+          <p class="font-st right">274.14</p>
+        </td>
+        <td class="border-right border-top">
+          <center>TAXABLE MDSE</center>
+          <p class="font-st right"></p>
+        </td>
+        <td class="border-right border-top">
+          <center>SALES TAX</center>
+          <p class="font-st right">.00</p>
+        </td>
+        <td class="border-right border-top">
+          <center>MISCELLANEOUS</center>
+          <p class="font-st right"></p>
+        </td>
+      </tr>
+      <tr bgcolor="#c9c9c9">
+        <td class="border-right border-top border-left">
+          <center>AMOUNT DUE</center>
+          <p class="font-st right"></p>
+        </td>
+        <td class="border-right border-top">
+          <center></center>
+          <p class="font-st right">274.14</p>
+        </td>
+        <td class="border-right border-top">
+          <center></center>
+          <p class="font-st right"></p>
+        </td>
+        <td class="border-right border-top">
+          <center></center>
+          <p class="font-st right"></p>
+        </td>
+      </tr>
+      <tr>
+        <td class="border-right border-top border-bottom border-left">
+          <center>DUE DATE</center>
+          <p class="font-st right"></p>
+        </td>
+        <td class="border-right border-top border-bottom">
+          <center></center>
+          <p class="font-st right"></p>
+        </td>
+        <td class="border-right border-top border-bottom">
+          <center></center>
+          <p class="font-st right"></p>
+        </td>
+        <td class="border-right border-top border-bottom">
+          <center></center>
+          <p class="font-st right"></p>
+        </td>
+      </tr>
+    </table>
+    <!-- End Totals -->
+  </table>
+</body>
+</html>

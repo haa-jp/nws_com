@@ -1,0 +1,721 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+#if($request.getServerPort() == 443)
+  #if($request.isSecure())
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>#springMessage("vm.checkout_customerinfo.title")</title>
+    <meta content="processing your order" name="keywords"/>
+    <base href="$baselink"/>
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+    <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/avetti-checkout.css" />
+
+  </head>
+  <body id="checkout" class="checkout" onload="showhidepayment_info($checkoutViewDTO.shipTypes.currentType);showhideShipping();">
+    ############################ Header ####################################
+    #if($vendorSettingsDTO.themeId == $storeSkinId)
+        #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+      #else
+        #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+    #end
+    ############################ End Header ################################    
+    <div id="wrapper" class="row-fluid">
+      <div class="container">
+        <div class="row-fluid">
+          <ul class="co-breadcrumb step2">
+            <li class="yi"><strong>#springMessage("vm.checkout_customerinfo.infor")</strong></li>
+            <li class="sp">#springMessage("vm.checkout_customerinfo.shipping")</li>
+            <li class="py">#springMessage("vm.checkout_customerinfo.payment")</li>
+            <li class="rv">#springMessage("vm.checkout_customerinfo.placeorder")</li>
+            <li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+
+
+
+          <h2>#springMessage("vm.checkout_customerinfo.infor")</h2>
+          <div class="warning" id="yourinfoErrors" style="display:none"></div>
+          #parse($checkoutDTO.getItems().get(0).get('checkout'))
+          <form class="form-horizontal" name="frm" action="" method="POST" id="nws-form">
+            <input type="hidden" name="mid" id="mid" value="demo"/>
+            <input type="hidden" name="t">
+            <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+            #springBind( "checkoutViewDTO.productidx" )
+            <input type="hidden" name="$status.expression" value="$!{status.value}">
+            #springBind( "checkoutViewDTO.addressidx" )
+            <input type="hidden" name="$status.expression" value="$!{status.value}">
+            #springBind( "checkoutViewDTO.addresses.billingAddress.addressId" )
+            <input type="hidden" name="$status.expression" value="$!{status.value}">
+            #springBind( "checkoutViewDTO.qty" )
+            <input type="hidden" name="$status.expression" value="$!{status.value}">
+            <input type="hidden" id="anchorName_id" name="anchorName" value="">
+            #springBind("checkoutViewDTO.*")
+
+            #if($status.errors.errorCount&&$status.errors.errorCount>0)
+            <div class="alert alert-error">
+              <button type="button" class="close" data-dismiss="alert">×</button>
+              <h4>#springMessage("vm.register.error")</h4>
+              <br/>
+              <ul>
+                #foreach($error in $status.errorMessages)
+                <li>$error</li>
+                #end
+              </ul>
+            </div>
+            #end
+
+            <div class="container-fluid">
+              <div class="row-fluid">
+              #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-billing.vm")
+              #if($checkoutViewDTO.billingandshippinginonepage)
+                #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-shipping.vm")
+              #end
+              </div>
+            </div>
+
+            ##One page checkout include
+            #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-onepage.vm")
+            #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-externalLogin.vm")
+
+            <div class="form-actions">
+              <input type="button" class="btn btn-primary" value="#springMessage('button.CONTINUE')"/>
+              <input type="button" class="btn" value="#springMessage('button.CANCEL')" onClick="JavaScript:window.location.href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/basket.html?vid=${vendorSettingsDTO.vendorId}'"/>
+              <div id="payment_method_alert" style="display:none;" class="warning" >#springMessage('vm.register.msg4')</div>
+            </div>
+          </form>
+
+
+
+
+      </div>
+
+    </div><!--end wrapper -->
+
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################
+
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+    <script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
+    <script language="javascript" src="assets/commercelib/ajax/ajax_object.js"></script>
+    <script type="text/javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
+    #if($checkoutViewDTO.onepagecheckout)
+      <script type="text/javascript" src="/C7pcisecureorderform/assets/pcisecureorderform.js"></script>
+    #end
+
+    <script language="javascript">
+      function changelocation(thissel, state){
+
+        var otherregion = document.getElementById("otherregion");
+        var countryIso = new Array(#foreach($country in $countriesInUse)  '$country.a2', #end 'other');
+        var countryId = new Array(#foreach($country in $countriesInUse)  '$country.id', #end 'other');
+        var provincesName = new Array(#foreach($province in $provincesInUse) '$province.name', #end 'other');
+        var provincesValue = new Array(#foreach($province in $provincesInUse) '$province.id', #end '0');
+        var provincesCountry = new Array(#foreach($province in $provincesInUse) '$province.countryid', #end '-1');
+        var countryid="0";
+        for(var i=0;i < thissel.options.length;i++)
+        {
+          if(thissel.options[i].selected == true)
+            countryid=thissel.options[i].value;
+        }
+
+        var isoname="";
+        for(var i=0;i < countryIso.length;i++){
+          if(countryId[i] == countryid)
+            isoname=countryIso[i];
+        }
+        if(isoname=="US"){
+          $('#' + state).val('#springMessage("vm.register.state")');
+        }
+        else{
+          $('#' + state).val('#springMessage("vm.register.province")');
+        }
+
+        var provinceselect = "";
+        for(var i=0; i<document.frm.elements.length; i++){
+          var el = document.frm.elements[i];
+          if(el.name == "addresses.billingAddress.provinceId")
+          {
+            provinceselect=document.frm.elements[i];
+          }
+        }
+
+        if(provinceselect !=""){
+          provinceselect.length=0;
+
+          for(var j=0;j< provincesName.length;j++){
+            if(countryid == provincesCountry[j] && countryid != 0)
+            {
+              provinceselect.options[provinceselect.length]= new Option(provincesName[j],provincesValue[j]);
+            }
+          }
+          if(provinceselect.length==0){
+            provinceselect.options[provinceselect.length]= new Option("Other","0");
+              $(provinceselect).hide();
+              $(otherregion).show();
+          }else{
+            $(provinceselect).show();
+            $(otherregion).hide();
+          }
+        }
+      }
+
+      function changeRegion(countryid){
+        var c = document.getElementById("region");
+        var otherregion = document.getElementById("otherregionForBilling");
+        c.length=0;
+
+        if(countryid > 0){
+          #foreach($country in $countriesInUse)
+            if(countryid == ${country.id})  {
+              #set($provicesSize = 0)
+              #foreach($province in $provincesInUse)
+                #if($province.countryid ==${country.id})
+                  #set($provicesSize =$provicesSize+1 )
+                #end
+              #end
+              #if($provicesSize >0)
+                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1"); // -1 stand for this country has region but select none
+                #foreach($province in $provincesInUse)
+                  #if($province.countryid ==${country.id})
+                    c.options[c.length]=new Option("$province.name","$province.id");
+                  #end
+                #end
+              #else
+                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","0");
+              #end
+            }
+          #end
+        }
+        else{
+          c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");
+        }
+
+        if(c.options[0].value== 0){
+          c.style.display = "none";
+          otherregion.style.display = "block";
+        }
+        else {
+          c.style.display = "block";
+          otherregion.style.display = "none";
+        }
+      }
+
+      function changeRegion1(countryid){
+        var c = document.getElementById("province");
+        var otherregion = document.getElementById("otherregionForShipping");
+        c.length=0;
+        #if($checkoutViewDTO.billingandshippinginonepage)
+          if(countryid > 0){
+            #foreach($country in ${checkoutViewDTO.addresses.shippingAddress.countries})
+              if(countryid == ${country.country.id}) {
+                #if($country.provinces.size()>0)
+                  c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");// -1 stand for this country has region but select none
+                  #foreach($province in ${country.provinces})
+                    c.options[c.length]=new Option("$province.province.name","$province.province.id");
+                  #end
+                #else
+                  c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","0"); //0 stand for this country don&acute;t have region which need display input field and go around back-end validation
+                #end
+              }
+            #end
+          }else{
+            c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");
+          }
+          if(c.options[0].value== 0){
+            c.style.display = "none";
+            otherregion.style.display = "block";
+          }else {
+            c.style.display = "block";
+            otherregion.style.display = "none";
+          }
+        #end
+      }
+
+      function showhideShipping(){
+        #if($checkoutViewDTO.billingandshippinginonepage)
+          var sameasbilling = document.getElementById("sameasbilling");
+          if(sameasbilling && sameasbilling.checked){
+            document.getElementById("notSameAsBilling").style.display="none";
+          }
+          else{
+            document.getElementById("notSameAsBilling").style.display="";
+          }
+        #end
+      }
+
+      function shippingaddressChanged(addressid){
+        $("#notSameAsBilling").append(window.inputsShipping);
+
+        document.getElementById("addresses.shippingAddress.addressId").value=addressid;
+        if(addressid>0){
+          #foreach($address in $customerAddressDTO)
+            if(addressid == ${address.addressid}){
+               document.getElementById("nickName").value = "${address.nickname}";
+               document.getElementById("addresses.shippingAddress.firstName").value="${address.firstname}";
+               document.getElementById("addresses.shippingAddress.middleName").value="${address.middlename}";
+               document.getElementById("addresses.shippingAddress.lastName").value="${address.lastname}";
+               document.getElementById("addresses.shippingAddress.company").value="${address.company}";
+               document.getElementById("addresses.shippingAddress.address1").value="${address.address1}";
+               document.getElementById("addresses.shippingAddress.address2").value="${address.address2}";
+               document.getElementById("addresses.shippingAddress.city").value="${address.city}";
+               document.getElementById("addresses.shippingAddress.countryId").value="${address.countryid}";
+               //changeRegion1("${address.countryid}");
+               document.getElementById("province").value="${address.provinceid}";
+               document.getElementById("otherregionForShipping").value="${address.anotherprovince}";
+               document.getElementById("addresses.shippingAddress.postal").value="${address.postal}";
+               document.getElementById("addresses.shippingAddress.phone").value="${address.phone}";
+            }
+          #end
+        }else{
+          window.location = 'shippingaddress.html?vid=${vendorSettingsDTO.vendorId}&t=add&p=0&a=0&s=0&targetURL=shipping.html&fromURL=shipping.html';
+        }
+
+        window.inputsShipping = $("#notSameAsBilling input").detach();
+      }
+
+      var isBillingAddressChanged=false;
+      var address1_val="$!checkoutViewDTO.addresses.billingAddress.address1";
+      var city_val="$!checkoutViewDTO.addresses.billingAddress.city";
+      var zip_val="$!checkoutViewDTO.addresses.billingAddress.postal";
+      var anotherprovince_val="$!checkoutViewDTO.addresses.billingAddress.anotherProvince";
+
+      function fieldBlurred(el, idx){
+        switch(idx){
+          case 1:
+            if(el.value != address1_val){
+              cleanPaymentMethod();
+              address1_val=el.value;
+              isBillingAddressChanged=true;
+            }
+            break;
+
+          case 2:
+            if(el.value != city_val){
+              cleanPaymentMethod();
+              city_val=el.value;
+              isBillingAddressChanged=true;
+            }
+            break;
+
+          case 3:
+            if(el.value != zip_val){
+              cleanPaymentMethod();
+              zip_val=el.value;
+              isBillingAddressChanged=true;
+            }
+            break;
+          case 4:
+            if(el.value != anotherprovince_val){
+              cleanPaymentMethod();
+              anotherprovince_val=el.value;
+              isBillingAddressChanged=true;
+            }
+            break;
+        }
+      }
+
+      function setAnchorName(name){
+        document.getElementById("anchorName_id").value=name;
+      }
+
+      function scrollToAnchor(name){
+        if(name && name!="")
+          location=location+"#"+name;
+      }
+
+      function cleanPaymentMethod(){
+        var pmradio=document.getElementsByName("selectedPaymentGatewayCode");
+        for(i=0;i<pmradio.length;i++)
+          pmradio[i].checked=false;
+      }
+
+      /** submit the post. If the payment gateway is PCI, then call PCI server asynchronously. */
+      function doContinue(frmName,actFieldName,btn,todo){
+        var thisAddressSelect;
+        #if($checkoutViewDTO.billingandshippinginonepage)
+          thisAddressSelect =  document.getElementById("rdoDiffAddr").checked;
+        #else
+          thisAddressSelect =  document.getElementById("rdoThisAddr").checked;
+        #end
+
+        #if($checkoutViewDTO.onepagecheckout)
+          var pgcode=$("input[name=selectedPaymentGatewayCode]:checked").val();
+        #else
+          var pgcode=""
+        #end
+
+        if(thisAddressSelect && (pgcode == "PCINONE" || pgcode == "PCICC")){
+          submitWithPCI(frmName,actFieldName,btn,todo);
+        }else{
+          $("#yourinfoErrors").hide();
+          $("input[name='"+actFieldName+"'][type='hidden']").val(todo);
+          $("form[name='"+frmName+"']").unbind('submit');
+          $("form[name='"+frmName+"']").submit();
+        }
+      }
+
+      function checkPaymentMethod(){
+        if(document.getElementById("payment_info").style.display=="none")
+          return true;
+
+        var checked = false;
+        var pmradio=document.getElementsByName("selectedPaymentGatewayCode");
+
+        for(i=0;i<pmradio.length;i++){
+          if(pmradio[i].checked==true){
+            checked = true;
+          }
+        }
+
+        if(!checked){
+          document.getElementById("payment_method_alert").style.display="";
+        }
+        return checked;
+      }
+
+      function showhide(pgid,pgcode,radioid,inputid){
+        document.getElementById("hidden_pgid").value=pgid;
+        showhidecc(pgcode,radioid);
+        showhideci(inputid);
+      }
+
+      function showhideci(inputid){
+        var allciinput=new Array();
+        #foreach($paymentgateway in ${checkoutViewDTO.ccPreferencesDTO.paymentgateways})
+          #if($paymentgateway.inputtype && $paymentgateway.inputtype!=0)
+            allciinput.push("input_$velocityCount");
+          #end
+        #end
+        var inputfield=document.getElementById(inputid);
+        document.getElementById("hidden_inputid").value=inputid;
+        if(inputfield){
+          inputfield.style.display="";
+          inputfield.disabled=false;
+		  document.getElementById("radio_text_"+inputid).style.display="";
+        }
+
+        for(var i=0;i<allciinput.length;i++){
+          if(allciinput[i]!= inputid){
+            var tempfield=document.getElementById(allciinput[i]);
+            tempfield.disabled=true;
+            tempfield.style.display="none";
+            tempfield.value="";
+			document.getElementById("radio_text_"+allciinput[i]).style.display="none";
+          }
+        }
+      }
+
+      function clearccinfo()
+      {
+        //clear normal cc form data
+        $("#CARDNO").val("");
+        $("#nameoncard").val("");
+        $("#cvv").val("");
+
+        //clear pci form data
+        $("#reviewAndPay-cardNumber").val("");
+        $("#reviewAndPay-level2Code").val("");
+        $("#creditCard.ccHolderName").val("");
+      }
+
+      function showhidecc(pgcode,radioid){
+        var noshowccinput =new Array("NCC","GL","PP","IB","");
+        var flag=false;
+
+        for(var i=0;i<noshowccinput.length;i++){
+          if( noshowccinput[i]==pgcode || pgcode.indexOf("NCC")==0){
+            flag = true;
+            break;
+          }
+        }
+
+        if(flag){
+          $("#cc").hide();
+          $("#ccsubmitted").hide();
+          $("#payment_method").hide();
+          clearccinfo();
+        }else{
+          if(pgcode=='PCICC' || pgcode=='PCINONE'){
+            showhidelast4cc();
+          }else{
+            $("#payment_method").show();
+          }
+        }
+
+        var radiobutton=document.getElementById(radioid);
+        if(radiobutton){
+          radiobutton.checked=true;
+          document.getElementById("hidden_radioid").value=radioid;
+        }
+
+      }
+
+      function setFocus(pidx,sidx,fomode){
+        if(fomode == "1"){
+        var shiptoid="SHIPTYP_"+pidx+"_"+sidx;
+          if(document.getElementById(shiptoid)){
+            document.getElementById(shiptoid).focus();
+            document.getElementById(shiptoid).click();
+          }
+        }
+        else if(fomode == "2"){
+          if(document.getElementById("CARDNO")){
+            document.getElementById("CARDNO").focus();
+          }
+        }else if(fomode == "3"){
+          var msgid="MESSAGE_"+pidx+"_"+sidx;
+          if(document.getElementById(msgid)){
+            document.getElementById(msgid).focus();
+          }
+        }
+      }
+
+      function showhidepayment_info(val){
+        #if($checkoutViewDTO.billingandshippinginonepage)
+          var currentAddress = $("#shipaddressid option:selected").val();
+          if(val && (val==2)){
+            $('[id="addresses.shippingAddress.countryId"]').trigger('change');
+            shippingaddressChanged(currentAddress);
+            document.getElementById("sameasbilling").value = false;
+            document.getElementById("shippingInfo").style.display="";
+            #if($checkoutViewDTO.onepagecheckout)
+              document.getElementById("payment_info").style.display="";
+            #end
+          }else{
+            document.getElementById("sameasbilling").value = true;
+            document.getElementById("shippingInfo").style.display="none";
+            #if($checkoutViewDTO.onepagecheckout)
+              document.getElementById("payment_info").style.display="none";
+            #end
+          }
+        #else
+          #if($checkoutViewDTO.onepagecheckout)
+            if(val&&(val==1))//show it
+              document.getElementById("payment_info").style.display="";
+            else
+              document.getElementById("payment_info").style.display="none";
+          #else
+            return true;
+          #end
+        #end
+      }
+
+      function initCap(inputObject){
+        var str = inputObject.value;
+
+        if (str.length > 0){
+          var words = str.split(" ");
+          var i = 1;
+          str = words[0].substring(0,1).toUpperCase() + words[0].substring(1, words[0].length);
+
+          while (i < words.length){
+            str += " " + words[i].substring(0,1).toUpperCase() + words[i].substring(1, words[i++].length);
+          }
+
+          inputObject.value = str;
+        }
+      }
+
+      $(document).ready(function(){
+        setFocus($checkoutViewDTO.productidx,$checkoutViewDTO.addressidx,$checkoutViewDTO.shipaddressid);
+        #if($checkoutViewDTO.onepagecheckout)
+          showhide('$checkoutViewDTO.selectedPaymentGatewayId','$!checkoutViewDTO.selectedPaymentGatewayCode','$!checkoutViewDTO.radioButtonId','$!checkoutViewDTO.inputFieldId');
+          showhidepayment_info($checkoutViewDTO.shipTypes.currentType);scrollToAnchor('$!checkoutViewDTO.anchorName')
+        #end
+      });
+
+      /**
+      * according to radio element of this address or same as billing checked or not, return the billing address as the shipping address
+      * or remain the same shipping address.
+      */
+      function getShippingAdd(){
+        var sameAsBilling = $("#sameasbilling").attr("checked");
+        var thisAddress = $("#rdoThisAddr").attr("checked");
+        if(sameAsBilling == true || thisAddress == true){
+          return {
+            "vid" : "$checkoutViewDTO.vendorId",
+            "countryid" : $(":input[name='addresses.billingAddress.countryId']").val(),
+            "provinceid" : $(":input[name='addresses.billingAddress.provinceId']").val(),
+            "anotherprovince" : $(":input[name='region']").val(),
+            "city" : $(":input[name='addresses.billingAddress.city']").val(),
+            "postal" : $(":input[name='addresses.billingAddress.postal']").val(),
+            "address1" : $(":input[name='addresses.billingAddress.address1']").val(),
+            "address2" : $(":input[name='addresses.billingAddress.address2']").val(),
+            "firstName" : $(":input[name='addresses.billingAddress.firstName']").val(),
+            "middleName" : $(":input[name='addresses.billingAddress.middleName']").val(),
+            "lastName" : $(":input[name='addresses.billingAddress.lastName']").val(),
+            "phone" : $(":input[name='addresses.billingAddress.dphone']").val(),
+            "shippingemail" : $(":input[name='addresses.billingAddress.email']").val(),
+            "shipping" : "shippingindetail"
+          };
+        }else{
+          return {
+            "vid" : "$checkoutViewDTO.vendorId",
+            "countryid" : $(":input[name='addresses.shippingAddress.countryId']").val(),
+            "provinceid" : $(":input[name='addresses.shippingAddress.provinceId']").val(),
+            "anotherprovince" : $(":input[name='province']").val(),
+            "city" : $(":input[name='addresses.shippingAddress.city']").val(),
+            "postal" : $(":input[name='addresses.shippingAddress.postal']").val(),
+            "address1" : $(":input[name='addresses.shippingAddress.address1']").val(),
+            "address2" : $(":input[name='addresses.shippingAddress.address2']").val(),
+            "firstName" : $(":input[name='addresses.shippingAddress.firstName']").val(),
+            "middleName" : $(":input[name='addresses.shippingAddress.middleName']").val(),
+            "lastName" : $(":input[name='addresses.shippingAddress.lastName']").val(),
+            "phone" : $(":input[name='addresses.shippingAddress.phone']").val(),
+            "shippingemail" : $(":input[name='addresses.shippingAddress.email']").val(),
+            "shipping" : "shippingindetail"
+          };
+        }
+      }
+
+      /**
+      * calculate the shipping and tax cost according to the new shipping address.
+      * @param showError - indicates to show error messages or not
+      */
+      function calcShippingAndTax(showError){
+        jQuery.ajax({
+          type : 'POST',
+          url: 'calcshipcost.ajx',
+          dataType: 'xml',
+          data: getShippingAdd(),
+          success: function(data){
+            var error = $(data).find("haserror").text();
+            if(error == 'true' && showError){
+              var errorMsgs = '<p>';
+              $(data).find("errormsg").each(function(){
+                errorMsgs += $(this).text()+"<br/>";
+              });
+              errorMsgs += '</p>';
+              var height = 35 + $(data).find("errormsg").length * 20;
+              $("#shippingadd-warnings").html(errorMsgs);
+              $("#modal-shippingadd-warning").css("height",height + "px");
+              $("#modal-shippingadd-warning").show();
+            }else{
+              $("#modal-shippingadd-warning").hide();
+              var productTable = $("#productItems").get(0);
+              var rowCount = 1;
+              $(data).find("products").children().each(function(index,value){
+                if(productTable){
+                    productTable.rows[rowCount].cells[0].innerHTML = $(value).find("title").text();
+                    productTable.rows[rowCount].cells[1].innerHTML = $(value).find("shippingaddress").text();
+                    productTable.rows[rowCount].cells[2].innerHTML = $(value).find("shippingmethod").text();
+                    productTable.rows[rowCount].cells[3].innerHTML = $(value).find("quantity").text();
+                    productTable.rows[rowCount].cells[4].innerHTML = $(value).find("itemprice").text();
+                    rowCount++;
+                }
+              });
+              $("#checkout_shipping_id").html($(data).find("totalshippingrate").text());
+              $("#checkout_tax_id").html($(data).find("totaltax").text());
+              $("#checkout_total_bill_id").html($(data).find("totalcost").text());
+              $(":input[type='hidden'][id='regioncode']").val($(data).find("provincecode").text());
+              $(":input[type='hidden'][id='countrycode']").val($(data).find("countrycode").text());
+            }
+
+          }
+        });
+      }
+
+      /**
+      *visual effect for validating shipping address and calculating shipping and tax cost
+      */
+      $(document).ready(function() {
+        $('body').append('<div id="modal-preloader-yourinfo" class="contentBoxYourinfo" align="center"><img src="assets/commercelib/commerce/preloader.gif"/><div style="margin-top:10px;">   #springMessage('vm.checkout_customerinfo.validating')<br/>   #springMessage('vm.checkout_customerinfo.waitmsg')</div></div><div id="modal-avetti-yourinfo"></div>');
+        $('body').append('<div id="modal-shippingadd-warning"><div id="shippingadd-warnings"></div><div align="center"><input type="button" onclick="javascript:document.getElementById(\'modal-shippingadd-warning\').style.display = \'none\'" value="#springMessage('button.CLOSE')"/></div></div>');
+      });
+
+      /**
+      * retrieve shipping address information for PCI
+      */
+      function retrieveShippingAddrForPCI(){
+        var addressInfor = getShippingAdd();
+        $(":input[type='hidden'][id='zip']").val(addressInfor.postal);
+        $(":input[type='hidden'][id='city']").val(addressInfor.city);
+        $(":input[type='hidden'][id='street']").val(addressInfor.address1);
+        $(":input[type='hidden'][id='firstName']").val(addressInfor.firstName);
+        $(":input[type='hidden'][id='middleName']").val(addressInfor.middleName);
+        $(":input[type='hidden'][id='lastName']").val(addressInfor.lastName);
+        $(":input[type='hidden'][id='address1']").val(addressInfor.address1);
+        $(":input[type='hidden'][id='address2']").val(addressInfor.address2);
+        $(":input[type='hidden'][id='phone']").val(addressInfor.phone);
+        $(":input[type='hidden'][name='email']").val(addressInfor.loginname);
+      }
+
+      /**
+      * asynchronously validate yourinfo
+      */
+      function submitWithPCI(frmName,actFieldName,btn,todo){
+        $('#modal-avetti-yourinfo').fadeTo(100,0.75);
+        $('#modal-preloader-yourinfo').fadeTo('fast',1);
+        jQuery.ajax({
+          type: 'POST',
+          url: 'yourinfo.ajx',
+          dataType: 'json',
+          data: $("form[name='frm']").serialize(),
+          success: function(data){
+            if(data.error){
+              var errors = data.errorMessages;
+              var errorMsgs = '#springMessage("vm.checkout_customerinfo.error"):<ul>';
+              for(var i=0;i<errors.length;i++)
+                errorMsgs +="<li>"+errors[i]+"</li>";
+                errorMsgs +="</ul>";
+                $("#postErrors").html("").hide();
+                $("#yourinfoErrors").html(errorMsgs).show();
+                $('#modal-preloader-yourinfo').hide();
+                $('#modal-avetti-yourinfo').hide();
+                $("html").scrollTop(0);
+            }
+            else{
+              $("#yourinfoErrors").hide();
+              $('#modal-preloader-yourinfo').hide();
+              $('#modal-avetti-yourinfo').hide();
+              retrieveShippingAddrForPCI();
+              doConfirm(frmName,actFieldName,btn,todo);
+            }
+          }
+        });
+      }
+
+      $(":input[name='addresses.billingAddress.postal']").blur(function(){
+        calcShippingAndTax(false);
+      });
+      $(":input[name='addresses.shippingAddress.postal']").blur(function(){
+        calcShippingAndTax(false);
+      });
+      $("#sameasbilling").click(function(){
+        calcShippingAndTax(false);
+      });
+      $("#rdoThisAddr").click(function(){
+        calcShippingAndTax(false);
+      });
+
+
+      $(document).ready( function(){
+        window.inputsBilling = $(".dom-block").detach();
+        window.inputsShipping = $("#notSameAsBilling input").detach();
+
+        $('.btn-primary').on('click', function(e){
+          $('.bill-to').append(window.inputsBilling);
+          $("#notSameAsBilling").append(window.inputsShipping);
+          doContinue('frm', 't', this,'update');
+        });
+      });
+
+    </script>
+  </body>
+</html>

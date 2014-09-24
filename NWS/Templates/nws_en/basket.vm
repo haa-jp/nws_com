@@ -1,0 +1,289 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/login-redirect.vm")
+#set($focusNum = $productsDetails.products.size())
+#if($crossSell.size())
+  #set($itemsCount = $crossSell.size() + $focusNum)
+#else
+  #set($itemsCount = $focusNum)
+#end
+
+#if($focusNum > 0)
+  #set($focusNum = $focusNum - 1)
+#end
+
+#if($customerAllowances)
+  #set($cusalllowances=$math.roundTo(2,$!customerAllowances))
+#else
+  #set($cusalllowances=0)
+#end
+
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+
+
+#set( $propName = "SessionCustomerDTO_"+$vid)
+#set ($approved = "")
+#if($request.getSession().getAttribute($propName))
+#set($approved = $request.getSession().getAttribute($propName).getProps().get("approved"))
+#end
+<html  xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <base href="$baselink"/>
+    <meta name="interestgroup" content="tp">
+    <meta name="prodtype" content="">
+    <title>#springMessage('vm.basket.title')</title>
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/deliveryoption/deliveryoption.css"/>
+    <link rel="stylesheet" type="text/css" href="assets/plugins/yahooUI/build/calendar/assets/calendar.css">
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/datepicker/datepicker.css" type="text/css" media="all" />
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+
+  </head>
+  <body class="nws">
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="row-fluid">
+      <form name="VIEWCART" action="" method="post" onSubmit="javascript:updateQuantities();">
+        <div class="span9">
+          <div class="container-fluid">
+            <h1 class="inline-middle">#springMessage('vm.basket.title')</h1>
+##            <input class="btn" type="button" value="#springMessage('vm.basket.toshop')" onclick="javascript:document.location='store.html?vid=${vendorSettingsDTO.vendorId}&cid=23049' " />
+            <input class="btn" value="#springMessage('vm.basket.toshop')" onclick="javascript:window.history.back()" />
+#if($productsDetails.allowanceswarningmsg  && $productsDetails.enableOrderAllowance == 'ALLOWANCE')
+            <div class="alert alert-error span6">#springMessage('vm.basket.warningallowancesmsg')$regExp.showPrice($cusalllowances)</div>
+#end
+  #springBind( "basketDTO.*" )
+#if($status.errors.errorCount>0)
+              <div class="alert alert-error span6">
+<h4>There were problems with your basket:</h4>
+<ul>
+  #foreach($error in $status.errorMessages)
+                  <li>$error</li>
+  #end
+                </ul>
+              </div>
+#end
+
+<br>
+#set($replaceSuspendedItemMsgMap=$productsDetails.replaceSuspendedItemMsg)
+  #foreach($msgcode in $replaceSuspendedItemMsgMap.keySet())
+	  #foreach( $product in $productsDetails.products)
+		  #if($product.compCode==$msgcode)	
+			 <font color="red">$replaceSuspendedItemMsgMap.get($msgcode)</font><br>
+		  #end
+	  #end
+  #end
+
+
+#if($basketDTO.notaddtocartmsg)
+  #foreach($ac_msg in $basketDTO.notaddtocartmsg)
+           <div class="alert alert-error span12">
+              <span>* $ac_msg</span>
+           </div>
+  #end
+#end
+
+                <input type="hidden" name="_targetupdateBasket" value="basket.html?vid=$vendorSettingsDTO.vendorId"/>
+                <input type="hidden" name="mode" value=""/>
+                <input type="hidden" name="itemscount" value="$itemsCount"/>
+#if($productsDetails.products.size()>0)
+  #if(!$currencyInUse)
+    #foreach($cur in $storeCurrencies)
+      #if($cur.def==1)
+                <input type="hidden" name="c" value="$cur.id" />
+      #end
+    #end
+  #else
+                <input type="hidden" name="c" value="$currencyInUse" />
+  #end
+
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_products.vm")
+                <input type="hidden" name="orderType" value="P"/>
+                <input type="hidden" name="_targetcheckout" value="checkout.html?vid=$vendorSettingsDTO.vendorId"/>
+
+#if($approved != "true")
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_notice.vm")
+#end
+
+                <div class="form-actions">
+#if($approved == "true")
+                  <input id="checkoutbtn" type="button" class="btn btn-primary" value="#springMessage('vm.basket.tocheckout')" onclick="javascript:document.VIEWCART.mode.value='checkout';document.VIEWCART.submit();"/>
+#end
+            <input class="btn" value="#springMessage('vm.basket.toshop')" onclick="javascript:window.history.back()" />
+                </div>
+
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_crosssell.vm")
+#else
+                <div class="basket-item-desc f-buttons">
+                  <b>#springMessage('vm.basket.msg')</b>
+                  <a href="store.html?vid=${vendorSettingsDTO.vendorId}&cid=23049">#springMessage('vm.basket.toshop')</a>
+  #*
+  #if(!${welcomeMatDTO.loggedIn})
+                  <b><a href="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=${welcomeMatDTO.currentEncodePage}">#springMessage('vm.header.login')</a> #springMessage('vm.basket.loginmsg')  </b>
+  #end
+  *#
+                </div>
+#end
+
+          </div><!-- end container -->
+        </div><!-- end span-9 -->
+        <div class="span3">
+          <div class="span3"></div>
+
+          <div class="span8">
+          #if($totalQty > 0)
+            #if($approved == "true")
+            <div class="checkout-total">
+              <h1>Order Total</h1>
+              <div class="totals">
+                <span class="item-qty">$totalQty #if($totalQty > 1)#springMessage('vm.register.items')#else #springMessage('vm.register.item')#end</span> <br>
+                <span class="item-qty">$!basketItemsTotal #if($basketItemsTotal >1) Skus #else Sku #end </span>
+                #set($total=$math.sub($subtotal, 0))
+                <span class="grand-total">$$!regExp.currencyInteger($viewStoreCurrency.locale, $total).<sup>$!regExp.currencyFraction($viewStoreCurrency.locale, $total)</sup></span>
+              </div>
+            </div>
+            #end
+            <div class="right">
+            #if($approved == "true")
+              <input id="checkoutbtn" type="button" class="btn btn-primary" value="#springMessage('vm.basket.tocheckout')" onclick="javascript:document.VIEWCART.mode.value='checkout';document.VIEWCART.submit();"/>
+            #end
+            </div>
+          #end
+          <div class="save-basket">
+              #if(!${welcomeMatDTO.loggedIn})
+                <div class="f-buttons restoreBasket">
+                  <strong>#springMessage('vm.basket.logintorestoreasavedbasket'):</strong> <input type="button" class="btn btn-primary" onclick="JavaScript:window.location.href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=${welcomeMatDTO.currentEncodePage}'" class="proceed btnLogin" value="#springMessage("button.LOGIN")">
+                </div>
+              #else
+                  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_saveforlater.vm")
+              #end
+                <br/>
+            </div>
+          </div>
+          <div class="span1"></div>
+        </div> <!-- end span 3 -->
+      </form>
+      </div>
+
+<div class="container">
+
+<!--
+<div id="example" class="modal hide fade in" style="display: none; ">
+   <div class="modal-header">
+              <a class="close" data-dismiss="modal">×</a>
+              <h3>Back Order Alert</h3>
+   </div>
+   <div class="modal-body">
+              <h4>Text in a modal</h4>
+              <p>display messages here.</p>
+   </div>
+   <div class="modal-footer">
+              <a href="#" class="btn" data-dismiss="modal">close</a>
+              <a href="#" class="btn btn-success">confirm</a>
+   </div>
+</div>
+<p><a data-toggle="modal" href="#example" class="btn ">test modal</a></p>
+-->
+
+</div>
+
+
+
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+
+#foreach($item in $product)
+<p>$item</p>
+#end
+    </div><!-- end page -->
+    <div id= "test" class="yui-skin-sam">
+      <div id="cal1Container"></div>
+    </div>
+    <div id="deliverypopup" class="popup_menu"></div>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/basket.js"></script>
+
+#if(${welcomeMatDTO.loggedIn})
+    <script type="text/javascript">
+      var lists = [], currency = 0;
+  #foreach($nickname in $availBasketList)
+    #set ($rowNumber = $velocityCount - 1)
+      lists.push("$nickname");
+  #end
+  #if(!$currencyInUse)
+    #foreach($cur in $storeCurrencies)
+      #if($cur.def==1)
+      currency = $cur.id;
+      #end
+    #end
+  #else
+      currency = $currencyInUse;
+  #end
+
+      myBasket.initialize({
+        basketLists: lists,
+        warningErrors: {
+          checkOption: '#springMessage("vm.basket.checkoption")',
+          basketLimit: '#springMessage("vm.basket.maxnumberbaskets")',
+          invalidNickname: '#springMessage("vm.basket.validnickname")',
+          selectBasket: '#springMessage("vm.basket.choosebasket")'
+        },
+        itemsCount: $itemsCount,
+        vendorId: $vendorSettingsDTO.vendorId,
+        currency: currency,
+        themePath: 'store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname'
+      });
+
+     #*$(document).ready(function(){
+        createCalendar();
+      });*#
+    </script>
+#end
+    ##<script language="javascript" src="assets/commercelib/basket/saveBasket.js"></script>
+    <script type="text/javascript" src="assets/plugins/yahooUI/build/yahoo-dom-event/yahoo-dom-event.js"></script>
+    <script type="text/javascript" src="assets/commercelib/basket/basket.js"></script>
+    <script language="javascript" src="assets/commercelib/ajax/ajax_object.js"></script>
+    <script language="javascript" src="assets/commercelib/ajax/ajax_utils_jQuery.js"></script>
+    <script language="javascript" src="assets/commercelib/utils/formatCurrency.js"></script>
+    <script language="javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/handlebars-v1.1.2.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/overrides.js"></script>
+    <script type="text/javascript" src="assets/plugins/yahooUI/build/calendar/calendar-min.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/datepicker/bootstrap-datepicker.js"></script>
+
+#set ($basketForceRefresh = $request.getParameter('bfr'))
+#if ( $basketForceRefresh.equals("true") )
+    <script type="text/javascript">
+         alert("#springMessage('vm.basket.forcerefresh')")
+    </script>
+#end
+
+    <script language="javascript">
+
+    function showToastr(mode) {
+      if (mode === 'update') {
+        toastr.success('Updating item...');
+      } else {
+        toastr.warning('Removing item from basket...');
+      }
+    }
+
+
+
+    $('.showEditDate > a').datepicker()
+      .on('changeDate', function(ev){
+        var month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'September', 'August', 'October', 'November', 'December'];
+        $(ev.target).parent().parent().find('.showReqDate').val(month[ev.date.getMonth()] + ev.date.getDate() + ', ' + ev.date.getFullYear());
+        $(ev.target).datepicker('hide');
+        document.VIEWCART.submit();
+      });
+
+
+    function createCalendar() {}
+    </script>
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/shipping_cost_estimator.vm")
+  </body>
+</html>

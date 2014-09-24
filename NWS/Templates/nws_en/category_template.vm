@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+
+#if(!${welcomeMatDTO.loggedIn})
+<script type="text/javascript">
+<!--
+window.location = "$baselink/signin.html?vid=20120606532&mt=1"
+//-->
+</script>
+#end
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+
+#if ($pageTileDictionaryDTO)
+  #set ($vCatsCategoryDTO=$pageTileDictionaryDTO.getPageTile("vCatsCategoryDTO") )
+#end
+
+
+#if(($multiPageViews) && ($__virtualCategory))
+  #set($itemMultiPageView = $multiPageViews.get($__virtualCategory.getPageTileName()))
+#end
+
+#if (!$direction) #set($direction = $regExp.getParamFromURL($itemMultiPageView.multiPageURL, 'direc'))  #end
+#if (!$mpvp&&$itemMultiPageView&&$itemMultiPageView.currentPageIndex)
+  #set($mpvp = $itemMultiPageView.currentPageIndex)
+#else
+  #set($mpvp = "")
+#end
+
+#set($catid = $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'categoryid'))
+#set($metadescription= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metadescription'))
+#set($metakeywords= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metakeywords'))
+#set($pagetitle= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'pagetitle'))
+#set($categoryImage= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'image'))
+#set($categoryThumb= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'thumbimage'))
+#set($categoryName= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'name'))
+#set($category= $pageTile.getItemObject($childCategoriesDTO, $childCategoriesDTO.getItems(), "c"))
+#set($categoryDescription= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'description'))
+#if($CookiesDTO && $CookiesDTO.getCookieValue('preferences'))
+  #if($CookiesDTO.getCookieValue('preferences')=="grid")
+    #set($itemViewClass= "grid")
+  #else
+    #set($itemViewClass= "list")
+  #end
+#else
+  #set($itemViewClass= "grid")
+#end
+
+#*********************************************
+* The following block of code is used together with the
+* redirect to item option in category properties
+* this should automatically redirect the category to
+* the single item in that category.
+*********************************************#
+##
+#set($category1= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'c'))
+#set($childItemsViewDTO = $multiPageViews.get("childItemsDTO"))
+#if($category1.autoview==1 && $childItemsViewDTO.itemsCount==1)
+  #foreach($itemIter in $childItemsDTO.getItems())
+    #set($childItem = $pageTile.getItemObject($childItemsDTO, $itemIter, "i"))
+  #end
+  $response.sendRedirect($seourl.encodeURL("store.html?cid=$catid&vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid"))
+#end
+
+#**
+ * Enables the use of the facet search on the category page only.
+ *#
+#set($useFacet = true)
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <base href="$baselink"/>
+    <meta name="description" content="#if($metadescription!="") $metadescription #else   #end" />
+  #if(false)
+    <meta name="keywords" content="#if($metakeywords!="")$metakeywords #else   #end" />
+  #end
+  <title>$!pagetitle</title>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+  </head>
+  <body class="nws">
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+  <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+<!-- end search_bar -->
+    <div class="row-fluid">
+<!-- jp --> <div class="span3"> 
+      <div class="data-container">
+        <div class="side-nav">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/side_nav.vm")
+    </div> 
+    <!-- end 3 --> </div></div>
+    <!-- jp -->          <div class="span9">
+
+        <div class="row-fluid main">
+          <div class="span12">
+            <div class="row-fluid">
+              <div class="span8">
+#if($category_ad_topDTO.getItems().get(0).get('category_ad_top').indexOf('blank.vm') >= 0)
+  #if($childCategoriesDTO.getItems().size() > 0)
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/featureditems.vm")
+  #end
+#else
+  #parse($category_ad_topDTO.getItems().get(0).get('category_ad_top'))
+#end
+              </div> <!-- end 8 -->
+              <div class="span4">
+#if($childCategoriesDTO.getItems().size() > 0)
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/Cat_Featured_products.vm")
+#end
+              </div> <!-- end 4 -->
+            </div>
+            <div class="row-fluid">
+              <div class="span12">
+                <h3 class="category-title">$categoryDescription</h3>
+
+    #parse($category_centerDTO.getItems().get(0).get('category_center'))
+    #if($childCategoriesDTO.getItems().size()!=0)
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/categoryT_subcategoryGridList.vm")
+    #end
+    #if($childCategoriesDTO.getItems().size()==0)
+      ## The following variables is needed to define the DTO in the pagination
+      #set($itemsDTO = $childItemsDTO)
+
+            ##setUseCacheFlag()
+            <!-- Use Cache Mode: $use_cache -->
+
+            #if  ($use_cache)
+              #if ($subpage)
+                <!--# include virtual="/store.caches?vid=${vendorSettingsDTO.vendorId}&cid=$catid&ts=inner&ttl=3600&mpv=childItemsDTO&mpvp=$subpage" wait="yes" -->
+              #else
+                <!--# include virtual="/store.caches?vid=${vendorSettingsDTO.vendorId}&cid=$catid&ts=inner&ttl=3600" wait="yes" -->
+              #end
+            #else
+
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/categoryT_itemList.vm")
+    #end
+#end
+              </div>
+            </div>
+          </div>
+      </div>
+##parse("$vendorSettingsDTO.vendorId/customer_data_form.vm")
+#parse($category_bottomDTO.getItems().get(0).get('category_bottom'))
+      </div><!-- end span10 -->
+<!-- jp end 9 -->      </div>
+    </div>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+  </div><!-- end container-fluid -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quicklook_ext.vm")
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quickadd_ext.vm")
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/category.js"></script>
+<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/sidenav.js"></script>
+<script type="text/javascript">
+  $('.sub-categories').sidenav({vid: $vendorSettingsDTO.vendorId})
+</script> 
+  <script type="text/javascript" language="javascript">
+    Category.initialize();
+    $('#featureCarousel, #myCarousel').carousel({interval: 4000});
+  </script>
+  </body>
+</html>

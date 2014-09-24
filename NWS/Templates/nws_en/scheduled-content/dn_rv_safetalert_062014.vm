@@ -1,0 +1,18 @@
+<div class="row-fluid">
+	<div class="span12  alert alert-block alert-info">
+		<div class="span4">
+			<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/logos/vendors/safe_t_alert.png" alt="Safe T Alert"/>
+		</div>
+		<div class="span8">
+			<h3>Important information every dealer needs to know.</h3>
+			<ul>
+				<li> <a href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/vendors/Life_Safety_Alarms.pdf" 
+					 alt="Safety Notice" target="_blank"> Life Safety Alarms - You and Your Dealership</a> </li>
+				<li> <a href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/vendors/Dealer_Check.pdf" 
+					 alt="Dealer Check" target="_blank"> MTI Industries Dealer Check</a> </li>
+				<li> <a href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/vendors/Mandatory_Replacement_Notice.pdf" 
+					 alt="important replacement notice" target="_blank"> Propane and Carbon Monoxide Alarms Replacement Notice</a> </li>
+			</ul>
+		</div>
+	</div>
+</div>

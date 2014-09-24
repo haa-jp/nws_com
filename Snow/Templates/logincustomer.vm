@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#if (!$pageTileDictionaryDTO)
+	#if ($_commandName)
+		#springBind( "${_commandName}.pageTileDictionaryDTO" )
+		#set ($pageTileDictionaryDTO = ${status.value})
+	#end
+#end
+#if (!$pageTileDictionaryDTO)
+	#if ($_commandName)
+		#springBind( "${_commandName}.pageTileDictionaryDTO" )
+		#set ($pageTileDictionaryDTO = ${status.value})
+	#end
+#end
+
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+		<title>#springMessage("vm.logincustomer.title")</title>
+		<link rel="shortcut icon" href="/favicon.png">
+		
+#if($vendorSettingsDTO.themeId) 
+	#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/commonCSS-JS.vm")
+#else
+	#parse("$vendorSettingsDTO.vendorId/commonCSS-JS.vm")
+#end
+
+	</head>
+<body#if($isHome) id="home"#{end}>
+    <div id="masterWrapper">
+      <!-- Start header -->
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+#else
+       #parse("$vendorSettingsDTO.vendorId/header.vm")
+#end
+      <!-- End header -->
+      <div id="bd" class="checkout">
+		<div id="wide-content" class="yui-g">	
+			<h1>#springMessage("vm.logincustomer.title") </h1>
+			<!---start yui-u-->
+			<div class="yui-u first separator login">
+				<h2>#springMessage("vm.logincustomer.starthere")</h2>
+				<p>
+					#springMessage("vm.logincustomer.msg")
+				</p> 
+				<p><a class="internal-link" href="$seourl.encodeURL("store.html?cid=14&vid=$vendorSettingsDTO.vendorId")">#springMessage("vm.logincustomer.link1")</a></p>
+
+				<p>
+					<input type="button" value="#springMessage('vm.logincustomer.creat')" class="btnLogin btnclass" onclick="window.location='register.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26fr%3Dregister#end';"/>
+				</p>
+
+				<p>
+					<a href="guestregister.html?vid=${vendorSettingsDTO.vendorId}
+						#if(${loginViewDTO.memberType})
+							&mt=${loginViewDTO.memberType}
+						#else
+							&mt=3
+						#end
+						#if($authenticationRedirectURL && $authenticationRedirectURL!='')
+							&redirecturl=${authenticationRedirectURL}%26fr%3Dregister%26vid%3D${vendorSettingsDTO.vendorId}
+						#end">
+						Create a Guest Account
+					</a>
+				</p>
+			</div>
+			<!--end yui-u-->
+		
+			<!--start yui-u-->
+			<div class="yui-u login" >	
+				<h2>#springMessage("vm.logincustomer.returning")</h2> 
+				<form name="frm" method="POST">
+	#springBind("loginViewDTO.doSubmit")
+					<input type=hidden id=hiddenlogin name="$status.expression">
+	#springBind( "loginViewDTO.*" )
+	#foreach($error in $status.errorMessages) 
+					<div class="warning">$error</div>
+		#end
+					<label class="email">#springMessage("word.email"):</label> 
+					<p ><input value="" name="login" id="login" class="login_content" maxlength="50" tabindex="1" type="text"  /></p> 
+				 
+					<label class="password">#springMessage("word.password"):</label> 
+					<p><input name="password" id="password" class="login_content"  maxlength="20" tabindex="2" type="password" /></p>
+					
+					<p>
+                                                <input type="hidden" name="mode" value="Log In">
+						<input type="button" value="#springMessage('vm.logincustomer.title')" class="proceed btnLogin btnclass" onClick="JavaScript:document.frm.hiddenlogin.value='Log In';document.frm.submit();"/>
+						<input type="hidden" value="$!authenticationSubmitURL" name="Log In">
+					</p>
+					<a class="login_content" href="forgot_password.html?vid=${vendorSettingsDTO.vendorId}" >#springMessage('vm.logincustomer.link2')</a>
+				</form>
+			</div>
+			<!--end yui-u-->
+
+		</div>
+		<!--end yui-g-->
+      </div>
+      <!-- end wrapper_homes -->
+			
+	<!-- START BOTTOMNAV -->
+	#if($vendorSettingsDTO.themeId) 
+	      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+	#else
+	       #parse("$vendorSettingsDTO.vendorId/footer.vm")
+	#end
+	<!-- END BOTTOMNAV -->
+	
+		</div>
+		<!-- end doc2 -->
+		
+	</body>
+</html>

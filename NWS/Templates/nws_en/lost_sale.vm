@@ -1,0 +1,34 @@
+#set( $propName = "SessionCustomerDTO_"+$vid)
+<div id="dialog" style="display:none;" title="Lost Sale">
+  <p>Instructions go here.</p>
+  <div id="dialog-notifications"></div>
+  <form id="lost-form">
+    <fieldset>
+      <label for="name">Quantity</label>
+      <input type="text" name="quantity" id="lost-qty" class="text ui-widget-content ui-corner-all" />
+      <label for="name">Comments</label>
+      <textarea name="comment" id="lost-comment" class="text ui-widget-content ui-corner-all"></textarea>
+      <input type="hidden" name="name" id="lost-name" value="${welcomeMatDTO.firstName} ${welcomeMatDTO.lastName}" />
+      <input type="hidden" name="email" id="lost-email" />
+      <input type="hidden" name="customer" id="lost-customer" value="$request.getSession().getAttribute($propName).getCustomerProperty("Customer Number")" />
+      <input type="hidden" name="code" id="lost-code" />
+    </fieldset>
+  </form>
+</div>
+<script type="text/javascript">
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($serverDomain = "https://$request.getServerName()/")
+  #else
+    #set ($serverDomain = "https://$request.getServerName():$request.getServerPort()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($serverDomain = "http://$request.getServerName()/")
+  #else
+    #set ($serverDomain = "http://$request.getServerName():$request.getServerPort()/")
+  #end
+#end
+  var lost_sale_url = '${serverDomain}';
+</script>
+<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/lost_sale.js"></script>

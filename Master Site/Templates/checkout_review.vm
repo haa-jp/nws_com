@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+<html>
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+#set( $propName = "SessionCustomerDTO_"+$vid) #set ($customerNumber ="") 
+#if($request.getSession().getAttribute($propName))
+  #set($customerNumber = $request.getSession().getAttribute($propName).getProps().get("CustomerNumber")) 
+#end
+
+  <head>
+    <base href="$baselink"/>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <title>#springMessage("vm.checkout_review.title")</title>
+    <meta content="" name="keywords"/>
+    <meta name="interestgroup" content="tp"/>
+    <meta name="prodtype" content=""/>
+    <link rel="shortcut icon" href="/favicon.png"/>
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+  </head>
+  <body id="checkout" class="checkout">
+    ############################ Header ####################################
+    #if($vendorSettingsDTO.themeId == $storeSkinId)
+        #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+      #else
+        #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+    #end
+    ############################ End Header ################################
+    <div id="wrapper" class="row-fluid">
+      <div class="container">
+        <div class="row-fluid">
+          <ul class="co-breadcrumb step5">
+            <li class="yi">#springMessage("vm.checkout_customerinfo.infor")</li>
+            <li class="sp">#springMessage("vm.checkout_customerinfo.shipping")</li>
+            <li class="py">#springMessage("vm.checkout_customerinfo.payment")</li>
+            <li class="rv"><strong>#springMessage("vm.checkout_customerinfo.placeorder")</strong></li>
+            <li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row-fluid">
+          <h2>#springMessage("vm.checkout_review.review")</h2>
+          <div class="container-fluid">
+            <div class="row-fluid">
+              <div class="span12">
+
+                <h4>Ship To:</h4>
+                #foreach($productgroup in $checkoutViewDTO.details.shippinggroup)
+                  #foreach($productitem in $productgroup.shipItems)
+                    #if($velocityCount == 1 )
+                      $productgroup.address.address.nickname &nbsp;&nbsp; <a href="shipping.html?vid=$checkoutViewDTO.vendorId" class="edit">#springMessage('word.edit')</a><br/>
+                      $productgroup.address.address.firstname $productgroup.address.address.middlename $!productgroup.address.address.lastname<br/>
+                      $productgroup.address.address.company<br/>
+                      $productgroup.address.address.address1<br/>
+                      #if($!productgroup.address.address.address2 != '')
+                        $!productgroup.address.address.address2<br/>
+                      #end
+                      $productgroup.address.address.city, $!productgroup.address.province.a3 $productgroup.address.address.postal
+                      ##$!productgroup.address.address.anotherprovince  
+                      ##$!productgroup.address.country.name<br/> 
+                    #end
+                  #end
+                #end
+              </div>
+            </div>
+          </div>
+          <div class="separator grey">&nbsp;</div>
+          
+          <form class="form-horizontal" name="payment" action="revieworder.html" method="POST" id="nws-form">
+            <input type="hidden" name="t" />
+            #springBind( "checkoutViewDTO.*" )
+            #if($status.errors.errorCount>0)
+              <div class="warning  error-text-area">
+                <p>#springMessage("vm.register.error"):</p>                 
+                <ul>
+                  #foreach($error in $status.errorMessages)
+                    <li>$error</li>
+                  #end
+                </ul>
+              </div>
+            #end
+            <table class="table">
+              <colgroup>
+                <col class="col1" />
+                <col class="col2" />
+                <col class="col3" />
+                <col class="col4" />
+                <col class="col5" />
+              </colgroup>
+              #springBind( "checkoutViewDTO.*" )
+              <thead>
+                <tr>
+                  <th>#springMessage('vm.register.description')</th>
+                  <th>#springMessage('vm.register.shipmethod')</th>
+                  <th>#springMessage('vm.register.qty')</th>
+                  <th>#springMessage('vm.register.total')</th>
+                </tr>
+              </thead>
+              <tbody>
+                #set($creditneed = "N")
+                #set($groupidx = 0)
+                #foreach($productgroup in $checkoutViewDTO.details.shippinggroup)
+                  #set($itemidx = 0)
+                  #foreach($productitem in $productgroup.shipItems)
+                    #set($creditneed = "N")
+                    <tr>
+                      <td >${productitem.product.title}</td>
+                      <td>                    
+                        #if($itemidx == 0 )
+                          #if($productgroup.singleship)
+                            ${productgroup.shipmethod.shippingmethod.methodname}
+                          #else
+                            <select name="SHIPTYP_${groupidx}" ID="SHIPTYP_${groupidx}"  onchange="document.frm.submit()" disabled="true">
+                            #foreach($shipmethod in ${productgroup.shipmethods}) 
+                              #if( ${productgroup.shipmethod.shippingmethod.id} == ${shipmethod.shippingmethod.id})
+                                <option value="${shipmethod.shippingmethod.id}" selected>${shipmethod.shippingmethod.methodname}</option>
+                              #else
+                                <option value="${shipmethod.shippingmethod.id}">${shipmethod.shippingmethod.methodname}</option>
+                              #end 
+                            #end
+                            </select>
+                          #end
+                        #end
+                      </td>
+                      <td class="ac">${productitem.shipaddr.qty}</td>
+                      <td class="ar">
+                        <span>&#36;$checkoutViewDTO.formatter.currency(${productitem.shipaddr.totalPrice})</span>
+                      </td>
+                    </tr>
+                    #set($itemidx = $itemidx + 1)
+                  #end
+
+                  #* end one ship group, display this ship group's tax detail *#
+                  #if($productgroup.shipGroupTaxDetails)
+                    #if($productgroup.shipGroupTaxDetails.nationtax>0.0 || $productgroup.shipGroupTaxDetails.regiontax>0.0  ||  ($productgroup.shipGroupTaxDetails.taxHST&&$productgroup.shipGroupTaxDetails.taxHST>0.0))
+                      <tr>
+                        <td colspan="3" class="empty-cell">&nbsp;</td>
+                        <td>
+                          #if($productgroup.downloadable)
+                             #springMessage('vm.register.taxdownloadable') $productgroup.address.address.nickname
+                          #else
+                             #springMessage('vm.register.sgtaxdetail') $productgroup.address.address.nickname
+                          #end     
+                        </td>
+                        <td>
+                          #if($productgroup.shipGroupTaxDetails.nationtax>0.0)
+                            $productgroup.shipGroupTaxDetails.nationtaxname: $$checkoutViewDTO.formatter.currency($productgroup.shipGroupTaxDetails.nationtax) ($regExp.round($math.mul($productgroup.shipGroupTaxDetails.nationtaxrate,100), 2) %) <br>
+                          #end
+                        
+                          #if($productgroup.shipGroupTaxDetails.regiontax>0.0)
+                            $productgroup.shipGroupTaxDetails.regiontaxname: $$checkoutViewDTO.formatter.currency($productgroup.shipGroupTaxDetails.regiontax) ($regExp.round($math.mul($productgroup.shipGroupTaxDetails.regiontaxrate,100), 3) %) <br>
+                          #end
+                        
+                          #if($productgroup.shipGroupTaxDetails.citytax>0.0)
+                            $productgroup.shipGroupTaxDetails.citytaxname: $$checkoutViewDTO.formatter.currency($productgroup.shipGroupTaxDetails.citytax) ($regExp.round($math.mul($productgroup.shipGroupTaxDetails.citytaxrate,100), 2) %) <br>
+                          #end
+
+                          #if($productgroup.shipGroupTaxDetails.countytax>0.0)
+                            $productgroup.shipGroupTaxDetails.countytaxname: $$checkoutViewDTO.formatter.currency($productgroup.shipGroupTaxDetails.countytax) ($regExp.round($math.mul($productgroup.shipGroupTaxDetails.countytaxrate,100), 2) %) <br>
+                          #end
+
+                          #if($productgroup.shipGroupTaxDetails.placetax>0.0)
+                            $productgroup.shipGroupTaxDetails.placetaxname: $$checkoutViewDTO.formatter.currency($productgroup.shipGroupTaxDetails.placetax) ($regExp.round($math.mul($productgroup.shipGroupTaxDetails.placetaxrate,100), 2) %) <br>
+                          #end
+
+                          #if($productgroup.shipGroupTaxDetails.othertax1>0.0)
+                            $productgroup.shipGroupTaxDetails.othertax1name: $$checkoutViewDTO.formatter.currency($productgroup.shipGroupTaxDetails.othertax1) ($regExp.round($math.mul($productgroup.shipGroupTaxDetails.othertaxrate1,100), 2) %) <br>
+                          #end
+
+                          #if($productgroup.shipGroupTaxDetails.othertax2>0.0)
+                            $productgroup.shipGroupTaxDetails.othertax2Name: $$checkoutViewDTO.formatter.currency($productgroup.shipGroupTaxDetails.othertax2) ($regExp.round($math.mul($productgroup.shipGroupTaxDetails.othertaxrate2,100), 2) %) <br>
+                          #end
+                        </td>
+                      </tr>         
+                    #end
+                  #end
+                #end
+              </tbody>
+              <tfoot class="totals">
+                <tr class="subtotal">
+                  <td colspan="2" class="empty-cel">
+                  </td>
+                  <td class="ar vat lbl">
+                    #springMessage("vm.register.subtotal") ($checkoutViewDTO.details.totalQty #if($checkoutViewDTO.details.totalQty > 1)#springMessage("vm.register.items")#else #springMessage("vm.register.item")#end):
+                  </td>
+                  <td class="ar vat val">
+                    $number.format('currency', $checkoutViewDTO.details.total, $viewStoreCurrency.locale)
+                  </td>
+                </tr>
+                <input type="hidden" value="$number.format('currency', $checkoutViewDTO.details.total, $viewStoreCurrency.locale)" id="subtotal" name="subtotal" />
+                #if($math.round($checkoutViewDTO.details.totalDiscount )> 0)
+                  <tr class="discount">
+                    <td colspan="2" class="empty-cel">&nbsp;</td>
+                    <td class="ar vat lbl">#springMessage("vm.register.discounts"):</td>
+                    <td class="ar vat val">$number.format('currency', $checkoutViewDTO.details.totalDiscount, $viewStoreCurrency.locale)</td>
+                  </tr>
+                #end
+                #set($tempgiftcert=0)
+                #if($checkoutViewDTO.giftCertificate.giftCertificates && $checkoutViewDTO.giftCertificate.giftCertificates.size() > 0 )
+                  <tr class="discount">
+                    <td colspan="2" class="empty-cel">&nbsp;</td>
+                    <td class="ar vat lbl">#springMessage("vm.register.giftapplied"):</td>
+                    <td class="ar vat val">
+                      $number.format('currency', $checkoutViewDTO.giftCertificate.totalAvailable, $viewStoreCurrency.locale)
+                    </td>
+                  </tr>
+                #set($tempgiftcert=$checkoutViewDTO.giftCertificate.totalAvailable)
+                #end
+                <tr class="shipping">
+                  <td colspan="2" class="empty-cel">&nbsp;</td>
+                  <td class="ar vat lbl">#springMessage("vm.register.shipping"):</td>
+                  <td class="ar vat val">
+                    $number.format('currency',$checkoutViewDTO.details.shipTotal,$viewStoreCurrency.getLocale())
+                  </td>
+                </tr>
+                #if($checkoutViewDTO.details.perShippingDiscount>0)
+                  <tr class="discount" id="shippingDiscount">
+                    <td colspan="2" class="empty-cel">&nbsp;</td>
+                    <td class="ar vat lbl">
+                      <span id="shippinglab1">#springMessage("vm.basket.shippingdiscount"):</span>
+                    </td>
+                    <td class="ar vat val">
+                      $number.format('currency', $checkoutViewDTO.details.perShippingDiscount,$viewStoreCurrency.locale)
+                    </td>
+                  </tr>
+                #end
+                <tr class="tax">
+                  <td colspan="2" class="empty-cel">&nbsp;</td>
+                  <td class="ar vat lbl">
+                    <span id="taxlab1">#springMessage("vm.register.tax"):</span>
+                  </td>
+                  <td class="ar vat val">$number.format('currency', $checkoutViewDTO.details.taxTotal, $viewStoreCurrency.locale)</td>
+                </tr>
+                <tr class="total">
+                  <td colspan="2" class="empty-cel">&nbsp;</td>
+                  <td class="ar vat lbl">#springMessage("vm.register.totalbill"):</td>
+                  <td class="ar vat val" id="totalcost">
+                    #set($totalwithdis=$math.sub($math.sub($checkoutViewDTO.details.total,$checkoutViewDTO.details.totalDiscount),$checkoutViewDTO.details.perShippingDiscount))
+                     $number.format('currency', $math.abs($math.sub($math.add($math.add(${totalwithdis},${checkoutViewDTO.details.taxTotal}),${checkoutViewDTO.details.shipTotal}),${tempgiftcert})), $viewStoreCurrency.locale) 
+                  </td>
+                </tr>
+                #if($checkoutViewDTO.details.usepoints!=0)
+                  <tr class="balance">
+                    <td colspan="2" class="empty-cel">&nbsp;</td>
+                    <td class="ar vat lbl">
+                      #if($checkoutViewDTO.details.usepoints==2)
+                        #springMessage('vm.basket.balancedue'):
+                      #elseif($checkoutViewDTO.details.usepoints==1)
+                        #springMessage('vm.basket.pointsneed'):
+                      #end
+                    </td>
+                    <td class="ar vat val">
+                      #if($checkoutViewDTO.details.usepoints!=0) 
+                        #if($checkoutViewDTO.details.allowances >= $math.add($math.add($checkoutViewDTO.details.totalWithDiscount,$checkoutViewDTO.details.shipTotal),$checkoutViewDTO.details.taxTotal))
+                          PTS $math.round($math.add($math.add($checkoutViewDTO.details.totalWithDiscount,$checkoutViewDTO.details.shipTotal),$checkoutViewDTO.details.taxTotal)) 
+                        #else
+                          $$checkoutViewDTO.formatter.currency($math.abs($math.sub($math.sub($math.sub($math.add($math.add(${checkoutViewDTO.details.totalWithDiscount},${checkoutViewDTO.details.taxTotal}),${checkoutViewDTO.details.shipTotal}),${tempgiftcert}),$checkoutViewDTO.details.allowances),$checkoutViewDTO.details.perShippingDiscount)))
+                        #end
+                      #end 
+                    </td>
+                  </tr>
+                #end
+              </tfoot>
+            </table>
+	
+	<div class="row-fluid">
+		<div class="span6">
+			
+           <div  class="edit-payment">
+              <h4>#springMessage('vm.vieworderdetail.method')</h4>
+              #if($checkoutViewDTO.creditCard.ccNumber.length() > 0)
+                <div class="review_card">
+                  <div class="control-group">
+                    <label class="control-label">#springMessage('vm.register.creditcard'):</label>
+                    <div class="controls">#if($checkoutViewDTO.selectedPaymentGatewayCode == "PCICC" || $checkoutViewDTO.selectedPaymentGatewayCode == "PCINONE")************$checkoutViewDTO.creditCard.last4cc #else $checkoutViewDTO.creditCard.ccSecureNumber #end</div> 
+                  </div>
+                  #if($checkoutViewDTO.selectedPaymentGatewayCode != "PCICC" && $checkoutViewDTO.selectedPaymentGatewayCode != "PCINONE")
+                    #set ($cardtypekeys = $checkoutViewDTO.creditCard.ccTypes.keySet())
+                    #foreach ($cardtypekey in $cardtypekeys)
+                      #if ($cardtypekey == $checkoutViewDTO.creditCard.ccType)
+                        <div class="control-group">
+                          <label class="control-label">#springMessage('vm.register.cctype'): </label>
+                          <div class="controls">$checkoutViewDTO.creditCard.ccTypes.get($cardtypekey)</div>
+                        </div>
+                      #end
+                    #end
+                    <div class="control-group">
+                      <label class="control-label">#springMessage('vm.register.expirydate'):  </label>
+                         #if($checkoutViewDTO.creditCard.expMonth > 0) 
+                          <div class="controls">$checkoutViewDTO.creditCard.expMonth/$checkoutViewDTO.creditCard.expYear </div>
+                         #end                    
+                    </div>
+                  #end
+                </div> <!-- end class="review_card -->
+              #else
+                $!checkoutViewDTO.ccPreferencesDTO.currentPaymentgateway.displayname
+                #if($checkoutViewDTO.customerInput && $checkoutViewDTO.customerInput!="")
+                  :$checkoutViewDTO.customerInput
+                #end
+              #end  
+              #if(!$checkoutViewDTO.onepagecheckout)       
+                <a href="payment.html?vid=$checkoutViewDTO.vendorId&fo=2">#springMessage('word.edit')</a>
+              #end
+            </div><!-- end edit-payment -->
+
+		</div>
+		
+		<div class="span5 offset1">
+			<div class="alert alert-info">
+				<p> This transaction will appear on your statement as a charge to "B2CPARTS.COM", a third party drop-shipping service utilized by $storeName. All refunds and exchanges are subject to $storeName's policies and must be transacted through $storeName.  DO NOT ship product back to the address from which it was shipped. Warranty claims are subject to all manufacturer's claim policies and procedures.</p>
+			</div>
+
+		</div>
+		
+	</div>
+	
+
+
+            <div class="form-actions">
+              <input class="btn btn-primary" type="button" value="#springMessage('vm.checkout_customerinfo.placeorder')" onclick="doSubmit(this.form,this.form.t,'placeorder'); this.form.submit();"/>                       
+              <input class="btn" type="button" value="#springMessage('button.BACK')" onclick="history.back();"/>
+            </div>
+
+            <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+            <input type="hidden" name="browser" id="browser">
+          </form>                
+        </div>   
+      </div>
+
+    </div>
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################
+
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+
+    <script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
+    <script type="text/javascript">  
+      function checkbrowserTYPE(){
+        document.getElementById('browser').value=navigator.userAgent.toLowerCase();
+      }
+      
+      $(document).ready(function(){
+        checkbrowserTYPE();
+      });
+    </script>
+  </body>
+</html>

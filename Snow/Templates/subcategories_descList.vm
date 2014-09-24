@@ -1,0 +1,221 @@
+<div class="yui-g">
+  <h1>$categoryName</h1>
+  #set($catContent = $category_centerDTO.getItems().get(0).get('category_center'))
+  #if(($catContent.indexOf("blank") == -1 || !$category.longdesc.isEmpty()) && $categoryImage != "No Image")
+  <div class="yui-u first">
+    <img alt="$categoryName" src="store$categoryImage">
+  </div>
+  <div class="yui-u">  
+    #if($catContent.indexOf("blank") == -1)
+      #parse($category_centerDTO.getItems().get(0).get('category_center'))
+    #else
+      $!category.longdesc
+    #end
+  </div>
+  #end
+</div>
+#if($childCategoriesDTO.items.size() > 0)
+<ul class="subcat-list">
+#foreach($temp in $childCategoriesDTO.items) 
+  #set($category = $pageTile.getItemObject($childCategoriesDTO, $temp, "c"))
+  #if($category.thumbimage != "No Image")
+  <li>
+    <h3><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")">$category.name</a></h3>
+    <p><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")"><img src="store$category.thumbimage" alt="$category.name" ></a></p>
+  </li>
+  #end
+#end
+</ul>
+#end
+#if($childItemsDTO.items.size() > 0)
+<div class="item-view">
+  <a class="list #if($itemView == 'list')selected#{end}" href="#" onclick="changeView('list', event);"></a>
+  <a class="grid #if($itemView == 'grid')selected#{end}" href="#" onclick="changeView('grid', event);"></a>
+</div>
+ <div class="pagination">
+## START PAGINATION
+#set($childItemsViewDTO = $multiPageViews.get("childItemsDTO"))
+#if ($childItemsViewDTO && $childItemsViewDTO.itemsCount)
+  <span>${childItemsViewDTO.itemsCount} items found</span>
+                
+  #if($childItemsViewDTO.pagesCount > 1)
+    #if ($childItemsViewDTO.previousUrl)
+  &#45;<a href="$childItemsViewDTO.previousUrl">Prev</a>
+    #else
+       #if ($childItemsViewDTO.currentPageIndex == 1)
+      <span>Prev</span>
+       #end
+    #end
+  
+    #foreach($page in $childItemsViewDTO.indexList)
+      #if($page == $childItemsViewDTO.currentPageIndex)
+        $childItemsViewDTO.currentPageIndex
+      #else
+         #if($velocityCount < $childItemsViewDTO.pagesCount+1)
+          <a href="${childItemsViewDTO.multiPageURL}$page">$page</a>
+         #end
+      #end
+    #end
+                
+    #if ($childItemsViewDTO.nextUrl)
+       <a href="$childItemsViewDTO.nextUrl">Next</a>
+    #end
+  #end                
+#else
+  No items found
+#end
+## END PAGIGINATION
+</div>
+#end
+#******** Category Item List ********#
+#set($itemMax = $childItemsDTO.items.size())
+#if($itemMax > 0)
+<div id="item-ls" #if($itemView == 'list')class="show"#{else}class="hide"#end>
+#set($itemCount = 1)
+#set($lastRow = "")
+#if($childItemsDTO.items.size())
+  #foreach($temp in $childItemsDTO.items) 
+    #set($item = $pageTile.getItemObject($childItemsDTO, $temp, "i"))
+    #set($ilongdesc = $pageTile.getItemObject($childItemsDTO, $temp, 'longdesc'))
+  <div class="item-row${lastRow}">
+    <div class="details">
+
+<!-- MODJP update URL string -->
+
+
+
+<!-- MODJP -->
+      <h2><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$!item.itemid")">$!item.title</a></h2>
+      <div class="properties">
+        #foreach($prop in $item.Properties)
+          #if($prop && ($prop.propname !="" && $prop.propvalue !="" && $prop.propname !="Search_Terms" && $prop.propname !="Master Item" && $prop.propname != "Qualifier"))
+        <p class="prop"><span>${prop.propname.replace("_", " ")}:</span><span>$prop.propvalue</span></p>
+          #end
+        #end
+      </div>
+        <div class="desc">
+        #if($ilongdesc.length() > 100)
+          <p>$!ilongdesc.substring(0, 100)...</p>
+        #else
+          <p>$!ilongdesc</p>
+        #end
+          <a href="store.html?vid=$vendorSettingsDTO.vendorId&iid=$!item.itemid">Learn more</a>
+        </div>
+      <div class="pricing">
+#set($price = $item.itemPrice)
+        <p><span>Price:</span><span class="price">$number.format('currency', $price.price, $viewStoreCurrency.locale)</span></p>
+        <p><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&iid=$!item.itemid")" title="Buy Now">Buy Now</a></p>
+      </div>
+    </div>
+    <div class="img">
+#if($item.thumbnail != "" && $item.thumbnail != "No Image" && !$item.thumbnail.isEmpty())
+      <img alt="$esc.html($!item.title)" src="store$!item.thumbnail">
+#else
+      <img alt="$esc.html($!item.title)" src="store/$vendorSettingsDTO.vendorId/assets/images/no_img.gif">
+#end
+    </div>
+  </div>
+    #set($itemCount = $itemCount + 1)
+    #if($itemCount ==  $itemMax)
+      #set($lastRow = " last")
+    #end
+  #end
+#end
+</div>
+#end
+#******** Category Item Grid ********#
+#set($showItems = $childItemsDTO.items.size())
+#set($itemMax = 3)
+#set($controlCount = 0)
+#if($showItems > 0)
+<div id="item-gd" #if($itemView == 'grid')class="show"#{else}class="hide"#end>
+#set($itemCount = 1)
+#if($childItemsDTO.items.size())
+  #foreach($temp in $childItemsDTO.items) 
+    #if($itemCount == 1)
+  <div class="item-grp"> 
+    #end
+    #set($item = $pageTile.getItemObject($childItemsDTO, $temp, "i"))
+    #set($ilongdesc = $pageTile.getItemObject($childItemsDTO, $temp, 'longdesc'))
+    <div class="item-row">
+      <div class="img">
+#if($item.thumbnail != "" && $item.thumbnail != "No Image" && !$item.thumbnail.isEmpty())
+      <img alt="$esc.html($!item.title)" src="store$!item.thumbnail">
+#else
+      <img alt="$esc.html($!item.title)" src="store/$vendorSettingsDTO.vendorId/assets/images/no_img.gif">
+#end
+      </div>
+      <div class="details">
+        <h2><a href="storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$!item.itemid">$!item.title</a></h2>
+        <div class="properties">
+        #foreach($prop in $item.Properties)
+          #if($prop && ($prop.propname !="" && $prop.propvalue !=""&& $prop.propname !="Search_Terms" && $prop.propname !="Master Item" && $prop.propname != "Qualifier"))
+          <p class="prop"><span>${prop.propname.replace("_", " ")}:</span><span>$prop.propvalue</span></p>
+          #end
+        #end
+        </div>
+          <div class="desc">
+        #if($ilongdesc.length() > 100)
+            <p>$!ilongdesc.substring(0, 100)...</p>
+        #else
+            <p>$!ilongdesc</p>
+        #end
+            <a href="store.html?vid=$vendorSettingsDTO.vendorId&iid=$!item.itemid">Learn more</a>
+          </div>
+        <div class="pricing">
+#set($price = $item.itemPrice)
+          <p><span>Price:</span><span class="price">$number.format('currency', $price.Price, $viewStoreCurrency.locale)</span></p>
+          <p><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&iid=$!item.itemid")" title="Buy Now">Buy Now</a></p>
+        </div>
+      </div>
+    </div>
+    #if($itemCount ==  $itemMax)
+      #set($itemCount = 1)
+      </div>
+    #else
+      #set($itemCount = $itemCount + 1)
+      #if($math.add($controlCount, 1) == $showItems)
+      </div>
+      #end
+    #end
+    #set($controlCount = $controlCount + 1)    
+  #end
+#end
+</div>
+#end
+#if($childItemsDTO.items.size() > 0)
+<div class="pagination">
+## START PAGINATION
+#set($childItemsViewDTO = $multiPageViews.get("childItemsDTO"))
+#if ($childItemsViewDTO && $childItemsViewDTO.itemsCount)
+  <span>${childItemsViewDTO.itemsCount} items found</span>
+                
+  #if($childItemsViewDTO.pagesCount > 1)
+    #if ($childItemsViewDTO.previousUrl)
+  &#45;<a href="$childItemsViewDTO.previousUrl">Prev</a>
+    #else
+       #if ($childItemsViewDTO.currentPageIndex == 1)
+      <span>Prev</span>
+       #end
+    #end
+  
+    #foreach($page in $childItemsViewDTO.indexList)
+      #if($page == $childItemsViewDTO.currentPageIndex)
+        $childItemsViewDTO.currentPageIndex
+      #else
+         #if($velocityCount < $childItemsViewDTO.pagesCount+1)
+          <a href="${childItemsViewDTO.multiPageURL}$page">$page</a>
+         #end
+      #end
+    #end
+                
+    #if ($childItemsViewDTO.nextUrl)
+       <a href="$childItemsViewDTO.nextUrl">Next</a>
+    #end
+  #end                
+#else
+  No items found
+#end
+## END PAGIGINATION
+</div>
+#end

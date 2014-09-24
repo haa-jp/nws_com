@@ -1,0 +1,12 @@
+<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/quicklook/quicklook.js"></script>      
+<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/quicklook/quicklook.css" />
+<script type="text/javascript">
+  jQuery(document).ready(function(){
+    jQuery('#quicklook').quicklook({          
+      'btn_add_label': 'Add to Cart',
+      'vendorId': "$vendorSettingsDTO.vendorId",
+      'isLoggedIn': $welcomeMatDTO.loggedIn          
+    });
+  });
+</script>
+<div id="quicklook"></div>

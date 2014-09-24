@@ -1,0 +1,42 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+	<meta http-equiv="Expires" content="-1" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Cache-Control" content="no-cache" />
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+</head>   
+
+<body>
+	<h2> We have received a Wholesale Account Request</h2>
+	<p> We received a request for a new Wholesale Account. <br> The following information was received.</p>
+	<p> Be sure to verify all information and pass along to the appropriate sales rep for initial contact <strong>BEFORE</strong> starting the credit approval process.</p>
+
+	<hr/>
+	<b> Company Name: </b> ${companyname}<br/>
+	<b>- Name: </b> ${name}<br/>
+	<b>- Email Address: </b> ${email}</br>
+	<b>- Primary Business Phone: </b> ${phone}<br/>
+	<br/>
+	<b>- I am looking for: </b> ${onetime}<br/>
+	<b>- Antisipated Sales: </b> ${estimate}<br/>
+
+	<h3> Address Information</h3>
+	<b> Address: </b> ${address}<br/>
+	<b> Address: </b> ${address2}<br/>
+	<b> City: </b> ${city}<br/>
+	<b> State: </b> ${state}<br/>
+	<b> Zip/postal: </b> ${postcode}<br/>
+	<b> Country: </b> ${country}<br/>
+
+	<h3> Product Lines</h3>
+	<b> RV Items:</b>${rvitems}<br/>
+	<b> MH items:  </b>${mhitems}<br/>
+	<b> Marine Items: </b> ${marineitems}<br/>
+	<b> Powersports items: </b>${snowatvitems}<br/>
+
+	<h3> Additional Notes</h3>
+	<p> ${notes}</p>
+
+</body>
+</html>

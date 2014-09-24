@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#if($request.isSecure())
+#if ($request.getServerPort() ==443)
+#set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+#else
+#set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+#end
+#else
+#if ($request.getServerPort() ==80)
+#set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+#else
+#set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+#end
+#end
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <!-- myaccount.vm-->
+  <head>
+    <title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <base href="$baselink" />
+    <link rel="shortcut icon" href="/favicon.png" />
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+    <link rel="stylesheet" href="$request.getContextPath()/assets/admin/css/calendar.css" type="text/css"/>
+    <link rel="stylesheet" type="text/css" href="assets/plugins/yahooUI/build/container/assets/skins/sam/container.css" />
+    <link rel="stylesheet" type="text/css" href="assets/plugins/yahooUI/build/button/assets/skins/sam/button.css" />
+    <link rel="stylesheet" href="$request.getContextPath()/assets/plugins/yahooUI/build/calendar/assets/skins/sam/calendar.css" type="text/css"/>
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" />
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/datepicker/datepicker.css" type="text/css" media="all" />
+  </head>
+
+  <body class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="row-fluid">
+        <div class="span2">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/account_nav.vm")
+        </div>
+        <div class="span10">
+          <div class="row-fluid">
+            <div class="span12">
+
+              <h1>Open Invoices</h1>
+              #parse($item_topDTO.getItems().get(0).get('item_top'))
+
+                <form class="form-horizontal" id ="nws-form" action="openinvoices.html" method="get" >
+                    <div class="row-fluid">
+                      <div class="span6">
+
+                        <div class="control-group">
+                          <label class="control-label" for="invoicenNumber">Starting Invoice number:</label>
+                          #springBind("openInvoicesDTO.invoiceNumber")
+                          <div class="controls">
+                            <input type="text" name="$status.expression" value="$status.value" />
+                          </div>
+                        </div>
+                        <div class="control-group">
+                          <label class="control-label" for="orderNumber">Order Number:</label>
+                          #springBind("openInvoicesDTO.orderNumber")
+                          <div class="controls">
+                            <input type="text" name="$status.expression" value="$status.value" />
+                          </div>
+                        </div>
+                        <div class="control-group">
+                          <label class="control-label" for="opNumber">Po Number:</label>
+                          #springBind("openInvoicesDTO.poNumber")
+                          <div class="controls">
+                            <input type="text" name="$status.expression" value="$status.value" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="span6">
+                        <div class="control-group">
+                          <label class="control-label" for="date">End Invoice Date:</label>
+                          <div class="controls">
+                            <input class="smtext dateicon" type="text" id="endDate" name="endDate" value="$!openInvoicesDTO.endDate" size="70" />
+                          </div>
+                        </div>
+                        <div class="alert">
+                          <strong>When searching Open Invoices by date range, </strong><br />
+                                        the invoices displayed will go back 30 days for the date you selected..
+                        </div>
+                      </div>
+                    </div>
+                    <!-- end g -->
+
+                    <input type="hidden" name="mode" value="show" />
+                    #springBind("openInvoicesDTO.limit")
+                    <input type="hidden" name="$status.expression" value="$!status.value" />
+                    #springBind("openInvoicesDTO.page")
+                    <input type="hidden" name="$status.expression" value="$!status.value" />
+                    <input type="hidden" name="_targetshow" value="openinvoices.html" />
+                    
+                    <div class="form-actions" >
+                      <button class="btn-large btn-primary" type="submit">Show</button>
+                    </div>
+                  </form>
+
+            </div>
+            <div class="row-fluid">
+              <div class="span12">
+                <div class="btn-group">
+                  #if($openInvoicesDTO.limit==10)
+                  <button class="btn disabled">10</button>
+                  #else
+                  <a class="btn" href="openinvoices.html?numresult=10&endDate=$!openInvoicesDTO.endDate&invoiceNumber=$!openInvoicesDTO.invoiceNumber&orderNumber=$!openInvoicesDTO.orderNumber&poNumber=$!openInvoicesDTO.poNumber">10</a>
+                  #end
+                  #if($openInvoicesDTO.limit==25)
+                  <button class="btn disabled">25</button>
+                  #else
+                  <a class="btn" href="openinvoices.html?numresult=25&endDate=$!openInvoicesDTO.endDate&invoiceNumber=$!openInvoicesDTO.invoiceNumber&orderNumber=$!openInvoicesDTO.orderNumber&poNumber=$!openInvoicesDTO.poNumber">25</a>
+                  #end
+                  #if($openInvoicesDTO.limit==50)
+                  <button class="btn disabled">50</button>
+                  #else
+                  <a class="btn" href="openinvoices.html?numresult=50&endDate=$!openInvoicesDTO.endDate&invoiceNumber=$!openInvoicesDTO.invoiceNumber&orderNumber=$!openInvoicesDTO.orderNumber&poNumber=$!openInvoicesDTO.poNumber">50</a>
+                  #end
+                </div>
+
+                <table class="table table-striped" >
+                  <thead>
+                  <tr>
+                    <th scope="col">Invoice Number</th>
+                    <th scope="col">Order Number</th>
+                    <th scope="col"> PO Number</th>
+                    <th scope="col">Fin Chg</th>
+                    <th scope="col">Invoice Date</th>
+                    <th scope="col">Age Date</th>
+                    <th scope="col">Invoice Amount</th>
+                    <th scope="col">Invoice Balance</th>
+                    <th scope="col">Last Transaction</th>
+                    <th scope="col">Days Open</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  #set ($alter = $alternator.make('odd', 'even'))
+                  #foreach($invoice in $openInvoicesDTO.invoices)
+                  <tr class="$alter">
+                    <th scope="row"><a href="openinvoice.html?inv=$invoice.invoiceNumber&mn=am" data-inv="$invoice.invoiceNumberf">$invoice.invoiceNumber</a></th>
+                    <td> <a href="nwrevieworder.html?ornum=$invoice.orderNumber&hseq=$invoice.histSequence&gen=$invoice.generation&tptm=pff&mn=am" target="_blank">$invoice.orderNumber</a></td>
+                    <td> $invoice.poNumber</td>
+                    <td>$!number.format('#,###.00', $invoice.financeCharge)</td>
+                    <td>$date.format('M/d/yyyy',$invoice.invoiceDate)</td>
+                    <td>$date.format('M/d/yyyy',$invoice.ageDate)</td>
+                    <td align="right">$!number.format('#,###.00', $invoice.invoiceAmount)</td>
+                    <td align="right">$!number.format('#,###.00', $invoice.invoiceBalance)</td>
+                    <td>$date.format('M/d/yyyy',$invoice.lastTransDate)</td>
+                    <td>$invoice.daysOpen</td>
+                    <td>
+                        <form id="nws-invoice" name="form1" action="http://s1042d3p.northernwholesale.com:89/nws/invoice.php" method="post">
+                           <input type="hidden" value="$invoice.histSequence" name="histseq">
+                           <button class="btn" type="submit">PDF</button> 
+                        </form>
+                   </td>
+                  </tr>
+                  #end
+                  </tbody>
+                </table>
+                
+                <div class="pagination">
+                  <ul>
+#foreach($curPage in $openInvoicesDTO.pageList)
+  #if($openInvoicesDTO.page)
+    #if($curPage == $openInvoicesDTO.page)
+                  <li><span>$curPage</span></li>
+    #else
+                  <li><a href="openinvoices.html?page=$curPage&numresult=$!openInvoicesDTO.limit&endDate=$!openInvoicesDTO.endDate&invoiceNumber=$!openInvoicesDTO.invoiceNumber&orderNumber=$!openInvoicesDTO.orderNumber&poNumber=$!openInvoicesDTO.poNumber">$curPage</a></li>
+    #end
+  #else
+    #if($curPage == 1)
+                  <li><span>$curPage</span></li>
+    #else
+                  <li><a href="openinvoices.html?page=$curPage&numresult=$!openInvoicesDTO.limit&endDate=$!openInvoicesDTO.endDate&invoiceNumber=$!openInvoicesDTO.invoiceNumber&orderNumber=$!openInvoicesDTO.orderNumber&poNumber=$!openInvoicesDTO.poNumber">$curPage</a></li>
+    #end
+  #end
+#end
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+        </div><!-- end of content -->
+        </div>
+      </div><!-- end of yui3-u-1 -->
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+    </div><!-- END yui3-g -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+   <!--  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/myaccount-invoices.js"></script>  -->
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" />
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type="application/javascript">
+      $('#endDate').datepicker({format:'yyyy/mm/dd'});
+    </script>
+  </body>
+</html>

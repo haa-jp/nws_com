@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>#springMessage("vm.checkout_pickaddr.vm.title")</title>
+    <meta name="interestgroup" content="tp">
+    <meta name="prodtype" content="">
+#if($vendorSettingsDTO.themeId) 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/commonCSS-JS.vm")
+#else
+  #parse("$vendorSettingsDTO.vendorId/commonCSS-JS.vm")
+#end
+    <script language="javascript">
+      function upAddress(mode) {
+        document.frm.t.value=mode;
+        document.frm.submit();
+      }
+    </script>
+  </head>
+  <body>
+    <div id="masterWrapper">
+      <!-- Start header -->
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+#else
+       #parse("$vendorSettingsDTO.vendorId/header.vm")
+#end
+      <!-- End header -->
+      <!--start content-->
+      <div id="bd">
+        <div id="wide-content" class="checkout">
+              <h1>Please pick your shipping address</h1>
+              <div class="tablediv">
+                <form name="frm" action="pickaddress.html" method="POST">
+                    <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+                    <input type="hidden" name="t">
+                  <table cellspacing="0" cellpadding="0" border="0"class="product-table">
+#foreach($address in $customerAddressDTO)
+    <tr>
+    <td>
+  #springBind("checkoutViewDTO.shipaddressid")
+      <input type="radio" name="$status.expression" value="$address.addressid" />
+    </td>
+      <td>
+      $address.nickname <a href="myaccount.html?mode=editshippingaddress&addressid=$address.addressid">#springMessage("word.edit")</a>
+      <br/>
+      $address.address1
+      <br/>
+      $address.city
+      <br/>
+      #if($address.provinceid == 0)
+        $address.anotherprovince
+      #else
+        #foreach($province in $provincesInUse)
+          #if($address.provinceid == $province.id)
+            $province.name
+          #end
+        #end
+      #end
+      #if($address.postal.length() > 0)
+      $address.postal
+      #end
+      <br/>
+      #foreach($country in $countriesInUse)
+        #if($address.countryid == $country.id)
+          $country.name
+      <br/>
+        #end
+      #end
+    </td>
+  </tr>
+#end
+      <tr>
+    <td width="1">
+            <input id="addNewaddress" type="radio" name="shipaddressid" value="0"/>
+    </td>
+    <td>
+     #springMessage("vm.shippingaddress.newadd") 
+    <br/>
+    </td>
+      </tr>
+</table>
+                    
+  <div class="okCancelPos">
+          <input type="button" class="btnLogin btnclass" value="Continue" onClick="javascript:if(document.getElementById('addNewaddress').checked){upAddress('add');return true;}else{upAddress('continue');return true;}"/>
+      <br/>
+      <br/>
+      <br/>
+      * We cannot accept electronic orders from all countries.
+  </div>
+                </form>
+              </div>
+              <!--end tablediv-->
+        </div>
+        <!--end wide-content-->
+      </div>
+      <!--end bd-->
+      <!-- Start footer -->
+#if($vendorSettingsDTO.themeId) 
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+#else
+       #parse("$vendorSettingsDTO.vendorId/footer.vm")
+#end
+      <!-- End footer -->
+    </div>
+    <!-- End masterWrapper-->
+  </body>
+</html>

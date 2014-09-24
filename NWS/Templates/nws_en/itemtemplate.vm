@@ -1,0 +1,454 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#set($itemRow = $singleItemDTO.getItem(0))
+#if($itemRow)
+  #set($item = $pageTile.getItemObject($singleItemDTO, $itemRow , "i"))
+  #if($item)
+    #set($price = $item.itemPrice)
+  #end
+  #set($printitemid = $pageTile.getItemObject($singleItemDTO, $itemRow , "itemid"))
+#end
+
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+#if(!${welcomeMatDTO.loggedIn})
+<script type="text/javascript">
+   window.location = "$baselink/signin.html?vid=20120606532&mt=1";
+</script>
+#end
+
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+
+#if ($pageTileDictionaryDTO)
+  ###set ($storeMainCategoriesDTO=$pageTileDictionaryDTO.getPageTile("storeMainCategoriesDTO") )
+  #set ($childItemsHomeDTO=$pageTileDictionaryDTO.getPageTile("childItemsHomeDTO") )
+  #set ($catDropMenuDTO=$pageTileDictionaryDTO.getPageTile("catDropMenuDTO") )
+#end
+
+#set($metadescription= $item.metadescription)
+#set($keywords= $item.keywords)
+#set($pagetitle= $item.pagetitle)
+#if($request.getParameter("pf"))
+  #set($printView = $request.getParameter("pf"))
+#end
+
+
+<html xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
+  <!-- itemtemplate.vm--><head>
+      <!-- Facebook Graph Protocol -->
+    <meta property="og:title" content="${esc.html($item.title)}" />
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content="${baselink}${seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")}" />
+    <meta property="og:image" content="${baselink}store$item.itemimage" />
+    <meta property="og:site_name" content="$vendorSettingsDTO.SiteName" />
+<!--
+    <meta property="fb:admins" content="100001477813120" />
+-->
+    <meta property="fb:app_id" content="263181867092117"/>
+
+    <meta property="og:description" content="!${esc.html($item.shortdesc)}" />
+    <!-- End of Facebook Graph Protocol -->
+
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="description" content="$!metadescription" />
+    <meta name="keywords" content="$!keywords" />
+    <base href="$baselink" />
+    <title >$!pagetitle</title>
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/deliveryoption/deliveryoption.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/showimage/showimage.css">
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/commerce/commerce_shop.css"/>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+#if($printView && $printView == "y")
+    <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/print.css" media="screen,print"/>
+#end
+  </head>
+  <body class="nws item" id="item">
+  <input type="hidden" id="formName" value="F$item.itemid">
+
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <input type="hidden" id="js-vid" value="$vendorSettingsDTO.vendorId">
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="row-fluid">
+<!-- jp --> <div class="span3"> 
+        <div class="data-container">
+          <div class="side-nav">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/side_nav.vm")
+          </div>
+          </div>
+<!-- jp - end 3-->          </div>
+<!-- jp -->          <div class="span9">
+          <div class="row-fluid main">
+  #parse($item_topDTO.getItems().get(0).get('item_top'))
+              <div ><h1 class="title itemTitle"><span id="js-item-title-$item.itemid"> $item.Title </span></h1></div>
+              <h2> $item.shortdesc</h2>
+              <div class="span12">
+                <div class="row-fluid">
+                  <div class="span7">
+                    <div class="row-fluid">
+
+                      <div class="preview span6">
+                        #if($item.storeFeatured )
+                          Storewide Feature &nbsp;&nbsp;
+                        #end
+                        #if($item.catFeatured)
+                          Featured &nbsp;&nbsp;
+                        #end
+                        #if($item.newItem)
+                          New &nbsp;&nbsp;
+                        #end
+                        #if($item.onSale)
+                           On Sale &nbsp;&nbsp;
+                        #end
+
+                        <a id="js-item-imagelink-$item.itemid" href="store$item.largeimage" rel="showImage" title="$item.title">
+                            <img id="js-item-image-$item.itemid" name="slika" src="store$item.itemimage"></a>
+                        <a id="js-item-imagelink-$item.itemid" href="store$item.largeimage" rel="showImage" title="$item.title">
+                        #springMessage("vm.itemTemplate.msg1")</a>
+                      </div>
+                      <div class="top-details span6">
+                        #*
+                          ## Whenever reviews is ready, verify css that margins is not messing up layout
+                          <div class="reviews">
+                          </div> <!-- review place holder -->
+                        *#
+                        <p><b> NWS#: </b><span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></p>
+                        <p><b>MFG Item Number: </b> $item.mfgpartno</p>
+
+                     #foreach($prop in$item.properties)
+                         #if($prop.propname &&($prop.propname=='Additional Freight Code' && $prop.propvalue!=''))
+                         <p><b>Freight Intensive Item</b> : Code: $prop.propvalue</p>
+                         #end
+                        
+                     #end
+
+                       #if($list.size($item.attributes) != 0)
+                        <div class="item-attributes">
+                          <p class="section-title">
+                            Options for this item are available.
+                            Please make you selection.
+                          </p>
+                          <img src="store$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/preloader.gif" alt="Loading" id="preloader" />
+                          <div id="js-item-attributes-$item.itemid" class="item-attr-section">
+                          </div>
+                        </div>
+                        #else
+                          <div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
+                        #end
+                      </div>
+                    </div>
+                    <div class="row-fluid">
+                      <div class="thumbs span12">
+                      #if($item.smallimage!="")
+                        <a href="#" rel="tb"><img id="js-item-cimage-$item.itemid" src="store$item.smallimage" alt=""/></a>
+                      #end
+
+                      #if($item.smallimage2!="")
+                        <a href="#" rel="tbA"><img src="store$item.smallimage2" alt=""/></a>
+                      #end
+                      #if($item.smallimage3!="")
+                        <a href="#" rel="tbB"><img src="store$item.smallimage3" alt=""/></a>
+                      #end
+                      #if($item.smallimage4!="")
+                        <a href="#" rel="tbC"><img src="store$item.smallimage4" alt=""/></a>
+                      #end
+                      #if($item.smallimage5!="")
+                        <a href="#" rel="tbD"><img src="store$item.smallimage5" alt=""/></a>
+                      #end
+                      </div>
+                    </div>
+                  </div><!-- end span7-->
+                  <div class="span1"></div>
+                  <div class="span4">
+<!-- start jp mod -->
+#if(${welcomeMatDTO.loggedIn})
+   #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_actions.vm")
+#else
+                    <p>You must first <a href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=${welcomeMatDTO.currentEncodePage}&loginway=header'>#springMessage("vm.header.login")</a> to view pricing and purchase items</p>
+#end
+ 
+ <!-- end jp mod -->
+                    <p><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank>#springMessage('vm.itemTemplate.printerfriendly')</a></p>
+                    <p><a href="action.html?mode=addWishlist&iid=$item.itemid&vid=$vendorSettingsDTO.vendorId&qty=1&url=storeitem.html%3Fiid%3D$item.itemid%26vid%3D$vendorSettingsDTO.vendorId">Add to your Watch List</a></p>
+                    <p> <a href="wishlist.html?vid=$vendorSettingsDTO.vendorId&action=add" title="add this ite tot you wish list"> View Your Watch List </a></p>
+                    <p><a href="${seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$item.itemid")}?tptm=ex_en">Extended View</a></p>
+                    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_logo.vm")
+                  </div><!-- end span4 -->
+                  
+                  
+                </div>
+                ############### Mini Basket for SKUs ################
+                #if($list.size($item.attributes) != 0)
+                <div class="row-fluid">
+                  <div class="span3"></div>
+                  <div class="span9">
+                    <ul id="item-basket"></ul>
+                  </div>
+                </div>
+                #end
+                ############### End Mini Basket for SKUs ################
+                <div>
+
+   #parse($item_centerDTO.getItems().get(0).get('item_center'))
+                  <div class="separator grey">&nbsp;</div>
+                  <div class="item-secondary">
+  #if($item.longdesc!="" )
+                    <div class="title subTitle2">#springMessage('vm.itemTemplate.desc')</div>
+                    <div id="js-item-longdesc-$item.itemid" class="desc">$!item.longdesc</div>
+  #end
+  #if($item.longdesc2!="")
+                    <div class="title subTitle2">Features </div>
+                    <div id="js-item-longdesc2-$item.itemid" class="desc">$!item.longdesc2</div>
+  #end
+                  </div>
+                </div>
+              </div><!-- end span12-->
+            <div class="separator">&nbsp;</div>
+            <div class="row-fluid">
+              <div class="span12">
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_accessoryItems.vm")
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_alsolike.vm")
+  ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_reviews.vm")
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_recentlyViewed.vm")
+              </div>
+            </div>
+            <div class="separator">&nbsp;</div>
+          </div><!-- end main? -->
+          <!-- jp -end 9-->          </div>
+      </div>
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+    </div><!-- end container-fluid -->
+    <div id="deliverypopup" class="popup_menu"></div>
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+  <script language="javascript" src="assets/plugins/lowpro/lowpro.js"></script>
+  <script language="javascript" src="assets/plugins/jshashtable/jshashtable.js"></script>
+  <script language="javascript" src="assets/plugins/domec/domec.js"></script>
+
+  <script language="javascript" src="assets/commercelib/commerce/commerce_jQuery.js"></script>
+  <script language="javascript" src="assets/commercelib/commerce/commerce_shop_jQuery.js"></script>
+
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/overrides.js"></script>
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quicklook_ext.vm")
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quickadd_ext.vm")
+  <script type="text/javascript" src="assets/plugins/juitter/jquery.juitter.js"></script>
+  <script src="assets/plugins/extlogin/popup.js" type="text/javascript"></script>
+  <script src="assets/commercelib/showimage/showimage.js" type="text/javascript"></script>
+  <script type="text/javascript">
+      var $j = jQuery.noConflict();
+
+      //multi-images support
+      jQuery().ready(function(){
+        jQuery('.thumbs a').on('click', function (e){
+          e.preventDefault();
+          var src = jQuery(this).children('img').attr('src');
+          src_l = src.replace("small", "largeimage");
+          src_m = src.replace("small", "item");
+          jQuery('.preview').children('a').attr('href', src_l);
+          jQuery('.preview a').children('img').attr('src', src_m);
+        });
+        jQuery('.addToCartDummy').hide();
+        jQuery('.addToCartBtn').show();
+        jQuery('.listing .select-all').click(checkAllItems(this));
+      });
+    </script>
+
+    #set( $tweetHash= ${tweetHelper.tweetHash($request.getServerName(), $item)})
+    <!-- $tweetHash -->
+    <script type="text/javascript" >
+
+      function checkItem(el, item){
+        var itemToProcess = $j('input[name=basketItems['+item+'].itemToProcess]');
+        var itemsCount = $j('#itemscount');
+
+        //Variables to append to the form
+        var values =  ['basketItems['+item+'].itemToProcess', 'basketItems['+item+'].quantity', 'basketItems['+item+'].vendorId', 'basketItems['+item+'].itemId'];
+
+        if($j(itemToProcess).val() == "true"){
+          $j(itemToProcess).val("false");
+          $j(itemsCount).val(Number($j(itemsCount).val())-1);
+        }
+        else{
+          $j(itemToProcess).val("true");
+          $j(itemsCount).val(Number($j(itemsCount).val())+1);
+        }
+
+        if($j(el).attr('checked') == true){
+          for(var i = 0; i < values.length; i++){
+            appendToForm(values[i]);
+          }
+        }
+        else{
+          for(var i = 0; i < values.length; i++){
+            removeFromForm(values[i]);
+          }
+        }
+      }
+
+/*      function appendToForm(data){
+        var input = $j("<input />").attr("type", "hidden").attr("name", ''+data).val($j('.item input[name='+ data +']').val());
+        $j('form[name=${formName}]').append($(input));
+      }
+
+      function removeFromForm(data){
+        $j('form[name=${formName}]').find('input[name='+ data +']').remove();
+      }
+*/
+      function checkAllItems(checked){
+        var status = $j(checked).attr('checked');
+        // status will have boolean values (true, false)
+        $j('.listing input[name$=itemToProcess]').attr('value', status);
+      }
+
+      function initJuitter(){
+       //    alert('juitter ready: $tweetHash !');
+        jQuery.Juitter.start({
+        searchType:"searchWord",
+        searchObject: '%23$tweetHash',
+
+        placeHolder:"juitterContainer",
+        loadMSG: "#springMessage("vm.itemTemplate.loadmsgs")",
+        imgName: "loader.gif",
+        total: 20,
+        readMore: "#springMessage("vm.itemTemplate.readontwitter")",
+        nameUser:"#springMessage("vm.itemTemplate.image")",
+        openExternalLinks:"newWindow",
+        filter:"sex->*BAD word*,porn->*BAD word*,fuck->*BAD word*,shit->*BAD word*",
+        noTweetsYetMSG:'#springMessage("vm.itemTemplate.twitter.notweets.msg")'
+        });
+      }
+
+      function initNavPopUp(){
+        jQuery('.navPopup').bind("mouseleave",function(){jQuery('.sideNavToggle').slideUp();});
+      }
+
+      // $j().ready(function(){
+        // if($j('.thumbs a').children().length > 0){
+          // $j('.thumbs a').click(function (event){
+            // event.preventDefault();
+            // var src = $j(this).children('img').attr('src');
+            // src_l = src.replace(/small|thumbnails/, "largeimages");
+            // src_m = src.replace(/small|thumbnails/, "images");
+            // $j('.preview').children('a').attr('href', src_l);
+            // $j('.preview a').children('img').attr('src', src_m);
+          // });
+        // }
+        // $j('.addToCartDummy').hide();
+        // $j('.addToCartBtn').show();
+        // //$j('.listing .select-all').click(checkAllItems(this));
+        // initNavPopUp();
+        // initJuitter();
+      // });
+
+      $j().ready(function (){
+        $j('#tab-set>div').hide();
+        var active = $j('.tab-nav li.selected a').attr('href');
+        $j(active).show();
+
+        $j('.tab-nav li a').click(function (event){
+          event.preventDefault();
+          $j('.tab-nav li').removeClass('selected');
+          $j(this).parent().addClass('selected');
+          $j('#tab-set>div').hide();
+          active = $j('.tab-nav li.selected a').attr('href');
+          $j(active).show();
+        });
+      });
+    </script>
+    <!-- end submit script -->
+    <script type="text/javascript">
+      var formSubmit = document['F' + $item.itemid].submit;
+      document['F' + $item.itemid].submit = function(){$j('form[name="F'+$item.itemid+'"]').trigger('submit',{submit:formSubmit});}
+      $j('form[name="F'+$item.itemid+'"]').submit(function(e){
+        e.preventDefault();
+        //e.data
+        $j('.popup').hide();
+        $j('.qty-input').val('');
+        if (typeof ItemBasket !== "undefined") {
+          var miniBasketAttr = ItemBasket.formAttributes('.item-attributes');
+          var formOptions = jQuery('form[name="F${item.itemid}"]').serializeArray();
+          var miniBasketItem = _.where(formOptions, {name: "basketItems[0].itemId"})[0].value
+          var miniBasketOptions = _.filter(formOptions, function(param) {
+            return param.name.match(/^basketItems\[0\].attributes/);
+          });
+          var miniBasketObj = {
+            itemId: miniBasketItem,
+            options: miniBasketOptions,
+            attributes: miniBasketAttr,
+            formData: formOptions,
+            formAction: $j(this).attr('action')
+          };
+        } else {
+          var miniBasketObj = false;
+        }
+        var toastr_item_title = jQuery('#js-item-title-$item.itemid').text();
+        var toastr_item_code = jQuery('#js-item-code-$item.itemid').text();
+        toastr.info('Processing item #' + toastr_item_code + '<br />' + toastr_item_title);
+        jQuery.ajax({
+          type: "POST",
+          url: $j(this).attr( 'action' ),
+          data: $j(this).serialize(),
+          success: function( response ) {
+          //update minibasket
+          updateMiniBasket(true, miniBasketObj);
+          //end update minibasket
+          }
+        });
+      });
+
+      function updateMiniBasket(showToastr, miniBasketObj) {
+        jQuery.ajax({
+          url: 'basket.ajx',
+          data: 'vid='+$vendorSettingsDTO.vendorId,
+          type: 'get',
+          dataType: 'json',
+          success: function(response){
+            var result = response['_Result'],
+                i = 0,
+                len = result['basketItems'].length,
+                qty = 0,
+                total = 0,
+                total = parseFloat(result.total);
+            
+//            $j('.mini-basket-qty').text(items);
+            $j('.mini-basket-total').text('$'+total.toFixed(2));
+            if (typeof ItemBasket !== "undefined") {
+                // Send to minibasket
+                ItemBasket.processBasket(miniBasketObj, data.Products);
+            }
+            if (typeof showToastr !== 'undefined' && showToastr == true) {
+              toastr.success('Item Added to Cart!');
+            }
+          }
+        });
+      }
+    </script><!-- end submit script -->
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/handlebars-v1.1.2.js"></script>
+    ############### Mini Basket for SKUs ################
+    #if($list.size($item.attributes) != 0)
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/mini-basket/underscore.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/mini-basket/backbone.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/mini-basket/item-basket.js"></script>
+    #end
+    ############### End Mini Basket for SKUs ################
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/lost_sale.vm")
+  </body>
+</html>

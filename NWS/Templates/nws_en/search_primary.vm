@@ -1,0 +1,210 @@
+#*
+#if ($CookiesNWDTO && $CookiesNWDTO.getCookieValue('ct'))
+	#if($CookiesNWDTO.getCookieValue('ct')=="rv")
+		#set($catselect = $search_rvcatDTO)
+		#set($ct="rv")
+
+	#elseif($CookiesNWDTO.getCookieValue('ct')=="mh")
+		#set($catselect = $search_mhcatDTO)
+		#set($ct="mh")
+
+	#elseif($CookiesNWDTO.getCookieValue('ct')=="mr")
+		#set($catselect = $search_mrcatDTO)
+		#set($ct="mr")
+
+	#elseif($CookiesNWDTO.getCookieValue('ct')=="ps")
+		#set($catselect = $search_pscatDTO)
+		#set($ct="ps")
+
+	#end
+#end
+*#
+<script>
+	var catalogs = {
+		#if($search_rvcatDTO)
+			rv: {
+				searchName: "RV / MH Catalog",
+				name: "RV Parts & Accessories",
+				vals: [
+					#foreach($temp in $search_rvcatDTO.items)
+					#set($category = $pageTile.getItemObject($search_rvcatDTO, $temp, "c"))
+					{
+						catid: "$category.categoryid",
+						catname: "$category.name"
+					},
+					#end
+				]},
+		#end
+
+		#if($search_mhcatDTO)
+			mh: {
+				searchName: "RV / MH Catalog",
+				name: "Manufactured Housing Parts & Accessories",
+				vals: [
+					#foreach($temp in $search_mhcatDTO.items)
+					#set($category = $pageTile.getItemObject($search_mhcatDTO, $temp, "c"))
+					{
+						catid: "$category.categoryid",
+						catname: "$category.name"
+					},
+					#end
+				]},
+		#end
+
+		#if($search_mrcatDTO)
+			mr: {
+				searchName: "Marine Catalog",
+				name: "Marine Parts & Accessories",
+				vals: [
+					#foreach($temp in $search_mrcatDTO.items)
+					#set($category = $pageTile.getItemObject($search_mrcatDTO, $temp, "c"))
+					{
+						catid: "$category.categoryid",
+						catname: "$category.name"
+					},
+					#end
+				]},
+		#end
+
+		#if($search_pscatDTO)
+			ps: {
+				searchName: "Powersports Catalog",
+				name: "Powersports Parts & Accessories",
+				vals: [
+					#foreach($temp in $search_pscatDTO.items)
+					#set($category = $pageTile.getItemObject($search_pscatDTO, $temp, "c"))
+					{
+						catid: "$category.categoryid",
+						catname: "$category.name"
+					},
+					#end
+				]}
+		#end
+	};
+
+
+	function fillCategories(catalog){
+		var catSelector = jQuery("#origcatid").html("<option value=''>- Any Category -</option>");
+
+		if(catalog.length > 0){
+			var catList = catalogs[catalog];
+			for(var i=0; i<catList.vals.length; i++){
+				catSelector.append("<option value='"+catList.vals[i].catid+"'>"+catList.vals[i].catname+"</option>");
+			}
+		}
+	}
+
+	function prepareParams(){
+		var catalog = jQuery("#catalog");
+		var catalogVal = catalog.val();
+		var origcatid = jQuery("#origcatid");
+
+		if(catalogVal.length > 0){
+			catalog.find("option:selected").val(catalogs[catalogVal].searchName);
+		} else {
+			catalog.attr("name", "");
+		}
+		if(origcatid.val() == ""){
+			origcatid.attr("name", "");
+		}
+	}
+
+	function changePlaceholder(){
+		jQuery(function(){
+#*			#if($ct)
+				jQuery("#key").attr("placeholder", "Search "+ catalogs["$ct"].name);
+			#else
+				jQuery("#key").attr("placeholder", "Search: NWS# / mfg# / Description");
+			#end 
+*#			
+				jQuery("#key").attr("placeholder", "Search: NWS# / mfg# / Description");
+
+		});
+	}
+
+	function bindReady(handler){
+		var called = false
+		function ready() {
+			if (called) return
+			called = true
+			handler()
+		}
+
+		if ( document.addEventListener ) {
+			document.addEventListener( "DOMContentLoaded", function(){
+				ready()
+			}, false )
+		} else if ( document.attachEvent ) {
+			if ( document.documentElement.doScroll && window == window.top ) {
+				function tryScroll(){
+					if (called) return
+					if (!document.body) return
+					try {
+						document.documentElement.doScroll("left")
+						ready()
+					} catch(e) {
+						setTimeout(tryScroll, 0)
+					}
+				}
+				tryScroll()
+			}
+			document.attachEvent("onreadystatechange", function(){
+
+				if ( document.readyState === "complete" ) {
+					ready()
+				}
+			})
+		}
+
+		if (window.addEventListener)
+			window.addEventListener('load', ready, false)
+		else if (window.attachEvent)
+			window.attachEvent('onload', ready)
+	}
+
+	if(typeof jQuery != "undefined"){
+		jQuery(function(){
+			changePlaceholder();
+		})
+	} else {
+		bindReady(function(){
+			changePlaceholder();
+		})
+	}
+</script>
+
+<form action="asearch.html" onsubmit="checkKey();" id="searchForm" class="navbar-search">
+	<input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId"/>
+	<input name="keyword" value="$!keyword" id="key" type="text" placeholder="" class="search-query span3"/>
+
+<!-- Catalog seletor -->
+#*
+#if($ct)
+	<select id="catalog" name="catalog" style="display: none;">
+		<option value="$ct"></option>
+	</select>
+#else
+*#
+	<select id="catalog" name="catalog" onchange="fillCategories(jQuery(this).val());">
+		<option value="">- Any Catalog -</option>
+		<option value="rv">RV</option>
+		<option value="mh">Manufactured Housing</option>
+		<option value="mr">Marine</option>
+		<option value="ps">Powersports</option>
+	</select>
+##end
+
+<!-- Category selector -->
+	<select id="origcatid" name="origcatid">
+		<option value="">- Any Category -</option>
+#if($catselect)
+	#foreach($temp in $catselect.items)
+		#set($category = $pageTile.getItemObject($catselect, $temp, "c"))
+		<option value="$category.categoryid">$category.name</option>
+	#end
+#end
+	</select>
+
+	<button class="btn btn-primary" onclick="prepareParams()" type="submit">GO</button>
+	<!-- <a href="advancedsearch.html?vid=$vendorSettingsDTO.vendorId">Advanced</a> -->
+</form>

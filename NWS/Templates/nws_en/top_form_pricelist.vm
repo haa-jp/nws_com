@@ -1,0 +1,4 @@
+<div class="alert alert-info alert-block">
+   <p>Please fill out this short informational form to tell us what kind of price list you need. Every dealer is different and we will do our best to accommodate your requests. Please allow one business day to create and return the price list you have requested</p>
+   <p>If you would prefer not to fill out our <a href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/downloads/forms/Price_List_Request_Form.pdf" alt="Printable Price List Request Form" target="_blank">printable form</a> and submit your request in writing, please feel free to fill out our Price List Request form, and send it back to us by mail or, <b>Fax you request to (651) 429-5757</b> and we'll get you taken care of right away.</p>
+</div>

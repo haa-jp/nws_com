@@ -1,0 +1,108 @@
+              <div class="warning" id="registerErrors" style="display:none"></div>
+              <div class="row-fluid"> <!-- 3 col start -->
+
+                <div class="span4"> <!-- col2 -->
+                  <fieldset>
+                  		<legend>Requested Login</legend>
+#springBind("registerViewDTO.customerDTO.loginname")
+                    <div>
+                      <label for="customerDTO.loginname">#springMessage("word.email")</label>
+                      <input class="required email" size="30" maxlength="50" value="${status.value}" id="customerDTO.loginname" name="customerDTO.loginname" type="text"/>
+                    </div>
+#springBind("registerViewDTO.confirmLogin")
+                    <div>
+                      <label for="confirmLogin">#springMessage("vm.register.confirmemail")</label>
+                      <input class="required email" size="30" maxlength="50" value="${status.value}" id="confirmLogin" name="confirmLogin" type="text"/>
+                    </div>
+
+#springBind("registerViewDTO.customerDTO.loginpassword")
+                    <div>
+                      <label for="customerDTO.loginpassword">#springMessage("word.password")</label>
+                      <input class="required" value="${status.value}" size="30" maxlength="20" id="customerDTO.loginpassword" name="customerDTO.loginpassword" type="password" />
+                      <div class="info_needed">#springMessage("vm.register.msg1")</div>
+                    </div>
+#springBind("registerViewDTO.confirmPassword")
+                    <div>
+                      <label for="confirmPassword">#springMessage("vm.register.confirmpassword")</label>
+                      <input class="required" value="${status.value}" size="30" maxlength="20" id="confirmPassword" name="confirmPassword" type="password">
+                    </div>
+                  </fieldset>
+                </div>
+
+              
+                <div class="span4"> <!-- col1 -->
+                	<fieldset>
+						<legend>Your Information</legend>
+#springBind("registerViewDTO.customerDTO.firstName")
+                    <div>
+                      <label for="customerDTO.firstName">#springMessage("vm.register.firstname")</label>
+                      <input class="required" size="30" maxlength="20" value="${status.value}" name="customerDTO.firstName" id="customerDTO.firstName" type="text" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+                    </div>
+#springBind("registerViewDTO.customerDTO.lastName")
+                    <div>
+                      <label for="customerDTO.lastName">#springMessage("vm.register.lastname")</label>
+                      <input class="required" size="30" maxlength="30" value="${status.value}" id="customerDTO.lastName" name="customerDTO.lastName" type="text" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+                    </div>
+                    <div class="spacer"></div>
+#springBind("registerViewDTO.customerDTO.customerAddresses['1'].phone")
+                    <div>
+                      <label for="customerDTO.customerAddresses['1'].phone">#springMessage("vm.register.phone")</label>
+                      <input class="required" id="cname" value="${status.value}" id="customerDTO.customerAddresses['1'].phone" size="30" name="customerDTO.customerAddresses['1'].phone" size="30" maxlength="18" type="text">
+                    </div>
+                  </fieldset>
+                </div>
+                
+                
+                <div class="span4"> <!-- col3 -->
+                  <fieldset>
+                  		<legend>Company Information</legend>
+#if($registerViewDTO.memberType&&$registerViewDTO.memberType == '1')
+                    <div>
+  #springBind("registerViewDTO.customerDTO.customerProperties['Customer Number']")
+                      <label for="$status.expression">Active Customer Number</label>  
+                      <input class="required" size="30" maxlength="50" value="" id="$status.expression" name="$status.expression" type="text"/>
+                      <input type="hidden" name="customerDTO.allCustomerProperties['Customer Number']" value="$!{status.value}">
+                    </div>
+                    <div>
+#springBind("registerViewDTO.customerDTO.customerAddresses['1'].company")
+                    <div>
+                      <label for="customerDTO.customerAddresses['1'].company">#springMessage("vm.register.company")</label>
+                      <input class="required" id ="customerDTO.customerAddresses['1'].company" name="customerDTO.customerAddresses['1'].company" value="${status.value}" type="text" size="30"  onBlur="initCap(this)" onSubmit="initCap(this)"/>
+                    </div>                  
+#springBind("registerViewDTO.customerDTO.customerAddresses['1'].postal")
+                    <div>
+                      <label for="customerDTO.customerAddresses['1'].postal">#springMessage("vm.register.postal")</label>
+                      <div class="f-field">
+                        <input class="required" size="30" maxlength="10" value="${status.value}" id="customerDTO.customerAddresses['1'].postal" name="customerDTO.customerAddresses['1'].postal" type="text" onblur="fieldBlurred(this,3);#if($registerViewDTO.islogin) shippingAddressListenerAfterReg(${vendorSettingsDTO.vendorId},this.form,1,2);#else shippingAddressListener(${vendorSettingsDTO.vendorId},this.form,1,2,false);#end"/>
+                      </div>
+                    </div>
+                    <div class="spacer"></div>
+ #springBind("registerViewDTO.customerDTO.customerProperties['View AR Data']")
+                      <label for="$status.expression">Do you approve bills and invoices for this account?</label>  
+                      <div>
+                        <select id="$status.expression" name="$status.expression">
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                        </select>
+                        <input type="hidden" name="customerDTO.allCustomerProperties['View AR Data']" id="customerDTO.allCustomerProperties['View AR Data']" value="$!{status.value}">
+                      </div>
+                    </div>
+#end
+                  </fieldset>
+                </div>
+              </div> <!-- 3 col end -->
+              
+              
+              <input type="hidden" name="customerDTO.allCustomerProperties['Customer Type']" id="customerDTO.allCustomerProperties['Customer Type']" value="wholesale" />
+              <!-- end of input fields--> 
+
+#springBind("registerViewDTO.customerDTO.customerAddresses['1'].address1")
+<input type="hidden" value="6800 Otter Lake Road" id="${status.expression}" name="${status.expression}" onSubmit="initCap(this)"/>
+#springBind("registerViewDTO.customerDTO.customerAddresses['1'].address2")
+<input type="hidden" value="Suite 2" id="${status.expression}" name="${status.expression}" onSubmit="initCap(this)"/>
+#springBind("registerViewDTO.customerDTO.customerAddresses['1'].city")
+<input type="hidden" value="Lino Lakes" id="${status.expression}" name="${status.expression}" onSubmit="initCap(this)"/>
+#springBind("registerViewDTO.customerDTO.customerAddresses['1'].countryId")
+<input type="hidden" value="1" id="country_id" name="customerDTO.customerAddresses['1'].countryId" />
+#springBind("registerViewDTO.customerDTO.customerAddresses['1'].provinceId" )
+<input type="hidden" value="31" id="region" name="${status.expression}"/>

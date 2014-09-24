@@ -1,0 +1,7 @@
+<div id="logo">
+#foreach($prop in $item.properties)
+  #if($prop.propname == "Logo")
+    <img src="store/$vendorSettingsDTO.vendorId/assets/logos/$prop.propvalue" />
+  #end
+#end
+</div>

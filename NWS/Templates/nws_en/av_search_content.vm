@@ -1,0 +1,156 @@
+#set($advSearchParams = $advancedSolrSearchCommand.searchParameters)          
+   <div class="content">
+################################################################################
+########## Show form with search request #######################################
+################################################################################
+      <div class="advsearch_search">
+         <h2> Catalog Search</h2>                                   
+         <div class="navbar">
+            <div class="navbar-inner search-bar">
+               <div class="container">
+               	  <div class="nav-collapse">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_primary.vm")
+                  </div>
+               </div>
+            </div>
+
+         <h2> Google Site Search</h2>                                   
+<script>
+  (function() {
+    var cx = '003839047038147876990:7kseyseu-j8';
+    var gcse = document.createElement('script'); gcse.type = 'text/javascript'; gcse.async = true;
+    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+        '//www.google.com/cse/cse.js?cx=' + cx;
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(gcse, s);
+  })();
+</script>
+<gcse:search></gcse:search>
+
+
+                <h2>Advanced Search</h2>
+  
+                <form class="form-horizontal" method="get" action="advancedsearch.html?vid=${advancedSolrSearchCommand.vendorId}" onsubmit="createkeyword(this.keyword,this.pricerange,this);">
+                  <div class="control-group">
+                    <label class="control-label">Keyword 1:</label>
+                    <div class="controls">
+                      <input type="text" name="keyword1" #if($advSearchParams.keyword1)value="${advSearchParams.keyword1}"#end>
+                      <select class="vat" name="kw1logic" >
+                        <option value="+" #if($advSearchParams.kw1logic && $advSearchParams.kw1logic=="+") selected #end>AND</option>
+                        <option value="" #if($advSearchParams.kw1logic && $advSearchParams.kw1logic=="") selected #end>OR</option>
+                        <option value="-" #if($advSearchParams.kw1logic && $advSearchParams.kw1logic=="-") selected #end>NOT</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label">Keyword 2:</label>
+                    <div class="controls">
+                      <input type="text" name="keyword2" #if($advSearchParams.keyword2)value="${advSearchParams.keyword2}"#end>
+                      <select class="vat" name="kw2logic" >
+                        <option value="+" #if($advSearchParams.kw2logic && $advSearchParams.kw2logic=="+") selected #end>AND</option>
+                        <option value="" #if($advSearchParams.kw2logic && $advSearchParams.kw2logic=="") selected #end>OR</option>
+                        <option value="-" #if($advSearchParams.kw2logic && $advSearchParams.kw2logic=="-") selected #end>NOT</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label">Keyword 3:</label>
+                    <div class="controls">
+                      <input type="text" name="keyword3" #if($advSearchParams.keyword3)value="${advSearchParams.keyword3}"#end>
+                      <select class="vat" name="kw3logic" >
+                        <option value="+" #if($advSearchParams.kw3logic && $advSearchParams.kw3logic=="+") selected #end>AND</option>
+                        <option value="" #if($advSearchParams.kw3logic && $advSearchParams.kw3logic=="") selected #end>OR</option>
+                        <option value="-" #if($advSearchParams.kw3logic && $advSearchParams.kw3logic=="-") selected #end>NOT</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label">Keyword 4:</label>
+                    <div class="controls">
+                      <input type="text" name="keyword4" #if($advSearchParams.keyword4)value="${advSearchParams.keyword4}"#end>
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label">Price Range:</label>
+                    <div class="controls">
+                      <span>From: </span><input class="vam" type="text" name="minPrice" #if($advSearchParams.minPrice) value="$advSearchParams.minPrice" #end >
+                      <span>To: </span><input class="vam" type="text" name="maxPrice" #if($advSearchParams.maxPrice) value="$advSearchParams.maxPrice" #end >
+                    </div>
+                  </div>
+                  <div class="form-actions">
+                    <input class="btn btn-primary" type="submit" value="Search">
+                  </div>
+                  
+                <input type="hidden" name="keyword">
+                <input type="hidden" name="pricerange">
+              </form>
+  
+
+  
+    #if($facetOnSearchDTO && $facetOnSearchDTO.getItems() && $facetOnSearchDTO.getItems().size()>0)
+      #set($facets = $facetOnSearchDTO.getItems().get(0))
+  
+      #if($pageTile.getItemObject($facetOnSearchDTO,$facets,"price1").size()>0)
+                <br><h1>shop by price</h1>
+                <ul>
+        #foreach($line in $pageTile.getItemObject($facetOnSearchDTO,$facets,"price1"))
+                <li>
+                <a href="#hrefNewRangeParameter("minp" $list.get($line.fieldValue,0) "maxp" $list.get($line.fieldValue,1))">$list.get($line.fieldValue,0)  - $list.get($line.fieldValue,1)</a>
+                <font color='#666666'><font size='-2'>&nbsp;($line.count)</font></font>
+                </li>
+        #end
+                </ul>
+      #end
+  
+  
+      #if($facets && $pageTile.getItemObject($facetOnSearchDTO,$facets,"Brand_p").size()>0 && !$request.getParameter("brand"))
+                <br> <h1>shop by brand</h1>
+                <ul>
+        #foreach($line in $pageTile.getItemObject($facetOnSearchDTO,$facets,"Brand_p"))
+                <li>
+                <a href="#hrefNewParameter("brand" $line.fieldValue)">$line.fieldValue</a>
+                <font color='#666666'><font size='-2'>&nbsp;($line.count)</font></font>
+                </li>
+        #end
+                </ul>
+      #end
+  
+                <!-- Shop By Item Property -->
+  
+      #if($pageTile.getItemObject($facetOnSearchDTO,$facets,"intgroup_p").size()>0 && !$request.getParameter("intgroup"))
+                <br> <h1>shop by interest group</h1>
+                <ul>
+        #foreach($line in $pageTile.getItemObject($facetOnSearchDTO,$facets,"intgroup_p"))
+                <!-- if the facet is an item property add _p after the property name and make sure it is Solr Indexed -->
+                <li>
+                <a href="#hrefNewParameter("intgroup" $line.fieldValue)">$line.fieldValue</a>
+                <font color='#666666'><font size='-2'>&nbsp;($line.count)</font></font>
+                </li>
+        #end
+                </ul>
+      #end
+  
+  
+    #end
+  
+   </div><!-- end advsearch_search -->
+################################################################################
+########## End of show form with search request ################################
+################################################################################
+  
+#if($pageTileDictionaryDTO && $pageTileDictionaryDTO.getPageTile("AdvancedSearchUsingSolrNew") )
+  #set($itemsDTO = $AdvancedSearchUsingSolrNew)
+  #set($itemsPaginationDTO = "AdvancedSearchUsingSolrNew") 
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/pagination.vm")
+<!-- Start item listing -->
+   <div class="listing $!itemViewClass">
+  #foreach($itemIter in $pageTileDictionaryDTO.getPageTile("AdvancedSearchUsingSolrNew").getItems())
+    #set($item = $pageTile.getItemObject($AdvancedSearchUsingSolrNew, $itemIter, "i"))
+    #set($price = $item.itemPrice)
+  
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/product.vm")
+  
+  #end
+   </div> <!-- End item listing -->
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/pagination.vm")
+#end
+</div> <!-- end content -->

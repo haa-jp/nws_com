@@ -1,0 +1,134 @@
+<div class="row-fluid">
+	<ul class="order-actions">
+	  <li class="pull-left">
+<a> Browse Products</a>
+    <!-- <a href="#">Browse Products</a> -->
+    <div id="megamenu" class="megamenu">
+      <ul class="nav nav-pills" id="megaTabs">
+#foreach($temp in $Menu7DTO.items)
+  #set($category = $pageTile.getItemObject($Menu7DTO, $temp, "c"))
+  #if($category.name.toLowerCase().indexOf('rv') != -1)
+        <li class="active"><a href="#rv">$category.name</a></li>
+  #elseif($category.name.toLowerCase().indexOf('manufactured') != -1)
+        <li><a href="#mh">$category.name</a></li>
+  #elseif($category.name.toLowerCase().indexOf('marine') != -1)
+        <li><a href="#mr">$category.name</a></li>
+  #elseif($category.name.toLowerCase().indexOf('powersport') != -1)
+        <li><a href="#ps">$category.name</a></li>
+  #end
+#end
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="rv">
+          <div class="container">
+            <div class="row-fluid">
+              <div class="span12">
+#foreach($temp in $Menu2DTO.items)
+  #set($category = $pageTile.getItemObject($Menu2DTO, $temp, "c"))
+                <p><a data-ct="rv" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")">$category.name</a></p>
+#end
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="mh">
+          <div class="container">
+            <div class="row-fluid">
+              <div class="span12">
+#foreach($temp in $Menu3DTO.items)
+  #set($category = $pageTile.getItemObject($Menu3DTO, $temp, "c"))
+                <p><a data-ct="mh" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")">$category.name</a></p>
+#end
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="mr">
+          <div class="container">
+            <div class="row-fluid">
+              <div class="span12">
+#foreach($temp in $Menu4DTO.items)
+  #set($category = $pageTile.getItemObject($Menu4DTO, $temp, "c"))
+                <p><a data-ct="mr" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")">$category.name</a></p>
+#end
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="ps">
+          <div class="container">
+            <div class="row-fluid">
+              <div class="span12">
+#foreach($temp in $Menu5DTO.items)
+  #set($category = $pageTile.getItemObject($Menu5DTO, $temp, "c"))
+                <p><a data-ct="ps" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")">$category.name</a></p>
+#end
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+#*  <li class="pull-left">
+    <a href="resources/">Policies</a>
+    <div id="megamenuRes" class="megamenu">
+      <ul class="nav nav-pills" id="megaTabs">
+#foreach($temp in $Menu8DTO.items)
+  #set($category = $pageTile.getItemObject($Menu8DTO, $temp, "c"))
+  #if($category.name.toLowerCase().indexOf('vendor') != -1)
+        <li><a href="#vr">$category.name</a></li>
+  #elseif($category.name.toLowerCase().indexOf('dealer') != -1)
+        <li class="active"><a href="#dr">$category.name</a></li>
+  #elseif($category.name.toLowerCase().indexOf('about') != -1)
+        <li><a href="#ab">$category.name</a></li>
+  #end
+#end
+
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="dr">
+          <div class="container">
+            <div class="row-fluid">
+              <div class="span12">
+#foreach($temp in $MenuResourcesDealer.items)
+  #set($category = $pageTile.getItemObject($MenuResourcesDealer, $temp, "c"))
+                <p><a data-ct="dr" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")">$category.name</a></p>
+#end
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="vr">
+          <div class="container">
+            <div class="row-fluid">
+              <div class="span12">
+#foreach($temp in $MenuResourcesVendor.items)
+  #set($category = $pageTile.getItemObject($MenuResourcesVendor, $temp, "c"))
+                <p><a data-ct="vr" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")">$category.name</a></p>
+#end
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-pane" id="ab">
+          <div class="container">
+            <div class="row-fluid">
+              <div class="span12">
+#foreach($temp in $MenuResourcesAbout.items)
+  #set($category = $pageTile.getItemObject($MenuResourcesAbout, $temp, "c"))
+                <p><a data-ct="ab" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${category.categoryid}")">$category.name</a></p>
+#end
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+*#
+  </li>
+  <li class="pull-left"><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22823")"> Quick Order</a></li>
+  <li class="pull-left"><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23046")"> Saved Orders</a></li>
+  <li class="clear"></li>
+</ul>
+</div> <!-- end fluid -->

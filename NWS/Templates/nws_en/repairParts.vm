@@ -1,0 +1,88 @@
+#set($itemLike1=$pageTile.getItemObject($repairPartsDTO,$repairPartsDTO.getItems(),"i"))
+#set($count = 0)
+#set($allProductsInBasket= $session.getAttribute("ProductsDetiles_${vendorSettingsDTO.vendorId}").allProducts)
+#foreach($alsolike in $repairPartsDTO.getItems() ) 
+#set($itemLike=$pageTile.getItemObject($repairPartsDTO,$alsolike,"i"))
+#set($itemid=$itemLike.itemid)    
+#set($display= true)
+#foreach( $product in $allProductsInBasket)
+#if($product.itemid==$itemid)
+#set($display= false)
+#set($count=$count+1)
+#end
+#end
+#end
+
+#if($itemLike1.size() > $count)
+<div class="cross-sell">
+	<div class="title subTitle2">#springMessage("vm.youmakealsolike.title")</div>
+	<div class="listing grid">
+		#set($allProductsInBasket= $session.getAttribute("ProductsDetiles_${vendorSettingsDTO.vendorId}").allProducts)
+		#foreach($alsolike in $alsoLikeDTO.getItems() ) 
+		#set($itemLike=$pageTile.getItemObject($alsoLikeDTO,$alsolike,"i"))
+		#set($itemid=$itemLike.itemid)
+		#set($title2=$itemLike.title)
+		#set($shortdesc2=$itemLike.shortdesc)
+		#set($image2=$itemLike.thumbnail)    
+		#set($price = $itemLike.itemPrice)
+		#set($offerprices = $itemLike.itemPrice)
+		#set($display= true)
+		#foreach($product in $allProductsInBasket)
+		#if($product.itemid==$itemid)
+		#set($display= false)
+		#end
+		#end
+		#if($display)
+		<div class="item">
+			<div class="container">
+				<div class="image">
+					#if($image2!="")
+					<a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$itemid")" alt="$title2">
+						#if($image2.startsWith("http"))
+						<img border="0" src="$image2" />
+						#else  
+						<img border="0" src="store/$image2"/>
+						#end 
+					</a>      
+					<!-- End item-img-related -->
+					#end
+				</div>
+				<div class="text">
+					<div class="ititle">
+						<a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$itemid")" alt="$title2">$title2</a>
+					</div>
+					<!--start price-->
+					<ul>
+						#if($math.round($price2.listPrice) > $math.round($price2.price))
+						<li class="list-price"> 
+						<span>List Price:</span>
+						<em>$number.format('currency', $price.price, $viewStoreCurrency.locale)</em>                          
+						</li>
+						<li class="price">
+						<span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>   
+						<strong class="integer" id="_price_${velocityCount}"> $regExp.currencyInteger($viewStoreCurrency.locale, $price2.price)</strong>
+						<sup class="decimal" id="_listCent_${velocityCount}">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</sup>
+						</li>
+						#elseif($offerprices.price.compare($offerprices.price.doubleValue(),0) == 0)  
+						<li id="_price_0">#springMessage("vm.itemTemplate.callprice")</li>                
+						#else
+						<li class="price">
+						<span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+						<strong class="integer">
+							$regExp.currencyInteger($viewStoreCurrency.locale, $offerprices.price)
+						</strong>
+						<sup class="decimal">$regExp.currencyFraction($viewStoreCurrency.locale, $offerprices.price)</sup>
+						</li>
+						#end
+					</ul>
+
+					<!--end price-->
+				</div>
+				<!-- End item_desc -->
+			</div>
+			<!-- End item-u-related -->   
+		</div>                
+		#end
+		#end
+	</div><!-- End item-section -->
+</div>

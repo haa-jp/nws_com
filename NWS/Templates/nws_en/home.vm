@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+  #else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+#set($metadescription= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metadescription'))
+#set($metakeywords= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metakeywords'))
+#set($pagetitle= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'pagetitle'))
+<html lang="en">
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+   <base href="$baselink"/>
+   <link rel="shortcut icon" href="$baselink/store/20120606532/favicon.ico" type="image/x-icon">
+   <meta name="description" content="#if($metadescription!="") $metadescription #else   #end" />
+   <meta name="keywords" content="#if($metakeywords!="")$metakeywords #else   #end" />
+   <title>$!pagetitle</title>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+   <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/avetti.slider.css" type="text/css" media="all" />
+   <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" />
+   <style type="text/css" media="screen">
+
+        #bg-full {
+          z-index: -500;
+        /*  min-height: 100%;
+          min-width: 1024px;
+          width: 100%;
+          height: auto;
+          position: fixed;
+        */  top: 0;
+          left: 0;
+        }
+        .img_a {background: white url("store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/master/bkgd1b.jpg") no-repeat;}
+        .img_b {background: white url("store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/master/bkgd2b.jpg") no-repeat;}
+        .img_c {background: white url("store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/master/bkgd3b.jpg") no-repeat;}
+        .img_d {background: white url("store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/landingpages/master/bkgd4b.jpg") no-repeat;}
+
+   </style>
+   <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+</head>
+  <body class="nws" id="bg-full" >
+#if(${welcomeMatDTO.loggedIn})                     
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+#else                                           
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header_public.vm")
+#end                                               
+    <div class="container-fluid main-container pad70" style="background-color: transparent;">
+      <div class="row-fluid">                         
+        <div class="span10 offset1">                     
+#parse($home_centerDTO.getItems().get(0).get('home_center'))
+        
+          <div class="content">
+          
+          <div class="row-fluid">
+<div style="margin-top: 10px">
+   <div class="alert alert-error alert-block">
+      <button class="close" data-dismiss="alert" type="button">×</button>
+      <p> Welcome to the new northernwholesale.com. As of March 1, 2014, you may still view and order from our old website by clicking <a href="http://old.northernwholesale.com/storefrontB2BWEB" alt="Northern Wholesale Supply Inc."> here</a>. 
+        	Please note that our old website is not updated with current product. The only way to view and order 2014 product online is through our new website. Thank you for your patience during this transition.  </p>
+   </div>
+</div>
+
+          	
+          </div> 
+          
+        
+          <div class="row-fluid">
+<div class="span12">
+            <div class="span6">
+              <h1>Recreational Aftermarket<br />
+              Parts and Accessories</h1>
+
+              <h3>Serving dealers with both quality and excellence for over 25 years.</h3>
+              <h4>A single resource for distribution, management and profitability with over 45,000 items from today's industry leading manufacturers. </h4>
+              <div class="pad50">
+                 <a class="btn btn-large" href="learn-more" title="see what there is to learn about Northern Wholesale Supply "> Learn More About NWS</a>  &nbsp;
+                 
+              #if(${welcomeMatDTO.loggedIn})
+                 <a class="btn btn-large btn-primary" href="store.html?vid=20120606532&cid=23049" title="Dealer Home Area"> Back Home</a>   
+              #else   
+                 <a class="btn btn-large btn-success" href="signin.html?vid=20120606532&mt=1" title="Login to your dealer account"> Your Account Login</a>
+              #end
+              </div>
+
+            </div>
+
+            <div class="span6">
+#parse($home_bottomDTO.getItems().get(0).get('home_bottom'))
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/home_images.vm")
+
+
+            </div>
+          </div> <!-- end 12 -->
+          </div> <!-- end row -->
+         
+        </div> <!-- end span10 -->
+        </div> <!-- end content -->
+    </div>
+
+
+<!--  <div style="position: fixed; bottom: 1px; width: 100%">  -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+<!--  </div> -->
+    </div>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+    <script type="application/javascript">
+        $('.carousel').carousel({interval: 4000});
+        store.remove('sidenavData');
+      </script>
+
+<script type="text/javascript">
+
+function pickOne() {
+    return (Math.round(Math.random())-0.5);
+}
+
+$(document).ready(function() {
+    var bgs = [ 'img_a', 'img_b', 'img_c', 'img_d' ];
+    bgs.sort( pickOne );
+    $('#bg-full').each(function(i, val) {
+        $(this).addClass(bgs[i]);
+    });
+});
+</script>
+
+
+  </body>
+</html>

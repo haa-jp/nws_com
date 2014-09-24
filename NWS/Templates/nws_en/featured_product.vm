@@ -1,0 +1,68 @@
+                <div class="item">
+                  <input type="hidden" id="js-item-inv-$item.itemid" value="0"/>
+                  <input type="hidden" id="js-item-itemid-$item.itemid" value="$item.itemid"/> 
+                  <div style="display: none;" id="js-item-hiddenfields-$item.itemid">&nbsp;</div>
+                  
+                  <div class="container">
+                    <a id="parent-title-$item.itemid" href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$item.itemid")" >
+                      <span class="name">$item.title</span>
+                      <span class="image">
+                        <span class="badges">
+    #if($item.storeFeatured)
+                          <img class="" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/sw-feature.png"/>
+    #end
+                   
+    #if($item.catFeatured)
+                          <img class="" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/feature.png"/>
+    #end
+  
+    #if($item.newItem)
+                          <img class="" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/new.png"/>
+    #end
+  
+    #if($item.onSale)
+                          <img class="" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/on-sale.png"/>
+    #end
+                        </span>
+    #if($item.thumbnail !="")
+                        <img id="" src="store$item.thumbnail">
+    #else  
+                        <img id="parent-cimage-$item.itemid" src="store$vendorSettingsDTO.vendorId/assets/items/thumbnails/noimage.jpg"/>
+    #end
+                      </span>
+                    </a>
+
+#if($item.shortdesc!="")                
+                  <p>$item.shortdesc</p>        
+#end
+
+                    <p>NWS# $item.code.replace("-", ".")</p>
+#set($instock = $pageTile.getItemObject($childItemsDTO, $itemIter, "instock"))
+                    <p>In stock: #if($instock >= 1)yes#{else}no#end</p>
+                    <p>
+#if($math.round($price.listPrice) > $math.round($price.price))
+                      <span class="price">$number.format('currency', $price.price, $viewStoreCurrency.locale)</span>
+#elseif($price.listPrice.compare($price.listPrice.doubleValue(),0) == 0)  
+                      ##<span id="_price_0">#springMessage("vm.itemTemplate.callprice")</span>  
+                      <span id="_price_0" class="no-price">Login to View Pricing</span>  
+#else
+                      $number.format('currency', $price.price, $viewStoreCurrency.locale)
+#end
+                    </p>
+                  </div>
+                  <div id="quicklookFeedback_$item.itemid" class="hide">&nbsp;</div>
+                  <div class="actions">
+                    <div class="item-quick-add navbar">
+                      <div class="navbar-form">
+                        <input type="hidden" value="$!item.itemid" />
+                        <input type="text" placeholder="Qty." class="span2"/>
+                        <button class="btn btn-primary">Add</button>
+                        <a id="showq_$!item.itemid" class="quicklook_trigger">Quick Info</a>
+                      </div>
+                    </div>
+                  </div>                  
+                </div>
+                <!-- End Item -->
+                
+                
+                

@@ -1,0 +1,119 @@
+<div class="span6">
+  <h3>Your Shipping Infomation</h3>
+  #springBind( "checkoutViewDTO.shipTypes.currentType")
+  #if($checkoutViewDTO.allNoneShippableItems)
+    <input id="rdoThisAddr" style="display:none;" type="radio" name="$status.expression" value="1" checked >
+  #else
+    <div class="row-fluid">
+      <div class="shipped-to span11 offset1">
+        <span>#springMessage("vm.register.msg2"):</span><br /><br />
+        <div class="control-group">
+          <label class="radio" for="rdoThisAddr">
+            <input id="rdoThisAddr" name="$status.expression" value="1" type="radio" #if($status.value&&$status.value==1)checked#end  onclick="showhidepayment_info(1);"/>Ship to this address
+            #springBind("checkoutViewDTO.sameAsBillingAddress")
+            <input id="sameasbilling" name="$status.expression" value="true" type="hidden" />
+          </label>
+        </div>
+        <div class="control-group">
+          <label class="radio" for="rdoDiffAddr">
+            #springBind( "checkoutViewDTO.shipTypes.currentType")
+            <input id="rdoDiffAddr" name="$status.expression" value="2" type="radio" #if($status.value&&$status.value==2)checked#end  onclick="showhidepayment_info(2);"/>Different Address
+          </label>
+
+          <div class="ship-to row-fluid"  id="shippingInfo" style="display:none">
+            #springBind( "checkoutViewDTO.addresses.shippingAddress.addressId" )
+            <input type="hidden" id="$status.expression" name="$status.expression" value="$!{status.value}">
+            #springBind( "checkoutViewDTO.billingandshippinginonepage" )
+            <input type="hidden" id="$status.expression" name="$status.expression" value="$!{status.value}">
+            #springBind( "checkoutViewDTO.addresses.shippingAddress.clientId" )
+            <input type="hidden" name="$status.expression" value="$!{status.value}">
+
+            <div id="notSameAsBilling">
+
+              #springBind("checkoutViewDTO.shipaddressid")
+              <select id="shipaddressid" name="$status.expression" onchange="shippingaddressChanged(this.value);">
+                <option value="0" >choose address on file</option>
+                #foreach($address in $customerAddressDTO)
+                  <option value="$address.addressid" #if($checkoutViewDTO.addresses.shippingAddress.addressId==$address.addressid) selected  #end> $address.nickname</option>
+                #end
+                <option value="-1">New Address</option>
+              </select>
+
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.nickName" )
+              <input id="nickName" name="$status.expression" type="hidden" value="$!{status.value}" />
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.firstName" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.middleName" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.lastName" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.company" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.address1" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.address2" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.city" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.countryId" )
+
+              #foreach($country in ${checkoutViewDTO.addresses.shippingAddress.countries})
+                #if($country.country.id == $status.value)
+                  <input id="$status.expression" name="$status.expression" type="hidden" value="$country.country.id">
+                #end
+              #end
+
+              #springBind("checkoutViewDTO.addresses.shippingAddress.provinceId")
+              #foreach($country in ${checkoutViewDTO.addresses.shippingAddress.countries})
+                #if(${checkoutViewDTO.addresses.shippingAddress.countryId} == ${country.country.id})
+                  #foreach($province in ${country.provinces})
+                    #if( ${province.province.id} == ${status.value})
+                      <input name="$status.expression" id="province" type="hidden" value="${province.province.id}" />
+                    #end
+                  #end
+                #end
+              #end
+
+              <input id="otherregionForShipping" value="${status.value}" name="$status.expression" type="hidden" >
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.postal" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" >
+              #springBind( "checkoutViewDTO.addresses.shippingAddress.phone" )
+              <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+
+            </div><!-- notSameAsBilling -->
+
+          </div> <!-- end ship-to -->
+
+        </div>
+
+        <div class="control-group">
+          <label class="radio" for="rdoMultAddr">
+            #springBind( "checkoutViewDTO.shipTypes.currentType")
+            <input id="rdoMultAddr" name="$status.expression" value="3" type="radio" #if($status.value&&$status.value==3)checked#end />Multiple Address
+          </label>
+        </div>
+
+        #foreach($recount  in $checkoutViewDTO.retailers)
+          #set($retailcount=$recount)
+        #end
+
+        #if($retailcount)
+          <div class="control-group">
+            <input id="rdoMultAddr" name="$status.expression" value="4" type="radio" #if($status.value&&$status.value==4)checked="checked"#end onclick="showhidepayment_info(4);"/>
+            <div class="controls">
+              <label for="rdoMultAddr">#springMessage("vm.register.shipretailers")&nbsp;</label>
+              #springBind( "checkoutViewDTO.retailerid")
+              <select id="selretailer"  name="$status.expression">
+                <option value="0">#springMessage("vm.register.plselectretailer")</option>
+                #foreach($retail  in $checkoutViewDTO.retailers)
+                  <option value="$retail.retailer.id" #if($status.value&&$status.value==$retail.retailer.id) selected  #end>$retail.retailer.name</option>
+                #end
+              </select>
+            </div>
+          </div>
+        #end
+      </div> <!-- end shipped-to span 11-->
+    </div>
+  #end
+
+</div> <!--end span6 -->

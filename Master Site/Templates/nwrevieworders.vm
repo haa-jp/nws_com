@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+#if(!$isAdmin)
+  $response.sendRedirect($seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049"))
+#end
+<html>
+  <head>
+    <title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <base href="$baselink">
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/datepicker/datepicker.css" type="text/css" media="all" />
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+  </head>
+  <body class="nws">
+    ############################ Header ####################################
+    #if($vendorSettingsDTO.themeId == $storeSkinId)
+        #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+      #else
+	#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+    #end
+    ############################ End Header ################################
+
+    ############################ Search Bar ################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
+    ############################ End Search Bar ############################
+
+    <div id="wrapper" class="row-fluid">
+      <div class="span2" id="left-col">
+        #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/accountbar.vm")
+      </div>
+      <div class="span10" id="right-col">
+
+    ############################ Page Content #############################
+        <div class="row-fluid">
+          <div class="span12">
+            <form class="form-horizontal" id="nws-form" action="nwrevieworders.html" method="GET" >
+              <h1>Review Orders</h1>
+              <div class="row-fluid">
+                <div class="span6">
+                  <div class="control-group">
+                    <label class="control-label"> Order Type:</label>
+                    <div class="controls">
+                      <select class="styled-select" id="orderType" name="orderType">
+                        <option value="*">All</option>
+                        <option value="O">Orders</option>
+                        <option value="B">Backorders</option>
+                        <option value="R">Returns</option>
+                        <option value="I">Invoice Only</option>
+                        <option value="Q">Quotes</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="control-group"> 
+                    <label class="control-label">Start Date:</label>
+                    <div class="controls">
+                      <input class="smtext" type="text" id="endDate" name="endDate" value="" size="70"/vspace="">
+                      <button class="btn btn-primary" type="submit">Show</button> 
+                    </div>
+                  </div>
+                </div>
+                <div class="span6">
+                  <p>When searching for orders by date range, the starting date for your query will be set to 30 days prior to the end date you selected above. </p>
+                  <p> <a href="$seourl.encodeURL("myaccount.html?mode=vieworder&vid=$vendorSettingsDTO.vendorId")">View web orders only.  </a>  </p>
+                </div>
+              </div>                  
+              <input type="hidden" name="mode" value="show">
+              <input type="hidden" name="limit" value="">
+              <input type="hidden" name="page" value="">
+              <input type="hidden" name="_targetshow" value="nwrevieworders.html">
+            </form>
+            <table class="table orderstable">
+              <tr>
+                <th scope="col">Order Number</th>
+                <th scope="col">Po Number</th>
+                <th scope="col">Date</th>
+                <th scope="col">Order Status</th>
+                <th>
+                  <div class="btn-group right">
+                  #if($openInvoicesDTO.limit==10)
+                    <button class="btn disabled">10</button>
+                  #else
+                    <a class="btn" href="nwrevieworders.html?numresult=10&endDate=$!customerOrdersDTO.endDate&orderType=$!customerOrdersDTO.orderType">10</a>
+                  #end
+                  #if($openInvoicesDTO.limit==25)
+                    <button class="btn disabled">25</button>
+                  #else
+                    <a class="btn" href="nwrevieworders.html?numresult=25&endDate=$!customerOrdersDTO.endDate&orderType=$!customerOrdersDTO.orderType">25</a>
+                  #end
+                  #if($openInvoicesDTO.limit==50)
+                    <button class="btn disabled">50</button>
+                  #else
+                    <a class="btn" href="nwrevieworders.html?numresult=50&endDate=$!customerOrdersDTO.endDate&orderType=$!customerOrdersDTO.orderType">50</a>
+                  #end
+                  </div>
+                </th>       
+              </tr>
+    #foreach($order in $customerOrdersDTO.customerOrders.orders)
+              <tr class="description">
+                <td>$order.orderNumber</td>
+                <td>$order.poNumber</td>
+                <td>$!date.format('short',$order.orderDate)</td>
+                <td>$order.status</td>
+                <td><a href="nwrevieworder.html?ornum=$order.orderNumber&hseq=$order.histSequence&gen=$order.generation" target="_blank">Full Details</a> | <a href="nwemailorder.html?ornum=$order.orderNumber&hseq=$order.histSequence&gen=$order.generation&url=nwrevieworders.html?vid=$vendorSettingsDTO.vendorId">Email Order</a></td>
+              </tr>
+              <tr class="orderdetails">
+                <td colspan="5">
+                  <input class="orderNumber" type="hidden" value="$order.orderNumber">
+                  <input class="params" type="hidden" value="ornum=$order.orderNumber&hseq=$order.histSequence&gen=$order.generation">
+                  <div class="details"></div>
+                </td>
+              </tr>
+    #end
+            </table>
+            <form name="cpfrm" action="nwrevieworders.html" method="POST" >
+              <input type="hidden" name="ornum" id="ornum">
+              <input type="hidden" name="hseq" id="hseq">
+              <input type="hidden" name="gen" id="gen">
+            </form>
+            <div class="pagination">
+              <ul>
+    #foreach($curPage in $customerOrdersDTO.pageList)
+      #if($customerOrdersDTO.page)
+        #if($curPage == $customerOrdersDTO.page)
+                <li><span>$curPage</span></li>
+        #else
+                <li><a href="nwrevieworders.html?page=$curPage&numresult=$!customerOrdersDTO.limit&endDate=$!customerOrdersDTO.endDate&orderType=$!customerOrdersDTO.orderType">$curPage</a></li>
+        #end
+      #else
+        #if($curPage == 1)
+                <li><span>$curPage</span></li>
+        #else
+                <li><a href="nwrevieworders.html?page=$curPage&numresult=$!customerOrdersDTO.limit&endDate=$!customerOrdersDTO.endDate&orderType=$!customerOrdersDTO.orderType">$curPage</a></li>
+        #end
+      #end
+    #end
+              </ul>
+            </div>
+          </div>
+        </div><!--end bd -->
+    ############################ Edns Page Content ########################
+      </div>
+    </div>
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################    
+    
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+    <script type="text/javascript">
+      function submitCopyOrder(ornum_val, hseq_val, gen_val) {
+        var ornum = document.getElementById('ornum');
+        var hseq = document.getElementById('hseq');
+        var gen = document.getElementById('gen');
+
+        ornum.value = ornum_val;
+        hseq.value = hseq_val;
+        gen.value = gen_val;
+        document.forms["cpfrm"].submit();
+      }
+
+      function popitup(url) {
+        newwindow = window.open(url, 'name', 'height=720,width=1000');
+        if(window.focus) {
+          newwindow.focus();
+        }
+        return false;
+      }
+
+      jQuery(document).ready(function(){
+        var step = 5;
+        getOrdersDetails(step);
+      });
+
+      function getOrdersDetails(step){
+        _step = step;
+
+        jQuery('.orderdetails').each(function(){
+          var params = jQuery(this).find('.params').val();
+          getOrderDetails(this, params);
+          
+          _step--;
+          if(_step<1){
+            setTimeout(function(){false}, 500);
+            _step = step;
+          }
+
+        });
+      }
+
+      function getOrderDetails(target, params){
+        params+='&tptm=json';
+        jQuery.ajax({
+          url: 'nwrevieworder.html',
+          data: params,
+          dataType: 'json',
+          type: 'get',  
+          success : function(data) {
+            data = data["order details"];
+            renderOrderDetails(target, data);
+          },
+          error : function (data) {
+            var orderNumber = jQuery(target).find('.orderNumber').val()
+            toastr.error('Failed to get details for order: '+orderNumber);
+          }
+        });
+      }
+
+      function renderOrderDetails(target, data){
+        if(data.length<1)
+          return true; 
+
+        var viewMore = false;
+        var iteration = data.length;
+        if (iteration>10){
+          iteration = 10;
+          viewMore = true;
+        }
+
+        var table = jQuery("<table class=\"orderDetailsTable\"></table>")
+        jQuery(target).find('.details').append(table)
+
+        for(var i=0; i<iteration; i++){
+          var index = '<td>'+(i+1)+'</td>';
+          var itemNumer = '<td><a href="'+data[i]['itemURL']+'">'+ data[i]['item Number'] +'</a></td>';
+          var qty = '<td>'+ data[i]['order Qty'] +'</td>';
+          var description = '<td>'+ data[i]['description'] +'</td>';
+          var row = jQuery("<tr>"+index+itemNumer+qty+description+'</tr>'); 
+          jQuery(table).append(row);
+        }
+
+        if(viewMore){
+          var row = '<tr><td colspan="4"><a href="nwrevieworder.html?'+jQuery(target).find('.params').val()+'">View More</a></td></tr>';
+          jQuery(table).append(row);
+        }
+        jQuery(table).fadeIn('slow');
+        
+      }
+    </script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script type="application/javascript">
+      $('#endDate').datepicker({format:'yyyy/mm/dd'});
+    </script>    
+  </body>
+</html>

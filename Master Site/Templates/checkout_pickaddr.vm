@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>#springMessage("vm.checkout_pickaddr.vm.title")</title>
+    <meta name="interestgroup" content="tp">
+    <meta name="prodtype" content="">
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+  </head>
+
+  <body id="checkout" class="checkout">
+    ############################ Header ####################################
+    #if($vendorSettingsDTO.themeId == $storeSkinId)
+        #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+      #else
+        #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+    #end
+    ############################ End Header ################################
+    <div id="wrapper" class="row-fluid">
+
+      <div class="container">
+        <div class="row-fluid">
+          <ul class="co-breadcrumb step3">
+            <li class="yi">
+              <a href="yourinfo.html?vid=$vendorSettingsDTO.vendorId">#springMessage("vm.checkout_customerinfo.infor")</a>
+            </li>
+            <li class="sp"><strong>#springMessage("vm.checkout_customerinfo.shipping")</strong></li>
+            <li class="py">#springMessage("vm.checkout_customerinfo.payment")</li>
+            <li class="rv">#springMessage("vm.checkout_customerinfo.placeorder")</li>
+            <li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row-fluid">
+          <h2>#springMessage("vm.checkout_pickaddr.vm.pickaddress")</h2>
+          <form class="form-horizontal" name="frm" action="pickaddress.html" method="POST">
+            <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+            <input type="hidden" name="t">
+
+            #foreach($address in $customerAddressDTO)
+              <div class="control-group">
+                <label class="radio" for="$status.expression">
+                  #springBind("checkoutViewDTO.shipaddressid")
+                  <input type="radio" name="$status.expression" value="$address.addressid" />
+                  <div>
+                    $address.nickname <a href="myaccount.html?mode=editshippingaddress&addressid=$address.addressid">#springMessage("word.edit")</a><br/>
+                    $address.address1<br/>
+                    $address.city<br/>
+                    #if($address.provinceid == 0)
+                      $address.anotherprovince
+                    #else
+                      #foreach($province in $provincesInUse)
+                        #if($address.provinceid == $province.id)
+                          $province.name
+                        #end
+                      #end
+                    #end
+                    #if($address.postal.length() > 0)
+                      $address.postal<br/>
+                    #end
+                    #foreach($country in $countriesInUse)
+                      #if($address.countryid == $country.id)
+                        $country.name<br/>
+                      #end
+                    #end
+                  </div>
+                </label>
+              </div>
+            #end
+
+            <div class="control-group">
+              <label class="radio" for="addNewaddress">
+                <input id="addNewaddress" type="radio" name="shipaddressid" value="0"/>
+                #springMessage("vm.shippingaddress.newadd")
+              </label>
+            </div>
+
+            <p>* #springMessage("vm.checkout_pickaddr.vm.msg")</p>
+
+            <div class="form-actions">
+              <input type="button" class="btn btn-primary" value="#springMessage('button.CONTINUE')" onclick="if(document.getElementById('addNewaddress').checked){upAddress('add');return true;}else{upAddress('continue');return true;}"/>
+            </div>
+          </form>
+
+        </div>
+      </div><!--container-->
+    </div><!-- End wrapper-->
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################
+
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+
+    <script language="javascript">
+      function upAddress(mode) {
+        document.frm.t.value=mode;
+        document.frm.submit();
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,60 @@
+#set($menu = $request.getParameter("mn"))
+#set( $propName = "SessionCustomerDTO_"+$vid)
+#set ($customerNumber = "")
+#if($request.getSession().getAttribute($propName))
+#set($customerNumber = $request.getSession().getAttribute($propName).getProps().get("Customer Number"))
+#end
+<div class="yui3-u side-nav">
+  <div class="accountbar">
+#if($menu == "am")
+    <div class="yui3-u-1">
+      <div class="filter">
+        <div class="back">  <a href="account-home" alt=""> Back to: <br/> Account Home</a></div>
+        <div class="title">
+          Account Management
+        </div>
+        <ul>
+          <li><a href="saved-orders?mn=am">Saved Orders</a></li>
+          <li><a href="nwrevieworders.html?mn=am">Review Orders</a></li>
+          <li><a href="accountsummary.html?mn=am">Account Summary</a></li>
+          <li><a href="openinvoices.html?mn=am">Open Invoices</a></li>
+          <li><a href="paidinvoices.html?mn=am">Paid Invoices</a></li>
+          <li><a href="myaccount.html?mode=customerinfo&vid=$vendorSettingsDTO.vendorId&mn=am"> #springMessage("vm.myaccount.customeradd")</a></li>
+          <li><a href="myaccount.html?mode=shippingaddress&vid=$vendorSettingsDTO.vendorId&mn=am"> #springMessage("vm.myaccount.shippingadd")</a></li>
+          <li><a href="myaccount.html?mode=changepassword&vid=$vendorSettingsDTO.vendorId&mn=am"> #springMessage("vm.myaccount.changepassword")</a></li>
+        </ul>
+        <div class="searchByCategoryBottom"></div>
+      </div>
+    </div>
+#else
+    <div class="yui3-u-1">
+      <div class="filter">
+        <div class="back"> <a href="account-home" alt=""> Back to: <br/> Account Home</a></div>
+        <div class="title">
+          Account Resources
+        </div>
+        #*<ul>
+          <li><a href="myaccount.html?mode=billingaddress&vid=$vendorSettingsDTO.vendorId"> #springMessage("vm.myaccount.billingadd")</a></li>
+          <li><a href="myaccount.html?mode=changepassword&vid=$vendorSettingsDTO.vendorId"> #springMessage("vm.myaccount.changepassword")</a></li>
+          <li><a href="myaccount.html?mode=customerinfo&vid=$vendorSettingsDTO.vendorId"> #springMessage("vm.myaccount.customeradd")</a></li>
+          <li><a href="myaccount.html?mode=shippingaddress&vid=$vendorSettingsDTO.vendorId"> #springMessage("vm.myaccount.shippingadd")</a></li>
+          <li><a href="myaccount.html?mode=viewproperties&vid=$vendorSettingsDTO.vendorId"> #springMessage("vm.myaccount.accountpref")</a></li>
+          <li>
+  #if(${storeOptions.properties.get("TWITTER.EnableLogin")}=='Yes' || ${storeOptions.properties.get("FACEBOOK.EnableLogin")}=='Yes')
+            <a href="myaccount.html?mode=externalaccounts&vid=$vendorSettingsDTO.vendorId">#springMessage("vm.myaccount.externalaccounts")</a>
+  #end
+          </li>
+        </ul>*#
+        <ul class="unstyled">
+          <li><a href="store-policies">NWS Policies</a></li>
+          <li><a href="account-resources/dealer-downloads">Dealer Download</a></li>
+          <li><a href="price-list-request">Price List Request</a></li>
+          <li><a href="eblast-subscriptions/">Email Suscription</a></li>
+          <li><a href="myaccount.html?mode=viewproperties&vid=$vendorSettingsDTO.vendorId">Account Preferences</a></li>
+        </ul>
+        <div class="searchByCategoryBottom"></div>
+      </div>
+    </div>
+#end
+  </div>
+</div>

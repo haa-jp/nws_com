@@ -1,0 +1,377 @@
+#if($childItemsDTO.getItems().size()==0)  
+<div id="item-hview"  class="hide">
+#else
+<div id="item-hview" >
+#end
+ 
+  <div id="item-gview" #if($layoutClass=="grid") class="show" #{else} class="hide" #end>
+    #springMessage("vm.categoryT_itemList.viewas") <b>#springMessage("vm.categoryT_itemList.grid")</b><span class="separator"> | </span><a href="javascript:changeItemView();">#springMessage("vm.categoryT_itemList.list")</a>
+  </div>
+  
+  <div id="item-lview" #if($layoutClass=="grid") class="hide" #{else} class="show" #end>
+    #springMessage("vm.categoryT_itemList.viewas") <a href="javascript:changeItemView();">#springMessage("vm.categoryT_itemList.grid")</a><span class="separator"> | </span><b>#springMessage("vm.categoryT_itemList.list")</b>
+  </div>
+  
+  <div id="sortBy">
+    <form>
+                         #if (!$sortBy) #set($sortBy = $request.getParameter('sortci'))   #end 
+
+      ##<label for="sortselect">Sort:</label>
+        <select name="sortselect" id="sortselect" onchange="sortRedirect();">
+          <option value=""> #springMessage("vm.categoryT_itemList.sortby") </option>
+                              <option value="stitleASC" #if($sortBy.equalsIgnoreCase('stitle ASC'))  SELECTED   #end>#springMessage("vm.categoryT_itemList.title") A --> Z</option> 
+                              <option value="newestDESC" #if($sortBy.equalsIgnoreCase('newest DESC'))  SELECTED   #end>#springMessage("vm.categoryT_itemList.newitems")</option> 
+        <option value="priceASC" #if($sortBy.equalsIgnoreCase('price ASC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.lowtohigh") </option>
+          <option value="priceDESC" #if($sortBy.equalsIgnoreCase('price DESC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.hightolow") </option>
+          <option value="topsellers" #if($sortBy.equalsIgnoreCase('topsellers ASC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.popular") </option>
+          <option value="orderscount" #if($sortBy.equalsIgnoreCase('orderscount DESC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.bestsellers") </option>
+          <option value="averagereview" #if($sortBy.equalsIgnoreCase('averagereview DESC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.bestrated") </option>
+       </select>
+    </form>  
+  </div>
+</div>
+
+              <div id="pagination">
+              ## START PAGINATION
+                            #set($childItemsViewDTO = $multiPageViews.get("childItemsDTO"))
+                            #if ($childItemsViewDTO && $childItemsViewDTO.itemsCount)
+                            &nbsp;$childItemsViewDTO.itemsCount items found
+                            
+                            #if($childItemsViewDTO.pagesCount > 1)
+                              #if ($childItemsViewDTO.previousUrl)
+                                 <a href="$childItemsViewDTO.previousUrl">Prev</a>&nbsp;|&nbsp;
+                              #else
+                                 #if ($childItemsViewDTO.currentPageIndex == 1)
+                                     &nbsp;|&nbsp;Page&nbsp;|</span>
+                                 #else
+                                     &nbsp;
+                                 #end
+                              #end
+                            
+                              #foreach($page in $childItemsViewDTO.indexList)
+                                  #if($page == $childItemsViewDTO.currentPageIndex)
+                    $childItemsViewDTO.currentPageIndex
+                                  #else
+                  #if($velocityCount < $childItemsViewDTO.pagesCount+1)
+                    <a href="${childItemsViewDTO.multiPageURL}$page">$page</a>&nbsp;
+                  #end
+                                  #end
+                              #end
+                            
+                              #if ($childItemsViewDTO.nextUrl)
+                                 <a href="$childItemsViewDTO.nextUrl">Next</a>
+                              #end
+                            #end
+                            
+                            #else
+                            &nbsp;no items found
+                            #end
+            ## END PAGIGINATION
+            </div>
+
+<div id="item-grid" #if($layoutClass=="grid") class="show" #{else} class="hide" #end> 
+<!-- start item -->
+#set($itemsPerRow = 3)
+## Control variable for the number of items
+#set($counter = 0)
+## Flag variable to select if the row is even or odd
+#set($odd = 1)
+#foreach($itemIter in $childItemsDTO.getItems())
+  #set($childItem = $pageTile.getItemObject($childItemsDTO, $itemIter, "i"))
+  
+## Selects one of these two tags depending on the odd flag
+  #if($counter == 0)
+    #if($odd == 1)
+<div class="item-hg ">
+    #else
+<div class="item-hg ">
+    #end
+  #end  
+  
+  <div class="item-u">
+    <div class="item-img">
+      #if($childItem.thumbnail !="")
+        <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid")">
+        <img src="store$childItem.thumbnail" alt="$childItem.title" onerror="javascript:this.src='store/$vendorSettingsDTO.vendorId/items/thumbnails/na_sm.png'"/>
+      #else  
+        <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid")" >
+        <img src="store/$vendorSettingsDTO.vendorId/assets/images5/no_img.gif" alt="$childItem.title"/>
+      #end
+      </a>
+    </div>
+    <!-- end item-img -->
+    
+    <div class="item-desc">
+      <div class="item-title">
+        <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid")" >$childItem.title</a>
+      </div>  
+      
+      <p class="desc">$childItem.shortdesc</p>
+      
+        <!--start price-->
+  #set($price = $childItem.itemPrice)
+  #if($math.round($price.listPrice) > $math.round($price.price))
+          
+      <p>
+##        #springMessage("vm.categoryT_itemList.listprice") <span class="item-list-price">  $$regExp.showPrice($price.listPrice) </span>
+                                                      #if($viewStoreCurrency)
+        #springMessage("vm.categoryT_itemList.listprice") <span class="item-list-price">  $number.format('currency',$price.listPrice, $viewStoreCurrency.locale) </span>
+                                                      #else
+        #springMessage("vm.categoryT_itemList.listprice") <span class="item-list-price">  $number.format('currency',$price.listPrice) </span>
+                                                      #end
+            </p>  
+      
+      <p>
+        #springMessage("vm.categoryT_itemList.yousave") 
+        <span class="item-price-saved">
+##        $$regExp.showPrice($math.sub($price.listPrice,$price.price)) 
+                                                      #if($viewStoreCurrency)
+                                                        $number.format('currency', $math.sub($price.listPrice,$price.price), $viewStoreCurrency.locale)
+                                                      #else
+                                                        $number.format('currency', $math.sub($price.listPrice,$price.price))
+                                                      #end
+($math.round($math.mul($math.div($math.sub($price.listPrice,$price.price),$price.listPrice),100))%)<br/>
+        </span>
+      </p>
+                  
+      <p class="price">
+        ##<b>#springMessage("vm.categoryT_itemList.price")</b>
+        <br/>
+        #* <span class="dollars">$number.format('currency', $price.price, $viewStoreCurrency.locale) </span> *#
+                                    <span class="symbol">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+                                    <span class="dollars">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span>
+                                    <span class="cents">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+      </p>
+
+        #elseif($price.listPrice.compare($price.listPrice.doubleValue(),0) == 0)  
+        <p id="_price_0" class="noPrice">#springMessage("vm.itemTemplate.callprice")</p>               
+
+  #else
+      <p class="price">
+        ##<b>#springMessage("vm.categoryT_itemList.price")</b>
+        <br/>
+        #* <span class="dollars">$number.format('currency', $price.price, $viewStoreCurrency.locale) </span> *#
+                                    <span class="symbol">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+                                    <span class="dollars">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span>
+                                    <span class="cents">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+      </p>
+  #end
+        <!--end price-->
+      
+    </div> 
+    <!-- end item-desc -->
+  </div>
+  
+## increments the counter
+  #set($counter = $counter + 1)
+  
+#* Checks if the number of items has been reached
+resets the counter to 0 and set the odd flag to its opposite *#
+
+  #if($counter == $itemsPerRow)
+    #set($counter = 0)
+    
+    #if($counter == 0)
+      #if($odd == 1)
+        #set($odd = 0)
+      #elseif($odd == 0)
+        #set($odd = 1)
+      #end
+    #end
+  #end
+  
+##************************************
+## If the number of item set to 0  it indicates #
+## that the max number of items per row has#
+## had beed reached                                   #
+##************************************
+  #if($counter == 0)
+</div>
+  #end
+#end
+
+##**********************************
+## The following if works if the number of #
+## items is odd, because it's not going to  #
+## close the last div for the items             #
+##**********************************
+#if($counter != 0)
+</div>
+#end
+<!-- end item-->
+</div>
+<!-- end item-list-->
+
+<div id="item-list" #if($layoutClass=="grid") class="hide" #{else} class="show" #end> 
+<!-- start item -->
+#set($itemsPerRow = 1)
+## Control variable for the number of items
+#set($counter = 0)
+## Flag variable to select if the row is even or odd
+#set($odd = 1)
+#foreach($itemIter in $childItemsDTO.getItems())
+  #set($childItem = $pageTile.getItemObject($childItemsDTO, $itemIter, "i"))
+  
+## Selects one of these two tags depending on the odd flag
+  #if($counter == 0)
+    #if($odd == 1)
+<div class="item-hl ">
+    #else
+<div class="item-hl ">
+    #end
+  #end  
+  
+  <div class="item-u">
+    <div class="item-img">
+      #if($childItem.thumbnail!="")
+        <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid")">
+        <img src="store$childItem.thumbnail"  alt="$childItem.title"/>
+      #else  
+        <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid")" >
+        <img src="store/$vendorSettingsDTO.vendorId/assets/images5/no_img.gif" alt="$childItem.title"/>
+      #end
+      </a>
+    </div>
+    <div class="item-desc">
+      <div class="item-title">
+        <a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid")" >$childItem.title</a>
+      </div>  
+      
+      <p class="desc">$childItem.shortdesc</p>
+      
+      <!--start price-->
+  #set($price = $childItem.itemPrice)
+  #if($math.round($price.listPrice) > $math.round($price.price))
+        
+      <p>
+##        #springMessage("vm.categoryT_itemList.listprice") <span class="item-list-price">  $$regExp.showPrice($price.listPrice) </span>
+                                                     #if($viewStoreCurrency)
+        #springMessage("vm.categoryT_itemList.listprice") <span class="item-list-price">  $number.format('currency', $price.listPrice, $viewStoreCurrency.locale) </span>
+                                                     #else
+        #springMessage("vm.categoryT_itemList.listprice") <span class="item-list-price">  $number.format('currency', $price.listPrice) </span>
+                                                     #end
+            </p>
+      
+      <p>
+        #springMessage("vm.categoryT_itemList.yousave") 
+        <span class="item-price-saved">
+##        $$regExp.showPrice($math.sub($price.listPrice,$price.price)) 
+        #if($viewStoreCurrency)
+          $number.format('currency',$math.sub($price.listPrice,$price.price), $viewStoreCurrency.locale) 
+        #else
+          $number.format('currency', $math.sub($price.listPrice,$price.price))
+        #end
+($math.round($math.mul($math.div($math.sub($price.listPrice,$price.price),$price.listPrice),100))%)
+        <br/>
+        </span>
+      </p>   
+         
+
+
+      <p class="price">
+        ##<b>#springMessage("vm.categoryT_itemList.price")</b>
+        <br/>
+         #* <span class="dollars">$number.format('currency', $price.price, $viewStoreCurrency.locale)</span> *#
+                                 <span class="symbol">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+                                 <span class="dollars">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span>
+                                 <span class="cents">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+
+      </p>
+
+         #elseif($price.listPrice.compare($price.listPrice.doubleValue(),0) == 0) 
+        <p id="_price_0" class="noPrice">#springMessage("vm.itemTemplate.callprice")</p>          
+
+         #else
+
+      <p class="price">
+        ##<b>#springMessage("vm.categoryT_itemList.price")</b>
+        <br/>
+         #* <span class="dollars">$number.format('currency', $price.price, $viewStoreCurrency.locale)</span> *#
+                                 <span class="symbol">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+                                 <span class="dollars">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span>
+                                 <span class="cents">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+      </p>
+  #end
+        <!--end price-->
+      
+    </div> 
+    <!-- end item-desc -->
+  </div>
+  
+## increments the counter
+  #set($counter = $counter + 1)
+  
+#* Checks if the number of items has been reached
+resets the counter to 0 and set the odd flag to its opposite *#
+
+  #if($counter == $itemsPerRow)
+    #set($counter = 0)
+    
+    #if($counter == 0)
+      #if($odd == 1)
+        #set($odd = 0)
+      #elseif($odd == 0)
+        #set($odd = 1)
+      #end
+    #end
+  #end
+  
+##************************************
+## If the number of item set to 0  it indicates #
+## that the max number of items per row has#
+## had beed reached                                   #
+##************************************
+  #if($counter == 0)
+                </div>
+  #end
+#end
+
+##**********************************
+## The following if works if the number of #
+## items is odd, because it's not going to  #
+## close the last div for the items             #
+##**********************************
+#if($counter != 0)
+              </div>
+#end
+              <!-- end item-->
+            </div>  
+            <!-- end item-list-->
+            
+              <div id="pagination">
+              ## START PAGINATION
+                            #set($childItemsViewDTO = $multiPageViews.get("childItemsDTO"))
+                            #if ($childItemsViewDTO && $childItemsViewDTO.itemsCount)
+                            &nbsp;$childItemsViewDTO.itemsCount items found
+                            
+                            #if($childItemsViewDTO.pagesCount > 1)
+                              #if ($childItemsViewDTO.previousUrl)
+                                 <a href="$childItemsViewDTO.previousUrl">Prev</a>&nbsp;|&nbsp;
+                              #else
+                                 #if ($childItemsViewDTO.currentPageIndex == 1)
+                                     &nbsp;|&nbsp;Page&nbsp;|</span>
+                                 #else
+                                     &nbsp;
+                                 #end
+                              #end
+                            
+                              #foreach($page in $childItemsViewDTO.indexList)
+                                  #if($page == $childItemsViewDTO.currentPageIndex)
+                    $childItemsViewDTO.currentPageIndex
+                                  #else
+                  #if($velocityCount < $childItemsViewDTO.pagesCount+1)
+                    <a href="${childItemsViewDTO.multiPageURL}$page">$page</a>&nbsp;
+                  #end
+                                  #end
+                              #end
+                            
+                              #if ($childItemsViewDTO.nextUrl)
+                                 <a href="$childItemsViewDTO.nextUrl">Next</a>
+                              #end
+                            #end
+                            
+                            #else
+                            &nbsp;no items found
+                            #end
+            ## END PAGIGINATION
+            </div>

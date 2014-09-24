@@ -1,0 +1,167 @@
+<div class="container-fluid">
+  <div class="row-fluid">
+    <h3>#springMessage("vm.myaccount.customeradd")</h3>
+    <div class="info_needed">#springMessage("vm.billingaddress.msg1")
+      (<span class="needed_star">*</span>)#springMessage("vm.billingaddress.msg2")
+    </div>
+  </div>
+</div>
+
+<br>
+
+#springBind( "myAccountDTO.*" )
+#foreach($error in $status.errorMessages)
+  #set($errorCount = $velocityCount)
+#end
+
+#foreach($error in $status.errorMessages)
+  #if($velocityCount == 1)
+    <div class="row-fluid">
+      <div class="alert alert-error span6">
+        <button data-dismiss="alert" class="close" type="button">&times;</button>
+        <p><strong>Warning!</strong></p>
+        <ul>
+  #end
+          <li>$error</li>
+  #if($velocityCount == $errorCount)
+        </ul>
+      </div>
+    </div>
+  #end
+#end
+
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span6">
+
+      #springBind( "myAccountDTO.customerAddress.firstname" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.firstname")<span class="needed_star">*</span></label>
+        <div class="controls">
+          <input id="$status.expression" name="$status.expression" type="text" value="$status.value" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+        </div>
+      </div>
+
+      #springBind( "myAccountDTO.customerAddress.middlename" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.midname")</label>
+        <div class="controls">
+          <input id="$status.expression" name="$status.expression" type="text" value="$status.value" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+        </div>
+      </div>
+
+      #springBind( "myAccountDTO.customerAddress.lastname" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.lastname")<span class="needed_star">*</span></label>
+        <div class="controls">
+          <input id="$status.expression" name="$status.expression" type="text" value="$status.value" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="span6">
+
+      #springBind( "myAccountDTO.customerAddress.company" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.company")</label>
+        <div class="controls">
+          <input id="$status.expression" name="$status.expression" type="text" value="$status.value" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+        </div>
+      </div>
+
+      #springBind( "myAccountDTO.customerAddress.address1" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.address") 1<span class="needed_star">*</span></label>
+        <div class="controls">
+          <input id="$status.expression" name="$status.expression" type="text" value="$status.value" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+        </div>
+      </div>
+
+      #springBind( "myAccountDTO.customerAddress.address2" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.address") 2</label>
+        <div class="controls">
+          <input id="$status.expression" name="$status.expression" type="text" value="$status.value" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+        </div>
+      </div>
+
+      #springBind( "myAccountDTO.customerAddress.city" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.city")<span class="needed_star">*</span></label>
+        <div class="controls">
+          <input id="$status.expression" name="$status.expression" type="text" value="$status.value" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+        </div>
+      </div>
+
+      #springBind( "myAccountDTO.customerAddress.countryid" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.country")<span class="needed_star">*</span></label>
+        <div class="controls">
+          #set($curcountry=$status.value)
+          <select id="country_id" name="${status.expression}" onChange="changeResion(this.value)">
+            <option value="0">#springMessage("vm.register.chosecountry")</option>
+            #foreach($country in ${myAccountDTO.countyInUse})
+              <option #if($country.country.id == $curcountry) selected="selected" #end  value="$country.country.id">
+                $country.country.name
+              </option>
+            #end
+          </select>
+        </div>
+      </div>
+
+      #springBind( "myAccountDTO.customerAddress.provinceid" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.province")<span class="needed_star">*</span></label>
+        <div class="controls">
+          #if(${myAccountDTO.customerAddress.provinceid}==-1)
+            #set($hide = "style='display:none'")
+          #end
+
+          <select  name="$status.expression" id="province" $!{hide}>
+            <option value="0">#springMessage("vm.register.choseprovince")</option>
+            #foreach($country in $myAccountDTO.countyInUse)
+              #if(${curcountry} == ${country.country.id})
+                 #foreach($province in ${country.provinces})
+                  #if( ${province.province.id} == ${status.value})
+                    <option value="${province.province.id}" selected>${province.province.name}</option>
+                  #else
+                    <option value="${province.province.id}">${province.province.name}</option>
+                  #end
+                #end
+              #end
+            #end
+          </select>
+
+          #springBind( "myAccountDTO.customerAddress.anotherprovince" )
+          #if(${myAccountDTO.customerAddress.provinceid}!=-1 )
+            #set($hide = "style='display:none'")
+          #end
+
+          <input size="25" name="${status.expression}" type="text" value="$!status.value" id="otherprovince" $!{hide}/>
+        </div>
+      </div>
+
+      #springBind( "myAccountDTO.customerAddress.postal" )
+      <div class="control-group">
+        <label class="control-label" for="${status.expression}">#springMessage("vm.register.postal")<span class="needed_star">*</span></label>
+        <div class="controls">
+          <input id="$status.expression" name="$status.expression" type="text" value="$status.value" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="row-fluid">
+    <div class="form-actions">
+      #springBind( "myAccountDTO.customerAddress.addressid" )
+      <input type="hidden" name="$status.expression" value="$status.value">
+      #springBind("myAccountDTO.customerAddress.email")
+      <input type="hidden" name="$status.expression" value="$status.value">
+      <input type="hidden" name="_targetcustomerinfo" value="myaccount.html?mode=customerinfo">
+      <input type="hidden" name="submit" value="update">
+      <input class="btn btn-primary" type="submit" name="TODO" value="#springMessage('button.UPDATE')">
+    </div>
+  </div>
+
+</div>

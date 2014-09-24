@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Invoice</title>
+  </head>
+#if ($_commandName)
+   #springBind( "${_commandName}.pageTileDictionaryDTO" )
+  #set ($pageTileDictionaryDTO = ${status.value})
+#end
+
+#set($itemRow = $orderDataDTO.getItem(0))
+#set($order = $pageTile.getItemObject($orderDataDTO, $itemRow , "o"))
+
+#set ($orderAddressesDTO=$pageTileDictionaryDTO.getPageTile("orderAddressesDTO") )
+
+#set($itemRow2 = $orderPaymentDTO.getItem(0))
+#set($payment = $pageTile.getItemObject($orderPaymentDTO, $itemRow2 , "p"))
+
+
+  <body style="font-family: Arial; font-size: 11pt;">
+    This is a test to see what template is sent.
+    <table width="100%" border="0">
+      <table width="100%" border="0">
+        <tr>
+          <td width="60%" valign="top"><img width="90%" src="http://test.northernwholesale.com/preview/store/20120606532/assets/themes/pf/images/logo.png" /></td>
+          <td width="40%" valign="top">
+            <center><h1>ORDER CONFIRMATION</h1></center>
+            <table width="100%" style="margin-top: 10px;" cellspacing="0" cellpadding="5">
+              <thead>
+                <tr bgcolor="#999999">
+                  <th style="font-size: 0.6em; font-weight: bold; border: 1px solid #000000; color: #ffffff;">ACCOUNT NO.</th>
+                  <th style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">DATE</th>
+                  <th style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">ORDER NO.</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td width="33%" align="center" style="font-family: Courier New;">&nbsp;</td>
+                  <td width="33%" align="center" style="font-family: Courier New;">$date.format("MM/dd/yyyy",$order.createtime)</td>
+                  <td width="33%" align="center" style="font-family: Courier New;">$order.orderid</td>
+                </tr>
+                </tbody>
+</table>
+</td>
+      </tr></table>
+<table width="100%" border="0"><tr>
+<td width="50%">
+          <table width="100%" border="0"><tr>
+<td width="30%" valign="top">SOLD TO</td>
+              <td width="70%" valign="top" style="font-family: Courier New;">
+              #foreach($addressIter in $orderAddressesDTO.getItems())
+                #set($orderaddress = $pageTile.getItemObject($orderAddressesDTO, $addressIter , "a"))
+                #if($orderaddress.addressdesc=='BILLING ADDRESS')
+                   #if($orderaddress.firstname != '')$!orderaddress.firstname $!orderaddress.lastname<br>#end
+                   #if($orderaddress.company!='')
+                   $orderaddress.company<br>
+                   #end
+                    $!orderaddress.address1 <br>
+                    #if($orderaddress.address2 != '')$!orderaddress.address2<br>#end
+                    $!orderaddress.city, $!orderaddress.province.name $!orderaddress.postal<br>
+                    $!orderaddress.country.name<br>
+                #end
+              #end
+              </td>
+            </tr></table>
+</td>
+        
+        
+        <td width="50%">
+          <table width="100%" border="0">
+<tr>
+<td width="30%" valign="top">SHIP TO</td>
+              <td width="70%" valign="top" style="font-family: Courier New;">
+              #foreach($addressIter in $orderAddressesDTO.getItems())
+                #set($orderaddress = $pageTile.getItemObject($orderAddressesDTO, $addressIter , "a"))
+                #if($orderaddress.addressdesc=='SHIPPING ADDRESS')
+                  #if($orderaddress.firstname !='')$!orderaddress.firstname $!orderaddress.lastname<br>#end
+                   #if($orderaddress.company !='')
+                   $orderaddress.company<br>
+                   #end
+                    $!orderaddress.address1<br>
+                    #if($orderaddress.address2 !='')$!orderaddress.address2<br>#end
+                    $!orderaddress.city, $!orderaddress.province.name $!orderaddress.postal<br>
+                    $!orderaddress.country.name<br>
+                #end
+              #end
+                <br><br><br><br>
+</td>
+            </tr>
+<tr>
+<td width="30%" valign="top">SHIP VIA</td>
+              <td width="70%" valign="top" style="font-family: Courier New;">
+                THURSDAY METRO AM
+              </td>
+            </tr>
+</table>
+</td>
+        
+      </tr></table>
+<table width="100%" cellspacing="0" cellpadding="3" border="0" style="margin-top: 30px;">
+<thead><tr bgcolor="#c9c9c9">
+<th align="center" style="font-size: 0.6em;">REP.</th>
+          <th align="center" style="font-size: 0.6em;">CUSTOMER ORDER NO.</th>
+          <th align="center" style="font-size: 0.6em;">OUR ORDER NO.</th>
+          <th align="center" style="font-size: 0.6em;">ORDER DATE</th>
+          <th align="center" style="font-size: 0.6em;">SHIP DATE</th>
+          <th align="center" style="font-size: 0.6em;">TERMS</th>
+        </tr></thead>
+<tbody><tr>
+<td align="center" style="font-family: Courier New;">14</td>
+          <td align="center" style="font-family: Courier New;">&nbsp;</td>
+          <td align="center" style="font-family: Courier New;">$order.orderid</td>
+          <td align="center" style="font-family: Courier New;">$date.format("MM/dd/yyyy",$order.createtime)</td>
+          <td align="center" style="font-family: Courier New;">&nbsp;</td>
+          <td align="center" style="font-family: Courier New;">&nbsp;</td>
+        </tr></tbody>
+</table>
+<table width="100%" cellspacing="0" cellpadding="3" border="0" style="margin-top: 30px;">
+<thead><tr bgcolor="#999999">
+<th align="center" style="font-size: 0.6em; font-weight: bold; border: 1px solid #000000; color: #ffffff;">QUANTITY</th>
+          <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">ITEM NO.</th>
+          <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">DESCRIPTION</th>
+          <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">UNIT PRICE</th>
+          <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">AMOUNT</th>
+        </tr></thead>
+<tbody>
+
+#foreach($itemIter in $orderItemDTO.getItems())
+  #set($orderitem = $pageTile.getItemObject($orderItemDTO, $itemIter, "o"))
+  #set($havedn=0)
+
+
+$pageTile.getItemObject($orderItemDTO, $itemIter, "status")
+<tr>
+          <td align="center" style="border-right-width: 1px; border-right-style: solid; font-family: Courier New; padding: 5px; border-left-width: 1px; border-left-style: solid; border-right-color: #000000; border-left-color: #000000;">$orderitem.qty</td>
+          <td style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$orderitem.compositecode</td>
+          <td style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$orderitem.title</td>
+          <td align="right" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$ $regExp.showPrice($!orderitem.itemcost)</td>
+          <td align="right" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$math.mul($!orderitem.itemcost, $orderitem.qty)</td>
+
+</tr>
+#end
+</tbody>
+<tfoot><tr>
+<th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+          <th style="border-top-color: #000000; border-top-style: solid; border-top-width: 1px;">&nbsp;</th>
+        </tr></tfoot>
+</table>
+<table width="70%" border="0" cellspacing="0">
+<tr>
+<td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-left-width: 1px; border-left-style: solid; border-top-width: 1px; border-top-style: solid; border-right-color: #000000; border-left-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">NON TAX MDSE</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right">$number.format('currency',$order.TotalWithDiscount)</p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">TAXABLE MDSE</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">SALES TAX</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right">$number.format('currency',$order.taxtot)</p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">MISCELLANEOUS</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+      </tr>
+<tr bgcolor="#c9c9c9">
+<td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-left-width: 1px; border-left-style: solid; border-top-width: 1px; border-top-style: solid; border-right-color: #000000; border-left-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;">AMOUNT DUE</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right">$number.format('currency',$order.TotalWithDiscount)</p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+      </tr>
+<tr>
+<td style="border: 1px solid #000000;">
+          <center style="font-size: 0.8em; height: 14px;">DUE DATE</center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+        <td style="border-right-width: 1px; border-right-style: solid; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">
+          <center style="font-size: 0.8em; height: 14px;"></center>
+          <p style="font-family: Courier New; height: 6px; text-align: right;" align="right"></p>
+        </td>
+      </tr>
+</table>
+</table>
+</body>
+</html>

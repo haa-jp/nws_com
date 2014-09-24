@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+#if($CookiesDTO && $CookiesDTO.getCookieValue('preferences'))
+  #if($CookiesDTO.getCookieValue('preferences')=="grid")
+    #set($itemViewClass= "grid")
+  #else
+    #set($itemViewClass= "list")
+  #end
+#else
+  #set($itemViewClass= "grid")
+#end
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <base href="$baselink"/>
+    <meta name="description" content="#if($metadescription && $metadescription!="") $metadescription #else   #end" />
+    <meta name="keywords" content="#if($metakeywords && $metakeywords!="")$metakeywords #else   #end" />
+    <title>#springMessage("vm.solr_advanced_search.title")</title>
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+  </head>
+  <body id="search" class="nws">
+
+    ############################ Header ####################################
+#if($vendorSettingsDTO.themeId == $storeSkinId)
+    #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+#else
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+#end
+    ############################ End Header ################################
+
+    ############################ Search Bar ################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
+    ############################ End Search Bar ############################
+
+
+    <div id="wrapper" class="row-fluid">
+      <div class="span2" id="left-col">
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/breadcrumbs.vm")
+      </div>
+      <div class="span10" id="right-col">
+          <div class="content">
+
+##set($itemsDTO = $AdvancedSearchUsingSolr)
+##set($itemsPaginationDTO = "AdvancedSearchUsingSolr")
+ #set($itemsDTO = $nwsSolrDTO)
+ #set($itemsPaginationDTO = "nwsSolrDTO")
+
+##set($facet_cat_searchDTO = $facet_simple_searchDTO)
+#set($facet_cat_searchDTO = $nwsFacetDTO)
+
+#if($itemsDTO.getItems().size() == 1)
+  #foreach($itemIter in $itemsDTO.getItems())
+    #set($childItem = $pageTile.getItemObject($itemsDTO, $itemIter, "i"))
+  #end
+  $response.sendRedirect($seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&iid=$childItem.itemid"))
+#end
+
+#if($itemsDTO.getItems().size() >1)
+<div class="alert" style="overflow: auto;">
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/facets_menu.vm")
+</div>
+#end
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/categoryT_itemList.vm")
+          </div><!-- end content -->
+        </div><!-- end span10 -->
+      </div>
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+    </div><!-- end container-fluid -->
+  </div>
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/category.js"></script>
+    <script type="text/javascript" language="javascript">
+      Category.initialize();
+    </script>
+  </body>
+</html>

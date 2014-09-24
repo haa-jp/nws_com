@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Checkout Split Order</title>
+    <meta name="interestgroup" content="tp">
+    <meta name="prodtype" content="">
+#if($vendorSettingsDTO.themeId)
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/commonCSS-JS.vm")
+#else
+  #parse("$vendorSettingsDTO.vendorId/commonCSS-JS.vm")
+#end
+    <script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
+    
+    <script language="javascript"> 
+    function upAddress(productidx,addressidx,mode) {
+    var addressid=eval("document.frm.shipaddressid.value");
+    if(addressid == "0") {
+    document.frm.t.value=mode;
+    document.frm.productidx.value=productidx;
+    document.frm.addressidx.value=addressidx;
+    document.frm.shipaddressid.value=addressid;
+    document.frm.submit();
+    }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="masterWrapper">
+      <!-- Start header -->
+#if($vendorSettingsDTO.themeId)
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+#else
+       #parse("$vendorSettingsDTO.vendorId/header.vm")
+#end
+      <!-- End header -->
+      <!--start content-->
+      <div id="bd">
+        <div id="wide-content" class="checkout">
+              <h1>Split Shipping Address</h1>
+              <div class="tablediv">
+#springBind( "checkoutViewDTO.*" )
+                <form name="frm" action="splitshipping.html" method="POST">
+                  <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+                  <input type="hidden" name="t">
+                  <input type="hidden" name="redirect">
+#springBind( "checkoutViewDTO.productidx")
+                  <input type="hidden" name="$status.expression" value="$status.value">
+#springBind( "checkoutViewDTO.addressidx")
+                  <input type="hidden" name="$status.expression" value="$status.value">
+
+#set($product=$checkoutViewDTO.details.products.get(${checkoutViewDTO.productidx}))
+#set($shipaddr=$product.shipAddress.get(${checkoutViewDTO.addressidx}))
+
+#springBind( "checkoutViewDTO.*" )
+#if($status.errors.errorCount>0)
+  #foreach($error in $status.errorMessages)
+                  <div class="warning">$error</div>
+  #end
+#end
+                  <table cellspacing="0" cellpadding="0" border="0" align="center" class="product-table">
+                    <tr>
+                      <th width="25%">
+                        You have:
+                      </th>
+                      <td>
+                        <input type="text" value="$shipaddr.qty" DISABLED/>&nbsp;$product.title
+                      </td>
+                    </tr>
+                    <tr>
+                      <th width="25%">
+                        QTY:
+                      </th>
+#springBind("checkoutViewDTO.qty")
+                      <td>
+                        <input type="text" name="$status.expression" value="$status.value"/>
+                      </td>
+                    </tr>
+                    <tr>
+                      <th width="25%">
+                        Shipping Address:
+                      </th>
+#springBind( "checkoutViewDTO.shipaddressid" )
+                      <td>
+                        <select name="$status.expression" onChange="upAddress(${checkoutViewDTO.productidx},${checkoutViewDTO.addressidx},'add')">
+#foreach($address in $customerAddressDTO)
+                          <option value="$address.addressid" 
+  #if("$address.addressid"=="$status.value") selected #end>$address.nickname
+
+                          </option>
+#end
+                          <option value="0">New Address</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </table>
+                    
+                  <div class="okCancelPos">
+                    <input type="submit" class="btnLogin btnclass" value="Continue" onClick="doSubmit(this.form,this.form.t,'split')"/>
+                    <input type="submit" class="btnLogin btnclass" value="Cancel" onClick="doSubmit(this.form,this.form.redirect,'shipping.html')"/>
+                  </div>
+                </form>
+              </div>
+              <!--end tablediv-->
+        </div>
+        <!--end wide-content -->
+      </div>
+      <!--end bd-->
+      <!-- Start footer -->
+#if($vendorSettingsDTO.themeId)
+      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+#else
+       #parse("$vendorSettingsDTO.vendorId/footer.vm")
+#end
+      <!-- End footer -->
+    </div>
+    <!-- End doc-->
+  </body>
+</html>

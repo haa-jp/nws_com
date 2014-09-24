@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <base href="$baselink"/>
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/datepicker/datepicker.css" type="text/css" media="all" />
+   </head>
+   <body class="nws">
+    ############################ Header ####################################
+    #if($vendorSettingsDTO.themeId == $storeSkinId)
+        #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+      #else
+        #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+    #end
+    ############################ End Header ################################
+    
+    ############################ Search Bar ################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
+    ############################ End Search Bar ############################
+
+    <div id="wrapper" class="row-fluid">
+      <div class="span2" id="left-col">
+    ############################ Left Column ##############################
+    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/accountbar.vm")
+    ############################ End Left Column ##########################
+      </div>
+      <div class="span10" id="right-col">
+
+    ############################ Page Content #############################
+
+        <h1>Order Summary</h1>
+        <p><b>Order Status: </b>&nbsp; $!customerOrderDTO.orderOutput.header.status</p>
+        <div style="font-size:20px;text-decoration:underline;text-align:center;">
+          #if($customerOrderDTO.copyOrderUrl!="")
+          <a href="$customerOrderDTO.copyOrderUrl">Copy Order</a>
+          #end
+        </div>
+
+        <div class="row-fluid">
+          <div>
+            <hr />
+            <div>
+              <table width="100%">
+                <tr>
+                  <td>
+                    <table>
+                      <tr>
+                        <td><b>Customer Number: </b></td><td>$!customerOrderDTO.orderOutput.header.customerNumber</td>
+                      </tr>
+                      <tr>
+                        <td><b>Order Number: </b></td><td>$!customerOrderDTO.orderOutput.header.orderNumber / $!customerOrderDTO.orderOutput.header.generation</td>                      </tr>
+                      <tr>
+                        <td><b>PO Number: </b></td><td>$!customerOrderDTO.orderOutput.header.poNumber</td>
+                      </tr>
+                      <tr>
+                        <td><b>Order Date: </b></td><td>$!date.format('short',$customerOrderDTO.orderOutput.header.orderDate)</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td><b>Order Value: </b></td><td>$!customerOrderDTO.orderOutput.header.orderValue</td>
+                      </tr>
+                      <tr>
+                        <td><b>Invoice Amount: </b></td><td>$!customerOrderDTO.orderOutput.header.invoiceAmount</td>
+                      </tr>
+                      <tr>
+                        <td><b>Order Type: </b></td><td>$!customerOrderDTO.orderOutput.header.orderType</td>
+                      </tr>
+                    </table>
+                  </td>
+                  <td>
+                    <table>
+                      <tr>
+                        <td><b>Est Ship Date: </b></td><td>$!date.format('short',$customerOrderDTO.orderOutput.header.estShipDate)</td>
+                      </tr>
+                      <tr>
+                        <td><b>Ship Date: </b></td><td>$!date.format('short',$customerOrderDTO.orderOutput.header.shipDate)</td>
+                      </tr>
+                      <tr>
+                        <td><b>Invoice Date: </b></td><td>$!date.format('short',$customerOrderDTO.orderOutput.header.invoiceDate)</td>
+                      </tr>
+                      <tr>
+                        <td><b>Invoice Number: </b></td><td>$!customerOrderDTO.orderOutput.header.invoiceNumber</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div style="display: none">
+              <p>
+                <b>Company Number:</b> $!customerOrderDTO.orderOutput.header.companyNumber
+                <b>Hist Sequence:</b> $!customerOrderDTO.orderOutput.header.histSequence
+              </p>
+            </div>
+          </div>
+          <hr />
+        </div>
+        <!-- end row-fluid -->
+
+        <div class="row-fluid">
+          <div class="span5">
+            <h3>Bill To:</h3>
+            <table>
+              <tr>
+                <td>$!customerOrderDTO.orderOutput.header.billToName
+                  <br/>
+                #if($!customerOrderDTO.orderOutput.header.billToLine1 != "")
+                  $!customerOrderDTO.orderOutput.header.billToLine1
+                  <br />
+                #end
+                #if($!customerOrderDTO.orderOutput.header.billToLine2 != "")
+                  $!customerOrderDTO.orderOutput.header.billToLine2
+                  <br />
+                #end
+                #if($!customerOrderDTO.orderOutput.header.billToLine3 != "")
+                  $!customerOrderDTO.orderOutput.header.billToLine3
+                  <br/>
+                #end
+                  $!customerOrderDTO.orderOutput.header.billToCity &nbsp; $!customerOrderDTO.orderOutput.header.billToState &nbsp; &nbsp; $!customerOrderDTO.orderOutput.header.billToZip
+                  <br/>
+                  $!customerOrderDTO.orderOutput.header.billToCountry
+                </td>
+              </tr>
+            </table>
+          </div>
+
+          <div style="span5">
+            <h3>Ship To:</h3>
+            <table>
+              <tr>
+                <td>$!customerDTO.arSummary.customerName
+                  <br/>
+                #if($!customerOrderDTO.orderOutput.header.shipToLine1 != "")
+                  $!customerOrderDTO.orderOutput.header.shipToLine1
+                  <br />
+                #end
+                #if($!customerOrderDTO.orderOutput.header.shipToLine2 != "")
+                  $!customerOrderDTO.orderOutput.header.shipToLine2
+                  <br />
+                #end
+                #if($!customerOrderDTO.orderOutput.header.shipToLine3 != "")
+                  $!customerOrderDTO.orderOutput.header.shipToLine3
+                  <br/>
+                #end
+                  $!customerOrderDTO.orderOutput.header.shipToCity &nbsp; $!customerOrderDTO.orderOutput.header.shipToState &nbsp; &nbsp; $!customerOrderDTO.orderOutput.header.shipToZip
+                  <br />
+                  $!customerOrderDTO.orderOutput.header.shipToCountry
+                </td>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <!-- end row-fluid -->
+
+        <hr />
+
+        <div class="row-fluid">
+          <table class="table">
+            <caption>
+              Shipping
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Weight</th>
+                <th scope="col">Carrier</th>
+                <th scope="col">Ship method</th>
+                <th scope="col">Ship date</th>
+                <th> Tracking number</th>
+              </tr>
+            </thead>
+            <tbody>
+              #foreach($shippinItem in $customerOrderDTO.orderOutput.shipping)
+              <tr>
+                <td>$!number.format('#,###.00',$shippinItem.weight)</td>
+                <td>$shippinItem.carrier</td>
+                <td>$shippinItem.method</td>
+                <td>$date.format('M/d/yyyy',$shippinItem.shipDate)</td>
+                <td> 
+                  #if($shippinItem.carrier.equalsIgnoreCase('UPS')) 
+                  <a href="http://wwwapps.ups.com/etracking/tracking.cgi?submit=Track&InquiryNumber1=$shippinItem.trackingNumber&InquiryNumber2=&InquiryNumber3=&InquiryNumber4=&InquiryNumber5=&TypeOfInquiryNumber=T">$shippinItem.trackingNumber</a> 
+                  #else 
+                    #if($shippinItem.carrier.equalsIgnoreCase('FEDEX')) 
+                  <a href="http://www.fedex.com/cgi-bin/tracking?action=track&language=english&cntry_code=us&initial=x&mps=y&tracknumbers=$shippinItem.trackingNumber">$shippinItem.trackingNumber</a> 
+                    #else 
+                      #if($shippinItem.carrier.equalsIgnoreCase('SPEEDEE')) 
+                  <a href="http://packages.speedeedelivery.com/packages/packages.php?tracking=$shippinItem.trackingNumber">$shippinItem.trackingNumber</a> 
+                      #else
+                  $shippinItem.trackingNumber
+                      #end
+                    #end
+                  #end 
+                </td>
+              </tr>
+              #end
+            </tbody>
+          </table>
+        </div>
+
+        <hr />
+
+        <div class="row-fluid">
+          <table class="table table-striped">
+            <caption>
+              Order Details
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Item Number</th>
+                <th scope="col">Description </th>
+                <th scope="col">Order Qty</th>
+                <th scope="col">Ship Qty</th>
+                <th scope="col">BO Qty</th>
+                <th scope="col">UOM</th>
+                <th scope="col">Sell Price</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              #set ($alter = $alternator.make('odd', 'even'))
+              #foreach($item in $customerOrderDTO.orderOutput.detail)
+              <tr class="$alter">
+                <td>$item.itemNumber</td>
+                <td>$item.description1 $item.description2</td>
+                <td>$item.orderQty</td>
+                <td>$item.shipQty</td>
+                <td>$item.bOQty</td>
+                <td>$item.uOM</td>
+                <td>$item.sellPrice</td>
+                <td>$item.total</td>
+              </tr>
+              #end
+            </tbody>
+          </table>
+        </div>
+    ############################ Edns Page Content ########################
+      </div>
+    </div>
+    ############################ Footer ###################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
+    ############################ Ends Footer ##############################    
+    
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+  </body>
+</html>
+

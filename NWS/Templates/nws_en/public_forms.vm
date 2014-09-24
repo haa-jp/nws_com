@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- start control heading -->
+#if (!$pageTileDictionaryDTO)
+	#if ($_commandName)
+		#springBind( "${_commandName}.pageTileDictionaryDTO" )
+		#set ($pageTileDictionaryDTO = ${status.value})
+	#end
+#end
+#if ($pageTileDictionaryDTO)
+#set ($Menu4DTO=$pageTileDictionaryDTO.getPageTile("Menu4DTO") )
+#set ($category_centerDTO=$pageTileDictionaryDTO.getPageTile("category_centerDTO") )
+#set ($vendorInfoDTO=$pageTileDictionaryDTO.getPageTile("vendorInfoDTO") )
+#set ($Menu3DTO=$pageTileDictionaryDTO.getPageTile("Menu3DTO") )
+#set ($Menu2DTO=$pageTileDictionaryDTO.getPageTile("Menu2DTO") )
+#set ($category_rightDTO=$pageTileDictionaryDTO.getPageTile("category_rightDTO") )
+#set ($category_topDTO=$pageTileDictionaryDTO.getPageTile("category_topDTO") )
+#set ($Menu5DTO=$pageTileDictionaryDTO.getPageTile("Menu5DTO") )
+#set ($Menu1DTO=$pageTileDictionaryDTO.getPageTile("Menu1DTO") )
+#set ($LearnMoreDTO=$pageTileDictionaryDTO.getPageTile("LearnMoreDTO") )
+#set ($categoryNameDTOHQL=$pageTileDictionaryDTO.getPageTile("categoryNameDTOHQL") )
+#set ($category_ad_topDTO=$pageTileDictionaryDTO.getPageTile("category_ad_topDTO") )
+#end
+<!-- end control heading --> 
+
+#if($request.isSecure())
+	#if ($request.getServerPort() ==443)  
+		#set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+	#else
+		#set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+	#end
+#else
+	#if ($request.getServerPort() ==80)
+		#set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+	#else
+		#set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+	#end
+#end
+									 
+
+#if (!$pageTileDictionaryDTO)
+	#if ($_commandName)
+		#springBind( "${_commandName}.pageTileDictionaryDTO" )
+		#set ($pageTileDictionaryDTO = ${status.value})
+	#end
+#end
+
+	#if ($pageTileDictionaryDTO)
+		#set ($vCatsCategoryDTO=$pageTileDictionaryDTO.getPageTile("vCatsCategoryDTO") )
+	#end
+
+	#if(($multiPageViews) && ($__virtualCategory))
+		#set($itemMultiPageView = $multiPageViews.get($__virtualCategory.getPageTileName()))
+	#end
+
+	#if (!$direction) #set($direction = $regExp.getParamFromURL($itemMultiPageView.multiPageURL, 'direc'))  #end
+		#if (!$mpvp&&$itemMultiPageView&&$itemMultiPageView.currentPageIndex) 
+			#set($mpvp = $itemMultiPageView.currentPageIndex)  
+		#else
+			#set($mpvp = "")  
+		#end
+
+#set($catid = $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'categoryid'))
+#set($metadescription= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metadescription'))
+#set($metakeywords= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metakeywords'))
+#set($pagetitle= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'pagetitle'))
+#set($categoryImage= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'image'))
+#set($categoryThumb= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'thumbimage'))
+#set($categoryName= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'name'))
+#set($category= $pageTile.getItemObject($childCategoriesDTO, $childCategoriesDTO.getItems(), "c"))
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<base href="$baselink">
+		<link rel="shortcut icon" href="/favicon.png">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+		<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/jquery.min.js"></script>
+		<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/jquery.validate.min.js"></script>
+		<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/customer_form_data_input_jquery.js"></script>
+	</head>
+
+	<body id="category" class="nws">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header_public.vm")
+		<div class="container-fluid main-container">
+			<div class="row-fluid pad70">
+				<div class="span2">
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/public_nav.vm")
+
+				</div>
+				<div class="span10">
+					<div class="container-fluid">
+						<h1>$categoryName</h1>
+#parse($category_topDTO.getItems().get(0).get('category_top'))
+					</div>
+					<div class="row">
+						<div class="span9">
+#parse($category_ad_topDTO.getItems().get(0).get('category_ad_top'))
+#parse($category_centerDTO.getItems().get(0).get('category_center'))
+					</div>
+					<div class="span3">
+#parse($category_rightDTO.getItems().get(0).get('category_right'))
+					</div>
+				</div> <!-- end row -->
+			</div>
+			</div>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+		</div><!-- end container-fluid -->
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+	</body>
+
+</html>
+
+
+
+
+
+

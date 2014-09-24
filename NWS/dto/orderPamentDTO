@@ -1,0 +1,1 @@
+select p as p from com.avetti.commerce.domainmodel.OrderPayment p where orderdataid='%%orderDataId%%'

@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+#set($itemRow = $singleItemDTO.getItem(0))
+#if($itemRow)
+#set($item = $pageTile.getItemObject($singleItemDTO, $itemRow , "i"))
+#if($item)
+#set($price = $item.itemPrice)
+#end
+#set($printitemid = $pageTile.getItemObject($singleItemDTO, $itemRow , "itemid"))
+#end
+## commit Test to hub ~ Jp.
+#if($request.isSecure())
+  #if ($request.getServerPort() ==443)
+    #set ($baselink = "https://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "https://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#else
+  #if ($request.getServerPort() ==80)
+    #set ($baselink = "http://$request.getServerName()$request.getContextPath()/")
+  #else
+    #set ($baselink = "http://$request.getServerName():$request.getServerPort()$request.getContextPath()/")
+  #end
+#end
+
+#if (!$pageTileDictionaryDTO)
+  #if ($_commandName)
+    #springBind( "${_commandName}.pageTileDictionaryDTO" )
+    #set ($pageTileDictionaryDTO = ${status.value})
+  #end
+#end
+
+#if ($pageTileDictionaryDTO)
+  ###set ($storeMainCategoriesDTO=$pageTileDictionaryDTO.getPageTile("storeMainCategoriesDTO") )
+  #set ($childItemsHomeDTO=$pageTileDictionaryDTO.getPageTile("childItemsHomeDTO") )
+  #set ($catDropMenuDTO=$pageTileDictionaryDTO.getPageTile("catDropMenuDTO") )
+#end
+
+#set($metadescription= $item.metadescription)
+#set($keywords= $item.keywords)
+#set($pagetitle= $item.pagetitle)
+#if($request.getParameter("pf"))
+#set($printView = $request.getParameter("pf"))
+#end
+<html xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
+  <!-- itemtemplate.vm--><head>
+      <!-- Facebook Graph Protocol -->
+    <meta property="og:title" content="${esc.html($item.title)}" />
+    <meta property="og:type" content="product" />
+    <meta property="og:url" content="${baselink}${seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")}" />
+    <meta property="og:image" content="${baselink}store$item.itemimage" />
+    <meta property="og:site_name" content="$vendorSettingsDTO.SiteName" />
+<!--
+    <meta property="fb:admins" content="100001477813120" />
+-->
+    <meta property="fb:app_id" content="263181867092117"/>
+
+    <meta property="og:description" content="!${esc.html($item.shortdesc)}" />
+    <!-- End of Facebook Graph Protocol -->
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="description" content="$!metadescription" />
+    <meta name="keywords" content="$!keywords" />
+    <base href="$baselink" />
+    <title >$!pagetitle</title>
+    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/showimage/showimage.css">
+
+## **********  Added the css directly just for the extended view skin use the same css than default skin
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/nws_en/plugins/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/nws_en/css/app.css" media="all" />
+## **********  End css for extended view
+
+#if($printView && $printView == "y")
+    <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/print.css" media="screen,print"/>
+#end
+  </head>
+  <body class="nws">
+    <input type="hidden" id="js-vid" value="$vendorSettingsDTO.vendorId">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/header.vm")
+    <div class="container-fluid main-container">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/search_bar.vm")
+      <div class="row-fluid">
+        <div class="span2">
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/side_nav.vm")
+        </div>
+        <div class="span10">
+          <a href="${seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$item.itemid")}" class="btn btn-primary">Back to item</a>
+          <hr />
+          <div class="row-fluid">
+            <div class="span12">
+#parse($item_topDTO.getItems().get(0).get('item_top'))
+            </div>
+          </div>
+          <div class="row-fluid">
+            <div class="span5">
+                   <div class="preview">
+                #if($item.storeFeatured )
+                   Storewide Feature &nbsp;&nbsp;
+                  #end
+                 
+                   #if($item.catFeatured)
+                   Featured &nbsp;&nbsp;
+                  #end
+
+                  #if($item.newItem)
+                   New &nbsp;&nbsp;
+                  #end
+
+                 #if($item.onSale)
+                   On Sale &nbsp;&nbsp;
+                  #end
+                <img id="js-item-image-$item.itemid" name="slika" src="$item.itemimage">
+              </div>
+              <div class="thumbs">
+  #if($item.smallimage!="")
+                <a href="#" rel="tb">
+      <img src="$item.smallimage" 
+      alt=""/></a>
+  #end
+  #if($item.smallimage2!="")
+                <a href="#" rel="tbA">
+      <img src="$item.smallimage2" 
+      alt=""/></a>
+  #end
+  #if($item.smallimage3!="")
+                <a href="#" rel="tbB">
+      <img src="$item.smallimage3" 
+      alt=""/></a>
+  #end
+  #if($item.smallimage4!="")
+                <a href="#" rel="tbC">
+      <img src="$item.smallimage4" 
+      alt=""/></a>
+  #end
+  #if($item.smallimage5!="")
+                <a href="#" rel="tbD">
+      <img src="$item.smallimage5" 
+      alt=""/></a>
+  #end
+              </div>
+      </div><!-- end span9 -->
+
+
+  <div class="span5">
+    <h2>$item.title</h2>  
+    <div style="padding-bottom: 8px;" id="js-item-title-$item.itemid" class="title itemTitle"></div>
+    <ul>
+      <li><strong>#springMessage("vm.itemTemplate.code"): </strong>
+        <span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></li>
+      <li><strong>MFG Item Number: </strong> $item.mfgpartno</li>
+#set ($inv=$itemInventoryDTO.getItem(0))
+#if($inv)
+      <li><strong>#springMessage("vm.itemTemplate.availability")</strong>
+      <span>$inv.instock</span></li>
+#end 
+    </ul>
+
+  #set ($itemProperties = $propertiesDTO.getItems())
+  <div class="title subTitle2">Properties</div>
+  <div class="desc">
+          <table style="width: 450px;">
+                  <tbody>
+                          #foreach( $prop in $itemProperties )
+                          #if($prop.propvalue.length() > 0)
+                          <tr>
+                                  <td style="border: none;">$prop.propname:</td>
+                                  <td style="border: none;">$prop.propvalue</td>
+                          </tr>
+                          #end
+                          #end
+                  </tbody>
+          </table>
+  </div>
+
+              </div><!-- end item-options -->
+ <!-- end jpyui3-1-5 -->
+              <div class="span2">
+#parse($item_rightDTO.getItems().get(0).get('item_right')) 
+              </div>
+            </div> <!-- end row-fluid -->
+            <div class="row-fluid">
+              <div class="span12">
+#parse($item_centerDTO.getItems().get(0).get('item_center')) 
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row-fluid">
+
+        </div>
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+
+    </div><!-- End container-fluid -->
+## **********  Added the js directly just for the extended view skin use the same css than default skin
+##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/nws_en/js/login.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/nws_en/js/lineItemAdd.js"></script>
+  <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/nws_en/js/lineItemAdd_events.js"></script>
+## **********  End css for extended view
+
+  </body>
+</html>
