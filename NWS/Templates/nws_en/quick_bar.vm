@@ -1,6 +1,10 @@
+
 <div class="row-fluid">
 	<ul class="order-actions">
-	  <li class="pull-left">
+#if($vendorSettingsDTO.templateName == "myaccount" || $vendorSettingsDTO.templateName == "home_store" || $vendorSettingsDTO.templateName == "home" || $vendorSettingsDTO.templateName == "static-content" ||
+ $vendorSettingsDTO.templateName == "accountsummary" || $vendorSettingsDTO.templateName == "paidinvoices" || $vendorSettingsDTO.templateName == "openinvoices" ||
+ $vendorSettingsDTO.templateName == "nwrevieworders" || $vendorSettingsDTO.templateName == "order builder" || $vendorSettingsDTO.templateName == "saved_orders")
+  <li class="pull-left">
 <a> Browse Products</a>
     <!-- <a href="#">Browse Products</a> -->
     <div id="megamenu" class="megamenu">
@@ -129,6 +133,7 @@
   </li>
   <li class="pull-left"><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=22823")"> Quick Order</a></li>
   <li class="pull-left"><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23046")"> Saved Orders</a></li>
+#end
   <li class="clear"></li>
 </ul>
 </div> <!-- end fluid -->

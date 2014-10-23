@@ -1732,13 +1732,12 @@ ul.ylink li {
 }
 
 .promo {
-	background: white url(images/rv-pro-logo.jpg) right no-repeat;
+	background: white url(images/rv-pro-logo.jpg) top right no-repeat;
     border: 1px solid #3A87AD;
     border-radius: 4px;
     text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
 	margin: 4px;
-	height: 80px;
 	padding:6px;
 }
-.promo p { font-size: 120%; margin: 20px 170px 20px 10px }
+.promo p { font-size: 120%; margin: 20px 225px 20px 10px }
 

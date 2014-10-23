@@ -14,8 +14,8 @@
                 <label for="per-page">Items Per page:</label>
                 <select class="per-page" name="pageItemsCount">
                   <option value="15" #if($itemCount <= 15) selected="selected" #end>15</option>
-                  <option value="20" #if($itemCount > 15 && $itemCount <= 20) selected="selected" #end>20</option>
-                  <option value="25" #if($itemCount > 20 && $itemCount <= 25) selected="selected" #end>25</option>
+                  <option value="30" #if($itemCount > 15 && $itemCount <= 30) selected="selected" #end>30</option>
+                  <option value="60" #if($itemCount > 30 && $itemCount <= 60) selected="selected" #end>60</option>
                 </select>
                 <select name="sortby" class="sortby">
                   <option value=""> #springMessage("vm.categoryT_itemList.sortby") </option>

@@ -1,6 +1,6 @@
 (function( $ ){
   $.fn.sidenav = function(options) {
-    if(this.data('menu') == undefined){
+if(this.data('menu') == undefined){
       this.data('menu', 'done');
     }
     else{
@@ -16,11 +16,13 @@
 
     var self = this,
       settings = $.extend({
+        
         'topId': ''
       }, options),
       menuCrumbs = [],
       menuLevel = 1,
       methods = {
+        
         submenu: function(menus){
           var menuHtml = '<ul data-level="'+ menuLevel +'">';
           if(menus.childs && menus.childs.length > 0) {
@@ -33,6 +35,7 @@
           }
           return menuHtml += '</ul>';
         },
+        
         li: function(options){
           var cCrumb = [],
             activeLi = 'class="active"',
@@ -64,6 +67,7 @@
           liHtml += '</li>';
           return liHtml;
         },
+        
         events: function($this){
           var jsonResponse, liChilds;
           try {
@@ -129,6 +133,7 @@
             $.cookie('mc', JSON.stringify({data: menuCrumbs}), {expires: 360, path: "/"});
           });
         },
+        
         generateAllSubmenus: function(){
           self.each(function() {
             $(this).find('li a').each(function(){

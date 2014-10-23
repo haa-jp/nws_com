@@ -309,6 +309,7 @@ $productitem.product.inventoryHistory.ship1qty
                   </td>
                   <td class="ar vat val">$number.format('currency', $checkoutViewDTO.details.taxTotal, $viewStoreCurrency.locale)</td>
                 </tr>
+                
                 <tr class="exttotal">
                   <td colspan="5" class="empty-cel">&nbsp;</td>
                   <td class="ar vat lbl"><b>Your Order Total:</b></td>
