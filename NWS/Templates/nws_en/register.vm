@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 #if($request.isSecure())
@@ -21,12 +22,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
- <!-- register.vm-->
+  <!-- register.vm-->
    
-    <title>Register - #springMessage("vm.nws.register.title")</title>
-    <link rel="shortcut icon" href="/favicon.ico">
+    <title>Register - #springMessage("vm.register.title")</title>
+    <link rel="shortcut icon" href="/favicon.png">
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
 
+##<script type="text/javascript" src="assets/plugins/jQuery/jquery-1.4.1.min.js"></script>
 #if($registerViewDTO.onepagecheckout)
   <link rel="stylesheet" href="/C7pcisecureorderform/assets/pcisecureorderform.css" type="text/css" media="all" />
   <script type="text/javascript" src="/C7pcisecureorderform/assets/pcisecureorderform.js"></script>
@@ -704,7 +706,7 @@ var province = document.getElementById("province");
           $('#customerNumberModal').modal('show');
         }
       });
- 	
+ 
       #if($memberType != '1' && $registerViewDTO.onepagecheckout && $productsDetails.products.size() > 0 )
         #springBind( "registerViewDTO.*" )
             check_country();

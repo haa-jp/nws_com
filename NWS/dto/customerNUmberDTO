@@ -1,0 +1,1 @@
+SELECT c as c FROM com.avetti.commerce.domainmodel.Customerprops c WHERE c.propname='Customer Number' and c.clientid=%%clientid%%

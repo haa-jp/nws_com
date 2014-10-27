@@ -143,32 +143,22 @@
 #end
 
 
-        <script language="javascript">
-          function changelocation(thissel, state)
-          {
-            var otherregion = document.getElementById("otherregion");
-            var countryIso = new Array(#foreach($country in $countriesInUse)  '$country.a2', #end 'other');
-            var countryId = new Array(#foreach($country in $countriesInUse)  '$country.id', #end 'other');
-            var provincesName = new Array(#foreach($province in $provincesInUse) '$province.name', #end 'other');
-            var provincesValue = new Array(#foreach($province in $provincesInUse) '$province.id', #end '0');
-            var provincesCountry = new Array(#foreach($province in $provincesInUse) '$province.countryid', #end '-1');
-            var countryid="0";
-            for(var i=0;i < thissel.options.length;i++)
-            {
-              if(thissel.options[i].selected == true)
-                countryid=thissel.options[i].value;
-            }
+<script type="text/javascript">
+	function changelocation(thissel, state) {
+
+	for(var i=0;i < thissel.options.length;i++) {
+		if(thissel.options[i].selected == true)
+			countryid=thissel.options[i].value;
+		}
     
-            var isoname="";
-            for(var i=0;i < countryIso.length;i++)
-            {
-              if(countryId[i] == countryid)
-                isoname=countryIso[i];
-            }
-            if(isoname=="US")
-            {
-              $('#' + state).val('#springMessage("vm.register.state")');
-            }
+		var isoname="";
+		for(var i=0;i < countryIso.length;i++) {
+			if(countryId[i] == countryid)
+				isoname=countryIso[i];
+			}
+            if(isoname=="US") {
+				$('#' + state).val('#springMessage("vm.register.state")');
+			}
             else 
             {
               $('#' + state).val('#springMessage("vm.register.province")');
@@ -207,510 +197,485 @@
                 $(otherregion).hide(); 
               }
             }
-          }
+	}
           
 
-function changeRegion(countryid){ 
-document.getElementById("countryid").value=countryid;
-var c = document.getElementById("region");
-var otherregion = document.getElementById("otherregionForBilling");
- c.length=0;
+	function changeRegion(countryid) { 
+		document.getElementById("countryid").value=countryid;
+		var c = document.getElementById("region");
+		var otherregion = document.getElementById("otherregionForBilling");
+		c.length=0;
 
- if(countryid > 0){
-            #foreach($country in $countriesInUse)
-            if(countryid == ${country.id})  {
-           #set($provicesSize = 0)
-                          #foreach($province in $provincesInUse)
-                             #if($province.countryid ==${country.id})    
-                                   #set($provicesSize =$provicesSize+1 )
-                             #end
-                          #end
-                 #if($provicesSize >0)
-                                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");## -1 stand for this country has region but select none
-                          #foreach($province in $provincesInUse)
-                           #if($province.countryid ==${country.id})                      
-                                               c.options[c.length]=new Option("$province.name","$province.id");
-                             #end
-                          #end
-                        #else
-                                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","0"); 
-                    #end
-                  }  
-           #end
-    }else{
-                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");
-   }
-   
-  if(c.options[0].value== 0){
-          c.style.display = "none";
-          otherregion.style.display = "block";
-     } else {
-          c.style.display = "block";
-          otherregion.style.display = "none";     
-     }
+		if(countryid > 0) {
+			#foreach($country in $countriesInUse)
+	            if(countryid == ${country.id})  {
+				#set($provicesSize = 0)
+					#foreach($province in $provincesInUse)
+						#if($province.countryid ==${country.id})    
+							#set($provicesSize =$provicesSize+1 )
+						#end
+					#end
+			
+				#if($provicesSize >0)
+					c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");## -1 stand for this country has region but select none
+					#foreach($province in $provincesInUse)
+						#if($province.countryid ==${country.id})                      
+							c.options[c.length]=new Option("$province.name","$province.id");
+						#end
+					#end
+				#else
+					c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","0"); 
+				#end
+				}
+			#end
+    	}else{
+           c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");
+		}
 
-}
+		if(c.options[0].value== 0){
+			c.style.display = "none";
+			otherregion.style.display = "block";
+		} else {
+			c.style.display = "block";
+			otherregion.style.display = "none";     
+		}
+	}
 
-   function changeRegion1(countryid)
-{ 
-var c = document.getElementById("provinceId");
-var otherregion = document.getElementById("otherregionForShipping");
- c.length=0;
-#if($checkoutViewDTO.billingandshippinginonepage)       
- if(countryid > 0){
-            #foreach($country in ${checkoutViewDTO.addresses.shippingAddress.countries})
-                if(countryid == ${country.country.id}) {
-                 #if($country.provinces.size()>0)
-                                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");// -1 stand for this country has region but select none
-                          #foreach($province in ${country.provinces}) 
-                                               c.options[c.length]=new Option("$province.province.name","$province.province.id");
-                          #end
-                        #else
-                                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","0"); // 0 stand for this country don't have region which need display input field and go around back-end validation
-#end
-                   } 
-           #end
-    }else{
-                c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");
-   }
-   
-  if(c.options[0].value== 0){
-          c.style.display = "none";
-          otherregion.style.display = "block";
-     } else {
-          c.style.display = "block";
-          otherregion.style.display = "none"; 
-     }
-#end
+	function changeRegion1(countryid) { 
+		var c = document.getElementById("provinceId");
+		var otherregion = document.getElementById("otherregionForShipping");
+		c.length=0;
 
-}
+		#if($checkoutViewDTO.billingandshippinginonepage)       
+			 if(countryid > 0){
+				#foreach($country in ${checkoutViewDTO.addresses.shippingAddress.countries})
+					if(countryid == ${country.country.id}) {
+						#if($country.provinces.size()>0)
+							c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");// -1 stand for this country has region but select none
+							#foreach($province in ${country.provinces}) 
+								c.options[c.length]=new Option("$province.province.name","$province.province.id");
+							#end
+						#else
+							c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","0"); // 0 stand for this country don't have region which need display input field and go around back-end validation
+						#end
+					} 
+				#end
+			} else {
+				c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1")
+			}
 
-function showhideShipping(){
-#if($checkoutViewDTO.billingandshippinginonepage)
-var sameasbilling = document.getElementById("sameasbilling");
-   if(sameasbilling && sameasbilling.checked){
-         document.getElementById("notSameAsBilling").style.display="none";
-     }else{
-         document.getElementById("notSameAsBilling").style.display="";
-   }
-#end
-}
+			if(c.options[0].value== 0) {	
+				c.style.display = "none";
+				otherregion.style.display = "block";
+			} else {
+				c.style.display = "block";
+				otherregion.style.display = "none"; 
+			}
+		#end
+	}
 
-    function shippingaddressChanged(addressid){
+	function showhideShipping() {
+	
+		#if($checkoutViewDTO.billingandshippinginonepage)
+			var sameasbilling = document.getElementById("sameasbilling");
+			if(sameasbilling && sameasbilling.checked) {
+				document.getElementById("notSameAsBilling").style.display="none";
+			} else {
+				document.getElementById("notSameAsBilling").style.display="";
+			}
+		#end
+	}
 
-        document.getElementById("addresses.shippingAddress.addressId").value=addressid;
+	function shippingaddressChanged(addressid) {
+		document.getElementById("addresses.shippingAddress.addressId").value=addressid;
 
-          if(addressid>0){
+		if(addressid>0) {
 
-           #foreach($address in $customerAddressDTO) 
-               if(addressid == ${address.addressid}){
-                     document.getElementById("nickName").value = "${address.nickname}";
-                   document.getElementById("addresses.shippingAddress.firstName").value="${address.firstname}";
-                   document.getElementById("addresses.shippingAddress.middleName").value="${address.middlename}";
-                   document.getElementById("addresses.shippingAddress.lastName").value="${address.lastname}";
-                   document.getElementById("addresses.shippingAddress.company").value="${address.company}";
-                   document.getElementById("addresses.shippingAddress.address1").value="${address.address1}";
-                   document.getElementById("addresses.shippingAddress.address2").value="${address.address2}";
-                   document.getElementById("addresses.shippingAddress.city").value="${address.city}";
-                   document.getElementById("addresses.shippingAddress.countryId").value="${address.countryid}";
+			#foreach($address in $customerAddressDTO)
+				if(addressid == ${address.addressid}) {
+					document.getElementById("nickName").value = "${address.nickname}";
+					document.getElementById("addresses.shippingAddress.firstName").value="${address.firstname}";
+					document.getElementById("addresses.shippingAddress.middleName").value="${address.middlename}";
+					document.getElementById("addresses.shippingAddress.lastName").value="${address.lastname}";
+					document.getElementById("addresses.shippingAddress.company").value="${address.company}";
+					document.getElementById("addresses.shippingAddress.address1").value="${address.address1}";
+					document.getElementById("addresses.shippingAddress.address2").value="${address.address2}";
+					document.getElementById("addresses.shippingAddress.city").value="${address.city}";
+					document.getElementById("addresses.shippingAddress.countryId").value="${address.countryid}";
                  ##  changeRegion1("${address.countryid}");
                  ##  document.getElementById("province").value="${address.provinceid}";
-                   document.getElementById("addresses.shippingAddress.provinceId").value="${address.provinceid}";
-                   document.getElementById("otherregionForShipping").value="${address.anotherprovince}";
-                   document.getElementById("addresses.shippingAddress.postal").value="${address.postal}";
-                   document.getElementById("addresses.shippingAddress.phone").value="${address.phone}";
-                 }
+					document.getElementById("addresses.shippingAddress.provinceId").value="${address.provinceid}";
+					document.getElementById("otherregionForShipping").value="${address.anotherprovince}";
+					document.getElementById("addresses.shippingAddress.postal").value="${address.postal}";
+					document.getElementById("addresses.shippingAddress.phone").value="${address.phone}";
+				}
           #end
-        }else{
-                   document.getElementById("nickName").value = "New Address";
-                   document.getElementById("addresses.shippingAddress.firstName").value="";
-                   document.getElementById("addresses.shippingAddress.middleName").value="";
-                   document.getElementById("addresses.shippingAddress.lastName").value="";
-                   document.getElementById("addresses.shippingAddress.company").value="";
-                   document.getElementById("addresses.shippingAddress.address1").value="";
-                   document.getElementById("addresses.shippingAddress.address2").value="";
-                   document.getElementById("addresses.shippingAddress.city").value="";
-                   document.getElementById("addresses.shippingAddress.countryId").value="0";
+          
+		} else {
+					document.getElementById("nickName").value = "New Address";
+					document.getElementById("addresses.shippingAddress.firstName").value="";
+					document.getElementById("addresses.shippingAddress.middleName").value="";
+					document.getElementById("addresses.shippingAddress.lastName").value="";
+					document.getElementById("addresses.shippingAddress.company").value="";
+					document.getElementById("addresses.shippingAddress.address1").value="";
+					document.getElementById("addresses.shippingAddress.address2").value="";
+					document.getElementById("addresses.shippingAddress.city").value="";
+					document.getElementById("addresses.shippingAddress.countryId").value="0";
                  ##  changeRegion1(0);
-                   document.getElementById("otherregionForShipping").value="";
-                   document.getElementById("addresses.shippingAddress.postal").value="";
-                   document.getElementById("addresses.shippingAddress.phone").value="";
-        }
-    }
-          var isBillingAddressChanged=false;
-          var address1_val="$!checkoutViewDTO.addresses.billingAddress.address1";
-          var city_val="$!checkoutViewDTO.addresses.billingAddress.city";
-          var zip_val="$!checkoutViewDTO.addresses.billingAddress.postal";
-          var anotherprovince_val="$!checkoutViewDTO.addresses.billingAddress.anotherProvince";
+					document.getElementById("otherregionForShipping").value="";
+					document.getElementById("addresses.shippingAddress.postal").value="";
+					document.getElementById("addresses.shippingAddress.phone").value="";
+		}
+	}
     
-          function fieldBlurred(el, idx)
-          {
-            switch(idx)
-            {
-              case 1:
-                if(el.value != address1_val)
-                {
-                  address1_val=el.value;
-                  isBillingAddressChanged=true;
-                }
-                break;
+	var isBillingAddressChanged=false;
+	var address1_val="$!checkoutViewDTO.addresses.billingAddress.address1";
+	var city_val="$!checkoutViewDTO.addresses.billingAddress.city";
+	var zip_val="$!checkoutViewDTO.addresses.billingAddress.postal";
+	var anotherprovince_val="$!checkoutViewDTO.addresses.billingAddress.anotherProvince";
+    
+	function fieldBlurred(el, idx) {
+		switch(idx) {
+			case 1:
+				if(el.value != address1_val)
+				{
+					address1_val=el.value;
+					isBillingAddressChanged=true;
+				}
+			break;
                     
-              case 2:
-		        if(el.value != city_val)
-                {
-                  city_val=el.value;
-                  isBillingAddressChanged=true;
-                }
-                break;
+			case  2;
+				if(el.value != city_val)
+				{
+					city_val=el.value;
+					isBillingAddressChanged=true;
+				}
+			break;
                     
-              case 3:
-                if(el.value != zip_val)
-                {
-                  zip_val=el.value;
-                  isBillingAddressChanged=true;
-                }
-                break;
-              case 4:
-                if(el.value != anotherprovince_val)
-                {
-                  anotherprovince_val=el.value;
-                  isBillingAddressChanged=true;
-                }
-                break;
-            }
-          }
+			case 3:
+				if(el.value != zip_val)
+				{
+					zip_val=el.value;
+					isBillingAddressChanged=true;
+				}
+			break;
+			
+			case 4:
+				if(el.value != anotherprovince_val)
+				{
+					anotherprovince_val=el.value;
+					isBillingAddressChanged=true;
+				}
+			break;
+		}
+	}
     
-          function setAnchorName(name)
-          {
-            document.getElementById("anchorName_id").value=name;
-          }
-    
-          function scrollToAnchor(name)
-          {
-            if(name && name!="")
-              location=location+"#"+name;
-          }
-    
-        /**
-      * submit the post. If the payment gateway is PCI, then call PCI server asynchronously.
-      */
-          function doContinue(frmName,actFieldName,btn,todo){
-          var thisAddressSelect ;
-                #if($checkoutViewDTO.billingandshippinginonepage)
-                    thisAddressSelect =  document.getElementById("rdoDiffAddr").checked;
-                #else
-                    thisAddressSelect =  document.getElementById("rdoThisAddr").checked;
-                #end
-    
-                #if($checkoutViewDTO.onepagecheckout)
-                     var pgcode=$("input[name=selectedPaymentGatewayCode]:checked").val();
-                #else
-                     var pgcode=""
-                #end
-               if(thisAddressSelect && (pgcode == "PCINONE" || pgcode == "PCICC")){
-          submitWithPCI(frmName,actFieldName,btn,todo);
-               }else{
-            $("#yourinfoErrors").hide();
-                    $("input[name='"+actFieldName+"'][type='hidden']").val(todo);
-                $("form[name='"+frmName+"']").unbind('submit');
-                $("form[name='"+frmName+"']").submit();
-               }
-          }
-    
-          function checkPaymentMethod()
-          {
-           
-            if(document.getElementById("payment_info").style.display=="none")
-                return true;
-            var checked = false;
-            var pmradio=document.getElementsByName("selectedPaymentGatewayCode");
-            for(i=0;i<pmradio.length;i++){
-              if(pmradio[i].checked==true){
-                     checked = true;
-              }
-            }
-           if(!checked){
-              document.getElementById("payment_method_alert").style.display="";
-           }
-             return checked;
-              
-          }    
+	function setAnchorName(name) {
+		document.getElementById("anchorName_id").value=name;
+	}
+
+	function scrollToAnchor(name) {
+		if(name && name!="")
+			location=location+"#"+name;
+	}
+</script>
+
+/**
+* submit the post. If the payment gateway is PCI, then call PCI server asynchronously.
+*/
+<script type="text/javascript">
+	function doContinue(frmName,actFieldName,btn,todo) {
+		var thisAddressSelect ;
+			#if($checkoutViewDTO.billingandshippinginonepage)
+				thisAddressSelect =  document.getElementById("rdoDiffAddr").checked;
+			#else
+				thisAddressSelect =  document.getElementById("rdoThisAddr").checked;
+			#end
+
+			#if($checkoutViewDTO.onepagecheckout)
+				var pgcode=$("input[name=selectedPaymentGatewayCode]:checked").val();
+			#else
+				var pgcode=""
+			#end
             
-          function showhide(pgid,pgcode,radioid,inputid)
-          {
-            document.getElementById("hidden_pgid").value=pgid;
-            showhidecc(pgcode,radioid);
-            showhideci(inputid);
-          }
+			if(thisAddressSelect && (pgcode == "PCINONE" || pgcode == "PCICC")) {
+				submitWithPCI(frmName,actFieldName,btn,todo);
+		} else {
+			$("#yourinfoErrors").hide();
+			$("input[name='"+actFieldName+"'][type='hidden']").val(todo);
+			$("form[name='"+frmName+"']").unbind('submit');
+			$("form[name='"+frmName+"']").submit();
+		}
+	}
     
-          function showhideci(inputid)
-          {
-            var allciinput=new Array();
-          #foreach($paymentgateway in ${checkoutViewDTO.ccPreferencesDTO.paymentgateways})
-            #if($paymentgateway.inputtype && $paymentgateway.inputtype != 0)
-            allciinput.push("input_$velocityCount");
-            #end
-          #end
-    
-            var inputfield=document.getElementById(inputid);
-            document.getElementById("hidden_inputid").value=inputid;
-            if(inputfield)
-            {
-              inputfield.style.display="";
-              inputfield.disabled=false;
-			  document.getElementById("radio_text_"+inputid).style.display="";
-            }
-    
-            for(var i=0;i<allciinput.length;i++)
-            {
-              if(allciinput[i]!= inputid)
-              {
-                var tempfield=document.getElementById(allciinput[i]);
-                tempfield.disabled=true;
-                tempfield.style.display="none";
-                tempfield.value="";
+	function checkPaymentMethod() {
+		if(document.getElementById("payment_info").style.display=="none")
+			return true;
+
+		var checked = false;
+		var pmradio=document.getElementsByName("selectedPaymentGatewayCode");
+		for(i=0;i<pmradio.length;i++) {
+			if(pmradio[i].checked==true) {
+				checked = true;
+			}
+		}
+		if(!checked){
+			document.getElementById("payment_method_alert").style.display="";
+		}
+		return checked;
+	}
+            
+	function showhide(pgid,pgcode,radioid,inputid) {
+		document.getElementById("hidden_pgid").value=pgid;
+		showhidecc(pgcode,radioid);
+		showhideci(inputid);
+	}
+
+	function showhideci(inputid) {
+		var allciinput=new Array();
+		#foreach($paymentgateway in ${checkoutViewDTO.ccPreferencesDTO.paymentgateways})
+			#if($paymentgateway.inputtype && $paymentgateway.inputtype != 0)
+				allciinput.push("input_$velocityCount");
+			#end
+		#end
+
+		var inputfield=document.getElementById(inputid);
+		document.getElementById("hidden_inputid").value=inputid;
+		if(inputfield) {
+			inputfield.style.display="";
+			inputfield.disabled=false;
+			document.getElementById("radio_text_"+inputid).style.display="";
+		}
+
+		for(var i=0;i<allciinput.length;i++) {
+			if(allciinput[i]!= inputid) {
+				var tempfield=document.getElementById(allciinput[i]);
+				tempfield.disabled=true;
+				tempfield.style.display="none";
+				tempfield.value="";
 				document.getElementById("radio_text_"+allciinput[i]).style.display="none";
-              }
-            }
-          }
-    
-          function clearccinfo()
-          {
-            //clear normal cc form data
-            $("#CARDNO").val("");
-            $("#nameoncard").val("");
-            $("input[id=cvv][type=text]").val("");
+			}
+		}
+	}
+</script>
 
-            //clear pci form data
-            $("#reviewAndPay-cardNumber").val("");
-            $("#reviewAndPay-level2Code").val("");
-            $("#creditCard.ccHolderName").val("");
-          }
-          
-          function showhidecc(pgcode,radioid)
-          {
-        #set($arraystr="")
-        #foreach( $a in $pgcodenocc ) 
-           #if($velocityCount!=$pgcodenocc.size())
-             #set($arraystr=$arraystr+'"'+$a+'"'+',')
-           #else
-             #set($arraystr=$arraystr+'"'+$a+'"')
-          #end
-        #end
-        
-      var noshowccinput =new Array($arraystr);
-            var flag=false;
-            for(var i=0;i<noshowccinput.length;i++)
-            {
-              if( noshowccinput[i]==pgcode || pgcode.indexOf("NCC")==0)
-              {
-                flag = true;
-                break;
-              }
-            }
-    
-        if(flag)
-        {
-            $("#cc").hide();
-          $("#ccsubmitted").hide();
-            $("#payment_method").hide();
-            $("#payment_method_ach").hide();  
-            clearccinfo();
-        } else
-        {
-            if(pgcode=="ACH")
-           {
-                 $("#payment_method_ach").show();
-                 $("#payment_method").hide();
-         }else
-          {
-               if(pgcode=='PCICC' || pgcode=='PCINONE')
-             {
-                 showhidelast4cc();
-                 $("#payment_method_ach").hide();
-            }else
-            {
-                $("#payment_method").show();
-                $("#payment_method_ach").hide();
-            }
-          }       
-        
-        }
-    
-            var radiobutton=document.getElementById(radioid);
-            if(radiobutton)
-            {
-              radiobutton.checked=true;
-              document.getElementById("hidden_radioid").value=radioid;
-            }
-               
-          }
-    
-          function setFocus(pidx,sidx,fomode) 
-          {
-            if(fomode == "1")
-            {
-            var shiptoid="SHIPTYP_"+pidx+"_"+sidx;
-              if(document.getElementById(shiptoid)) 
+<script type="text/javascript">    
+	function clearccinfo() {
+		//clear normal cc form data
+		$("#CARDNO").val("");
+		$("#nameoncard").val("");
+		$("input[id=cvv][type=text]").val("");
 
-              {
-                document.getElementById(shiptoid).focus();
-                document.getElementById(shiptoid).click();
-              }
-            }
-            else if(fomode == "2") 
-            {
-              if(document.getElementById("CARDNO")) 
-              {
-                document.getElementById("CARDNO").focus();
-              }
-            }
-            else if(fomode == "3") 
-            {
-              var msgid="MESSAGE_"+pidx+"_"+sidx;
-              if(document.getElementById(msgid)) 
-              {
-                document.getElementById(msgid).focus();
-              }
-            }
-          }
-    
-              function showhidepayment(){
-                 #if($checkoutViewDTO.hidePaymentMethod)
-                       document.getElementById("paymentGateway").style.display="none";
-                       $("#paymentGateway_title").hide();
-                       $("#paymentGateway_promo").hide();
-                 #else if(document.getElementById("paymentGateway")!==null)
-                       document.getElementById("paymentGateway").style.display="";
-          #end
-          }
+		//clear pci form data
+		$("#reviewAndPay-cardNumber").val("");
+		$("#reviewAndPay-level2Code").val("");
+		$("#creditCard.ccHolderName").val("");
+	}
+
+	function showhidecc(pgcode,radioid) {
+		#set($arraystr="")
+		#foreach( $a in $pgcodenocc ) 
+			#if($velocityCount!=$pgcodenocc.size())
+				#set($arraystr=$arraystr+'"'+$a+'"'+',')
+			#else
+				#set($arraystr=$arraystr+'"'+$a+'"')
+			#end
+		#end
+        
+		var noshowccinput = new Array($arraystr);
+		var flag=false;
+		for(var i=0;i<noshowccinput.length;i++) {
+			if( noshowccinput[i]==pgcode || pgcode.indexOf("NCC")==0) {
+				flag = true;
+				break;
+			}
+		}
+
+		if(flag) {
+			$("#cc").hide();
+			$("#ccsubmitted").hide();
+			$("#payment_method").hide();
+			$("#payment_method_ach").hide();  
+			clearccinfo();
+		} else {
+			if(pgcode=="ACH") {
+				$("#payment_method_ach").show();
+				$("#payment_method").hide();
+			} else {
+				if(pgcode=='PCICC' || pgcode=='PCINONE') {
+					showhidelast4cc();
+					$("#payment_method_ach").hide();
+				} else {
+					$("#payment_method").show();
+					$("#payment_method_ach").hide();
+				}
+			}
+		}
+
+		var radiobutton=document.getElementById(radioid);
+		if(radiobutton) {
+			radiobutton.checked=true;
+			document.getElementById("hidden_radioid").value=radioid;
+		}
+	}
+
+	function setFocus(pidx,sidx,fomode) {
+		if(fomode == "1") {
+			var shiptoid="SHIPTYP_"+pidx+"_"+sidx;
+			if(document.getElementById(shiptoid)) {
+				document.getElementById(shiptoid).focus();
+				document.getElementById(shiptoid).click();
+			}
+		}
+		else if(fomode == "2") {
+			if(document.getElementById("CARDNO")) {
+				document.getElementById("CARDNO").focus();
+			}
+		}
+		else if(fomode == "3") {
+			var msgid="MESSAGE_"+pidx+"_"+sidx;
+			if(document.getElementById(msgid)) {
+				document.getElementById(msgid).focus();
+			}
+		}
+	}
+
+	function showhidepayment(){
+		#if($checkoutViewDTO.hidePaymentMethod)
+			document.getElementById("paymentGateway").style.display="none";
+			$("#paymentGateway_title").hide();
+			$("#paymentGateway_promo").hide();
+		#else if(document.getElementById("paymentGateway")!==null)
+			document.getElementById("paymentGateway").style.display="";
+		#end
+	}
          
-          function showhidepayment_info(val)
-          {
-
-  #if($checkoutViewDTO.billingandshippinginonepage)
-              var sameas = document.getElementById("sameasbilling");
-             if(val && (val==2)){
-               #if(!$checkoutViewDTO.allNoneShippableItems)
-                 document.getElementById("shippingInfo").style.display="";
-               #end
-               #if($checkoutViewDTO.onepagecheckout)
-                 if(sameas.checked){
-                   document.getElementById("payment_info").style.display="";
-                 }else{
-                   document.getElementById("payment_info").style.display="none";
-                }
-               #end
-           }else{
-                document.getElementById("shippingInfo").style.display="none";
-               #if($checkoutViewDTO.onepagecheckout)
-               document.getElementById("payment_info").style.display="none";
-              #end
-          }
-#else
-     #if($checkoutViewDTO.onepagecheckout)
-            if(val&&(val==1))//show it
-              document.getElementById("payment_info").style.display="";
-            else
-              document.getElementById("payment_info").style.display="none";
-      #else
+	function showhidepayment_info(val) {
+		#if($checkoutViewDTO.billingandshippinginonepage)
+			var sameas = document.getElementById("sameasbilling");
+			if(val && (val==2)) {
+				#if(!$checkoutViewDTO.allNoneShippableItems)
+					document.getElementById("shippingInfo").style.display="";
+				#end
+				#if($checkoutViewDTO.onepagecheckout)
+					if(sameas.checked) {
+						document.getElementById("payment_info").style.display="";
+					} else {
+						document.getElementById("payment_info").style.display="none";
+					}
+				#end
+			} else {
+				document.getElementById("shippingInfo").style.display="none";
+				#if($checkoutViewDTO.onepagecheckout)
+					document.getElementById("payment_info").style.display="none";
+				#end
+			}
+		#else
+		
+		#if($checkoutViewDTO.onepagecheckout)
+			if(val&&(val==1)) {//show it
+				document.getElementById("payment_info").style.display="";
+			} else {
+				document.getElementById("payment_info").style.display="none";
+			}
+		#else
             return true;
-       #end
-#end
+		#end
+		
+		#end
+	}
+          
+	function initCap(inputObject) {
+		var str = inputObject.value;
+		if (str.length > 0) {
+			var words = str.split(" ");
+			var i = 1;
+			str = words[0].substring(0,1).toUpperCase() + words[0].substring(1, words[0].length);
 
-          }
-          
-          function initCap(inputObject) 
-          {
-            var str = inputObject.value;
-            
-            if (str.length > 0) 
-            {
-              var words = str.split(" ");
-              var i = 1;
-              str = words[0].substring(0,1).toUpperCase() + words[0].substring(1, words[0].length);
-              
-              while (i < words.length) 
-              {
-                str += " " + words[i].substring(0,1).toUpperCase() + words[i].substring(1, words[i++].length);
-              }
-              
-              inputObject.value = str;
-            }
-          }
-          
-          $(document).ready(function(){
-            setFocus($checkoutViewDTO.productidx,$checkoutViewDTO.addressidx,$checkoutViewDTO.shipaddressid);
-         #if($checkoutViewDTO.onepagecheckout)
-              showhide('$checkoutViewDTO.selectedPaymentGatewayId','$!checkoutViewDTO.selectedPaymentGatewayCode','$!checkoutViewDTO.radioButtonId','$!checkoutViewDTO.inputFieldId');
-          #end
-              #if($checkoutViewDTO.allNoneShippableItems)
-                 #if($checkoutViewDTO.billingandshippinginonepage)
-                   $("#sameasbilling").attr("checked", true);
-                   showhidepayment_info(2);
-                 #else
-                   showhidepayment_info(1);
-                 #end
-              #else
-                 #if($checkoutViewDTO.billingandshippinginonepage)
-                   $("#rdoDiffAddr").attr("checked", true);
-                   showhidepayment_info(2);
-                 #else
-                   showhidepayment_info($checkoutViewDTO.shipTypes.currentType);
-                 #end
-              #end
-              showhideShipping();
-              scrollToAnchor('$!checkoutViewDTO.anchorName');
-          
-             if(document.getElementById("rdoThisAddr").checked) {
-                 calcShippingAndTax();
-             }
+			while (i < words.length) {
+				str += " " + words[i].substring(0,1).toUpperCase() + words[i].substring(1, words[i++].length);
+			}
+			inputObject.value = str;
+		}
+	}
+</script>
 
-          });
-      /**
-    * according to radio element of this address or same as billing checked or not, return the billing address as the shipping address 
-    * or remain the same shipping address.
-    */
-    function getShippingAdd(){
-      var sameAsBilling = $("#sameasbilling").attr("checked");
-      var thisAddress = $("#rdoThisAddr").attr("checked");
-      if(sameAsBilling == true || thisAddress == true){
-        return {"vid" : "$checkoutViewDTO.vendorId",
-              "countryid" : $(":input[name='addresses.billingAddress.countryId']").val(),
-            "provinceid" : $(":input[name='addresses.billingAddress.provinceId']").val(),
-            "anotherprovince" : $(":input[name='region']").val(),
-            "city" : $(":input[name='addresses.billingAddress.city']").val(),
-            "postal" : $(":input[name='addresses.billingAddress.postal']").val(),
-            "address1" : $(":input[name='addresses.billingAddress.address1']").val(),
-            "address2" : $(":input[name='addresses.billingAddress.address2']").val(),
-            "firstName" : $(":input[name='addresses.billingAddress.firstName']").val(),
-            "middleName" : $(":input[name='addresses.billingAddress.middleName']").val(),
-            "lastName" : $(":input[name='addresses.billingAddress.lastName']").val(),
-            "phone" : $(":input[name='addresses.billingAddress.dphone']").val(),
-            "shippingemail" : $(":input[name='addresses.billingAddress.email']").val(),
-            "shipping" : "shippingindetail"};
-      }else{
-        return {"vid" : "$checkoutViewDTO.vendorId",
-              "countryid" : $(":input[name='addresses.shippingAddress.countryId']").val(),
-            "provinceid" : $(":input[name='addresses.shippingAddress.provinceId']").val(),
-            "anotherprovince" : $(":input[name='province']").val(),
-            "city" : $(":input[name='addresses.shippingAddress.city']").val(),
-            "postal" : $(":input[name='addresses.shippingAddress.postal']").val(),
-            "address1" : $(":input[name='addresses.shippingAddress.address1']").val(),
-            "address2" : $(":input[name='addresses.shippingAddress.address2']").val(),
-            "firstName" : $(":input[name='addresses.shippingAddress.firstName']").val(),
-            "middleName" : $(":input[name='addresses.shippingAddress.middleName']").val(),
-            "lastName" : $(":input[name='addresses.shippingAddress.lastName']").val(),
-            "phone" : $(":input[name='addresses.shippingAddress.phone']").val(),
-            "shippingemail" : $(":input[name='addresses.shippingAddress.email']").val(),
-            "shipping" : "shippingindetail"};       
-      }
+<script type="text/javascript">
+	$(document).ready(function() {
+		setFocus($checkoutViewDTO.productidx,$checkoutViewDTO.addressidx,$checkoutViewDTO.shipaddressid);
+		#if($checkoutViewDTO.onepagecheckout)
+			showhide('$checkoutViewDTO.selectedPaymentGatewayId','$!checkoutViewDTO.selectedPaymentGatewayCode','$!checkoutViewDTO.radioButtonId','$!checkoutViewDTO.inputFieldId');
+		#end
+		#if($checkoutViewDTO.allNoneShippableItems)
+			#if($checkoutViewDTO.billingandshippinginonepage)
+				$("#sameasbilling").attr("checked", true);
+				showhidepayment_info(2);
+			#else
+				showhidepayment_info(1);
+			#end
+		#else
+			#if($checkoutViewDTO.billingandshippinginonepage)
+				$("#rdoDiffAddr").attr("checked", true);
+				showhidepayment_info(2);
+			#else
+				showhidepayment_info($checkoutViewDTO.shipTypes.currentType);
+			#end
+		#end
+
+		showhideShipping();
+		scrollToAnchor('$!checkoutViewDTO.anchorName');
+
+		if(document.getElementById("rdoThisAddr").checked) {
+			calcShippingAndTax();
+		}
+	});
+
+/**
+* according to radio element of this address or same as billing checked or not, return the billing address as the shipping address 
+ or remain the same shipping address.
+*/
+	function getShippingAdd(){
+		var sameAsBilling = $("#sameasbilling").attr("checked");
+		var thisAddress = $("#rdoThisAddr").attr("checked");
+
+		if(sameAsBilling == true || thisAddress == true) {
+			return {"vid" : "$checkoutViewDTO.vendorId",
+					"countryid" : $(":input[name='addresses.billingAddress.countryId']").val(),
+					"provinceid" : $(":input[name='addresses.billingAddress.provinceId']").val(),
+					"anotherprovince" : $(":input[name='region']").val(),
+					"city" : $(":input[name='addresses.billingAddress.city']").val(),
+					"postal" : $(":input[name='addresses.billingAddress.postal']").val(),
+					"address1" : $(":input[name='addresses.billingAddress.address1']").val(),
+					"address2" : $(":input[name='addresses.billingAddress.address2']").val(),
+					"firstName" : $(":input[name='addresses.billingAddress.firstName']").val(),
+					"middleName" : $(":input[name='addresses.billingAddress.middleName']").val(),
+					"lastName" : $(":input[name='addresses.billingAddress.lastName']").val(),
+					"phone" : $(":input[name='addresses.billingAddress.dphone']").val(),
+					"shippingemail" : $(":input[name='addresses.billingAddress.email']").val(),
+					"shipping" : "shippingindetail"};
+		} else {
+			return {"vid" : "$checkoutViewDTO.vendorId",
+					"countryid" : $(":input[name='addresses.shippingAddress.countryId']").val(),
+					"provinceid" : $(":input[name='addresses.shippingAddress.provinceId']").val(),
+					"anotherprovince" : $(":input[name='province']").val(),
+					"city" : $(":input[name='addresses.shippingAddress.city']").val(),
+					"postal" : $(":input[name='addresses.shippingAddress.postal']").val(),
+					"address1" : $(":input[name='addresses.shippingAddress.address1']").val(),
+					"address2" : $(":input[name='addresses.shippingAddress.address2']").val(),
+					"firstName" : $(":input[name='addresses.shippingAddress.firstName']").val(),
+					"middleName" : $(":input[name='addresses.shippingAddress.middleName']").val(),
+					"lastName" : $(":input[name='addresses.shippingAddress.lastName']").val(),
+					"phone" : $(":input[name='addresses.shippingAddress.phone']").val(),
+					"shippingemail" : $(":input[name='addresses.shippingAddress.email']").val(),
+					"shipping" : "shippingindetail"};       
+		}
     }
-    /** 
-    * calculate the shipping and tax cost according to the new shipping address.
-    * @param showError - indicates to show error messages or not
-    */
-    function calcShippingAndTax(showError){
+    
+/** 
+* calculate the shipping and tax cost according to the new shipping address.
+* @param showError - indicates to show error messages or not
+*/
+	function calcShippingAndTax(showError){
       jQuery.ajax({
         type : 'POST',
             url: 'calcshipcost.ajx',
@@ -792,6 +757,16 @@ var sameasbilling = document.getElementById("sameasbilling");
 		    return html;
 		}	
 	}
+</script>
+
+
+
+
+
+
+
+
+
 
     /**
     *visual effect for validating shipping address and calculating shipping and tax cost
@@ -804,12 +779,13 @@ var sameasbilling = document.getElementById("sameasbilling");
     /** 
     * asynchronously validate yourinfo
     */
-    function submitWithPCI(frmName,actFieldName,btn,todo){
-       $('#modal-avetti-yourinfo').fadeTo(100,0.75);
-       $('#modal-preloader-yourinfo').fadeTo('fast',1);
-       jQuery.ajax({
-              type: 'POST',
-              url: 'yourinfo.ajx',
+	function submitWithPCI(frmName,actFieldName,btn,todo) {
+		$('#modal-avetti-yourinfo').fadeTo(100,0.75);
+		$('#modal-preloader-yourinfo').fadeTo('fast',1);
+
+		jQuery.ajax({
+			type: 'POST',
+			url: 'yourinfo.ajx',
               dataType: 'json',
               data: $("form[name='frm']").serialize(),
               success: function(data){
@@ -866,7 +842,7 @@ var sameasbilling = document.getElementById("sameasbilling");
        });
 #end
 
-function filterPaymentGateways(){
+function filterPaymentGateways() {
   var pcode = $(":input[name='addresses.billingAddress.postal']").val();
   #if($checkoutViewDTO.billingandshippinginonepage)
 	  if($("#sameasbilling").attr("checked")==true && $("#rdoDiffAddr").attr("checked")==true && pcode!=''){
@@ -894,7 +870,7 @@ function filterPaymentGateways(){
 $(function(){
 	  filterPaymentGateways();
 	})
-        </script>
+</script>
 
 
     </body>

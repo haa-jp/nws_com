@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -111,7 +112,7 @@
                 #set($orderaddress = $pageTile.getItemObject($orderAddressesDTO, $addressIter , "a"))
                 #if($orderaddress.addressdesc=='SHIPPING ADDRESS')
                   ##if($orderaddress.firstname !='')$!orderaddress.firstname $!orderaddress.lastname<br>#end
-                   #if($orderaddress.company !='') $orderaddress.company<br> #end
+                   #if($orderaddress.company !='') $orderaddress.company.replace("&amp;","&").replace("&apos;","'")<br> #end
                    #if($orderaddress.firstname == $orderaddress.company) $!orderaddress.lastname<br>
                       #else 
                         $!orderaddress.firstname $!orderaddress.lastname<br>
@@ -200,13 +201,13 @@
       <td align="right" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$ $regExp.showPrice($!orderitem.itemcost)</td>
       <td align="right" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">	 
 	  #if($orderitem.inventoryHistory.deliveryoption == 0 || $orderitem.inventoryHistory.deliveryoption == 1 ||      $orderitem.inventoryHistory.deliveryoption == 4 || $orderitem.inventoryHistory.deliveryoption == 5 )
-        #set($exttotal = $math.add($exttotal, $math.mul($orderitem.inventoryHistory.ship1qty, ${orderitem.itemcost})))
-        #set($goodnum = $math.mul($orderitem.inventoryHistory.ship1qty, ${orderitem.itemcost}))
-        $number.format('currency',$goodnum)
-      #else
-        0
-      #end
-	  </td>
+            #set($exttotal = $math.add($exttotal, $math.mul($orderitem.inventoryHistory.ship1qty, ${orderitem.itemcost})))
+            #set($goodnum = $math.mul($orderitem.inventoryHistory.ship1qty, ${orderitem.itemcost}))
+            $number.format('currency',$goodnum)
+          #else
+            0
+          #end
+      </td>
    </tr>
 #end
 </tbody>
