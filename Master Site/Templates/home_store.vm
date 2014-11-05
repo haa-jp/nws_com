@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
-#if (!$pageTileDictionaryDTO)
-  #if ($_commandName)
-    #springBind( "${_commandName}.pageTileDictionaryDTO" )
-    #set ($pageTileDictionaryDTO = ${status.value})
-  #end
-#end
+##if (!$pageTileDictionaryDTO)
+  ##if ($_commandName)
+    ##springBind( "${_commandName}.pageTileDictionaryDTO" )
+    ##set ($pageTileDictionaryDTO = ${status.value})
+  ##end
+##end
 #set($metadescription= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metadescription'))
 #set($metakeywords= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'metakeywords'))
 #set($pagetitle= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'pagetitle'))
@@ -16,12 +16,27 @@
     <meta name="description" content="#if($metadescription!="") $metadescription #else   #end" />
     <meta name="keywords" content="#if($metakeywords!="")$metakeywords #else   #end" />
     <base href="$baselink"/>
-    <title>$!pagetitle</title>
+  <title>$storeName - Parts and Accessories</title>
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+
+<!--     <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$storeSkinName/css/app.css" media="all"/> -->
+
+ #set($test = $vendorSettingsDTO.themeId)
+  $test
+
   </head>
+##set($test = $vendorSettingsDTO.themeId)
+##  active theme = $test || 
+##  master theme = $masterSkinId || 
+##  store theme = $storeSkinId
+
   <body class="home">
     ############################ Header ####################################
-    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/${storeclass}_banner.vm")
+#if($vendorSettingsDTO.themeId == $storeSkinId)
+    #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+#else
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+#end
     ############################ End Header ################################
     
     ############################ Search Bar ################################
@@ -29,7 +44,7 @@
     ############################ End Search Bar ############################
 
     <div id="wrapper" class="row-fluid">
-      <div class="span4" id="left-col">
+      <div class="span4" id="left-col"> OMG !! can you beleive this?
     ############################ Left Column ##############################
     #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/${storeclass}_home_left.vm")
     ############################ End Left Column ##########################
@@ -40,6 +55,7 @@
     ############################ Ends Mini Nav ############################
 
     ############################ Page Content #############################
+<!-- right here -->
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/home_content.vm")
     ############################ Edns Page Content ########################
       </div>
@@ -51,7 +67,11 @@
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
 
     ################## Featured Items Scripts #############################
+#if($vendorSettingsDTO.themeId == $storeSkinId)
+    #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/featured-items.vm")
+#else
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/featured-items.vm")
+#end
     ################## Ends Featured Items Scripts ########################
   </body>
 </html>

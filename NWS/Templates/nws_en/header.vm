@@ -86,7 +86,7 @@
 																											</div>
 																										</div>
 																									</form>
-																									<form autocomplete="off" class="form forgot-form" action="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/forgot_password.html" method="post">
+																									<form autocomplete="on" class="form forgot-form" action="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/forgot_password.html" method="post">
 																										<input type="hidden" name="doSubmit" value="Send Email"/>
 																										<input type="hidden" name="mode" value="sendEmail"/>
 																										<input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId"/>

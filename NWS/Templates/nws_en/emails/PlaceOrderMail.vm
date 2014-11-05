@@ -23,6 +23,12 @@
   #set($customerNumber = $numberProp.propvalue)
 #end
 
+#if($customerRepnumDTO.getItems().size()>0)
+  #set($numberPropRow = $customerRepnumDTO.getItem(0))
+  #set($numberProp = $pageTile.getItemObject($customerRepnumDTO, $numberPropRow , "c"))
+  #set($customerRepnum = $numberProp.propvalue)
+#end
+
 #set($customerInput = "")
 #foreach($paymentIter in $orderPaymentDTO.getItems())
     #set($payment = $pageTile.getItemObject($orderPaymentDTO, $paymentIter , "p"))
@@ -145,7 +151,7 @@
          <th align="center" style="font-size: 0.6em;">TERMS</th>
       </tr></thead>
       <tbody><tr>
-         <td align="center" style="font-family: Courier New;">14</td>
+         <td align="center" style="font-family: Courier New;">$!customerRepnum</td>
          <td align="center" style="font-family: Courier New;">$!customerInput</td>
          <td align="center" style="font-family: Courier New;">$order.orderid</td>
          <td align="center" style="font-family: Courier New;">$date.format("MM/dd/yyyy",$order.createtime)</td>
@@ -158,13 +164,13 @@
 <thead>
    <tr style="background-color: #999999">
       <th align="center" style="font-size: 0.6em; font-weight: bold; border: 1px solid #000000; color: #ffffff;">ITEM NO.</th>
-      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">DESCRIPTION</th>
-	  <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">ORDER</th>
-      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">SHIP</th>
-      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">BO QTY</th>
-      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">STATUS</th>
-      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">UNIT PRICE</th>
-      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;">AMOUNT</th>
+      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;"> DESCRIPTION</th>
+	  <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;"> ORDER</th>
+      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;"> SHIP</th>
+      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;"> BO QTY</th>
+      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;"> STATUS</th>
+      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;"> UNIT PRICE</th>
+      <th align="center" style="border-right-width: 1px; border-right-style: solid; font-weight: bold; font-size: 0.6em; border-top-color: #000000; border-bottom-width: 1px; border-bottom-style: solid; color: #ffffff; border-bottom-color: #000000; border-top-width: 1px; border-top-style: solid; border-right-color: #000000;"> AMOUNT</th>
    </tr>
 </thead>
 <tbody>
@@ -176,11 +182,11 @@
   #set($havedn=0)
    <tr>
       <td style="border-right-width: 1px; border-right-style: solid; font-family: Courier New; padding: 5px; border-left-width: 1px; border-left-style: solid; border-right-color: #000000; border-left-color: #000000;">$orderitem.compositecode.replace("-",".")</td>
-      <td style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$orderitem.title</td>
-	  <td align="center" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">
-	  $orderitem.qty
-	  </td>
+      <td style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;"> $orderitem.title </td>
+	  <td align="center" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;"> $orderitem.qty </td>
+        ### Order Qty ###
       <td align="center" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">
+        ### Item Shipping Qty. ###
         #if($orderitem.inventoryHistory.deliveryoption == 0 || $orderitem.inventoryHistory.deliveryoption == 1 || $orderitem.inventoryHistory.deliveryoption == 4 || $orderitem.inventoryHistory.deliveryoption == 5 )
            #set($extqty = $math.add($extqty, $orderitem.inventoryHistory.ship1qty) )
            $orderitem.inventoryHistory.ship1qty
@@ -189,6 +195,7 @@
         #end
 	  </td>
       <td align="center" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">
+      	### Qty of items on Backorder ###
         #if($orderitem.inventoryHistory.deliveryoption == 0 || $orderitem.inventoryHistory.deliveryoption == 4 || $orderitem.inventoryHistory.deliveryoption == 5 )
           0
         #elseif($orderitem.inventoryHistory.deliveryoption == 1)
@@ -197,10 +204,17 @@
           $orderitem.inventoryHistory.ship1qty
         #end
 	  </td>
-      <td style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$pageTile.getItemObject($orderItemDTO, $itemIter, "status")</td>
+      <td style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;"> 
+      	#if($orderitem.qty != $orderitem.inventoryHistory.ship1qty)
+      	   Ready to Ship
+      	#else
+      	   Back Ordered
+      	#end
+	  </td> 	
+ ##  	$pageTile.getItemObject($orderItemDTO, $itemIter, "status")</td>
       <td align="right" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">$ $regExp.showPrice($!orderitem.itemcost)</td>
       <td align="right" style="padding: 5px; border-right-width: 1px; border-right-style: solid; font-family: Courier New; border-right-color: #000000;">	 
-	  #if($orderitem.inventoryHistory.deliveryoption == 0 || $orderitem.inventoryHistory.deliveryoption == 1 ||      $orderitem.inventoryHistory.deliveryoption == 4 || $orderitem.inventoryHistory.deliveryoption == 5 )
+	    #if($orderitem.inventoryHistory.deliveryoption == 0 || $orderitem.inventoryHistory.deliveryoption == 1 ||      $orderitem.inventoryHistory.deliveryoption == 4 || $orderitem.inventoryHistory.deliveryoption == 5 )
             #set($exttotal = $math.add($exttotal, $math.mul($orderitem.inventoryHistory.ship1qty, ${orderitem.itemcost})))
             #set($goodnum = $math.mul($orderitem.inventoryHistory.ship1qty, ${orderitem.itemcost}))
             $number.format('currency',$goodnum)

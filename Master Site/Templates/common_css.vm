@@ -9,9 +9,21 @@
 <![endif]-->
 
 <!-- start common_css.vm -->
-  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/master_en/plugins/bootstrap/css/bootstrap.min.css" />
-  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/app.css" media="all" />
-  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/master_en/plugins/toastr/toastr.css " />
-  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/master_en/plugins/toastr/toastr-responsive.css " />
- 
+<!--  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$storeSkinName/css/app.css" media="all" /> -->
+<!--  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/css/app.css" media="all" /> -->
+<!--  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/app.css" media="all" /> -->
+  
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/bootstrap/css/bootstrap.min.css" />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/toastr/toastr.css " />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/toastr/toastr-responsive.css " />
+  <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/jquery-ui/jqueryui.css" />
+  ## <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/jquery-ui/jqueryui-ie.css " />
+  ############################## Styles ####################################
+## This asset must be manually copied to the store skin. 
+#if($vendorSettingsDTO.themeId == $storeSkinId)
+   <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$storeSkinName/css/app.css" media="all" id="store"/>
+#else
+   <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/css/app.css" media="all" id="master" />
+#end
+    ############################# End Style ###################################
 <!-- End common_css.vm -->

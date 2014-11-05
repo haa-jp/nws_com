@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 #if($request.isSecure())
@@ -28,7 +27,6 @@
     <link rel="shortcut icon" href="/favicon.png">
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
 
-##<script type="text/javascript" src="assets/plugins/jQuery/jquery-1.4.1.min.js"></script>
 #if($registerViewDTO.onepagecheckout)
   <link rel="stylesheet" href="/C7pcisecureorderform/assets/pcisecureorderform.css" type="text/css" media="all" />
   <script type="text/javascript" src="/C7pcisecureorderform/assets/pcisecureorderform.js"></script>
