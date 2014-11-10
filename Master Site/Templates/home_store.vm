@@ -11,20 +11,20 @@
 #set($pagetitle= $pageTile.getItemObject($categoryNameDTOHQL, $categoryNameDTOHQL.items.get(0), 'pagetitle'))
 #set($isHome = true)
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="description" content="#if($metadescription!="") $metadescription #else   #end" />
-    <meta name="keywords" content="#if($metakeywords!="")$metakeywords #else   #end" />
-    <base href="$baselink"/>
-  <title>$storeName - Parts and Accessories</title>
-    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="description" content="#if($metadescription!="") $metadescription #else   #end" />
+		<meta name="keywords" content="#if($metakeywords!="")$metakeywords #else   #end" />
+		<base href="$baselink"/>
+		<title>$storeName - Parts and Accessories</title>
+#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
 
 <!--     <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$storeSkinName/css/app.css" media="all"/> -->
 
  #set($test = $vendorSettingsDTO.themeId)
   $test
 
-  </head>
+	</head>
 ##set($test = $vendorSettingsDTO.themeId)
 ##  active theme = $test || 
 ##  master theme = $masterSkinId || 

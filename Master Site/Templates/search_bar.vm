@@ -1,22 +1,44 @@
-#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
-    <div class="row-fluid">
-      <div class="navbar navbar-static-top">
-        <div class="navbar-inner">
-          <div class="span8 offset4">
-            <div class="span8">
-              <a class="brand">Search</a>
-              <form class="navbar-form">
-                <input class="span8" type="text"></input>
-                <button class="btn btn-info" type="submit">Go</button>
-              </form>
-            </div>
-            <div class="span4">
-              <a class="brand span12 text-right" href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")">Customer Service</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+
+<div class="row">
+	<nav class="top-bar" data-topbar="" role="navigation">
+<!-- Title -->
+		<ul class="title-area">
+			<li class="name"><h1><a href="#"> Home </a></h1></li>
+<!-- Mobile Menu Toggle -->
+			<li class="toggle-topbar menu-icon"><a href="#"><span> Menu </span></a></li>
+		</ul>
+<!-- Top Bar Section -->
+		<section class="top-bar-section">
+<!-- Top Bar Left Nav Elements -->
+			<ul class="left">
+<!-- Search | has-form wrapper -->
+				<li class="has-form">
+					<div class="row collapse">
+						<div class="large-8 small-9 columns">
+							<input type="text" placeholder="Find Items">
+						</div>
+						<div class="large-4 small-3 columns">
+							<a href="#" class="alert button expand">Search</a>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			<!-- Top Bar Right Nav Elements -->
+			<ul class="right">
+				<!-- Divider -->
+				<li class="divider"></li>
+
+				<!-- Anchor -->
+				<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")">alt ="Customer Service"> Customer Service </a></li>
+				<li class="divider"></li>
+
+				<!-- Button -->
+				<li class="has-form show-for-large-up">	<a href="http://foundation.zurb.com/docs" class="button">Get Lucky</a></li>
+			</ul>
+		</section>
+	</nav>
+</div>
 
     ################################# Mini nav for all pages except home #########################
     #if(!$isHome)
