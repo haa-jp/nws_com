@@ -1,8 +1,9 @@
-          <div class="row-fluid">
-            <div class="container-fluid" id="categories">
-              <h2>Product Categories</h2>
-              <!-- Main Content -->
-              <div class="row-fluid white-links">
+<div class="row">	
+	<div id="categories"class="small-12 columns">
+		<h2>Product Categories</h2>
+	</div>
+    <!-- Main Content -->
+	<div class="row">
 #set($totalMenus = $menuCategories.items.size())
 #set($column1 = [])
 #set($column2 = [])
@@ -16,21 +17,24 @@
   #end                      
   #set($x = $x + 1)
 #end            
-                <div class="span6">
-                  <ul>
+		<div class="small-6 columns">
+			<ul class="no-bullet">
 #foreach($line in $column1)
-                  <li><a href="${seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${line.get(0)}")}">${line.get(1)}</a></li>
+				<li><a href="${seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${line.get(0)}")}">${line.get(1)}</a></li>
 #end
-                  </ul>
-                </div>
-                <div class="span6">
-                  <ul>
+			</ul>
+		</div>
+
+		<div class="small-6 columns">
+			<ul class="no-bullet">
 #foreach($line in $column2)
-                    <li><a href="${seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${line.get(0)}")}">${line.get(1)}</a></li>
+				<li><a href="${seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${line.get(0)}")}">${line.get(1)}</a></li>
   #end
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row-fluid" id="featured-items"></div>
+			</ul>
+		</div>
+	</div> <!-- end row -->
+ 
+</div> <!-- end row -->
+
+
+<div class="row-fluid" id="featured-items"></div>

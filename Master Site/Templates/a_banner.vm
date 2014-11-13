@@ -1,19 +1,22 @@
-    <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId"/>
-    <div id="header" class="row-fluid">
-      <div class="container-fluid">
-        <div class="row-fluid">
-          <div class="span6">
-            <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")">
+<input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId"/>
+	<header>
+		<div class="row">
+			<div class="small-8 columns"> &nbsp;</div>
+			<div class="small-4 columns">
+				<ul class="inline-list">
+					<li> <a href="" alt=""> login / My Account</a></li>
+					<li> <a href="" alt=""> Shopping Cart</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="row">
+			<div class="small-12 columns">
               <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/business-logo.png">
-            </a>
-          </div>
-          <div class="span6">
-            <div id="business-address" class="span6 offset6 text-right">
-              Kroubets Lakeside Campers <br>
-              351 Hwy 60 East <br>
-              Lake Crystal, MN 56055
+              <div id="business-address" class="span6 offset6 text-right">
+              	Kroubets Lakeside Campers <br>
+              	351 Hwy 60 East <br>
+              	Lake Crystal, MN 56055
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
+			</div>
+		</div>
+	</header>

@@ -1,12 +1,14 @@
 #set($bcSeparator = "&raquo;") ## Breadcrumbs separator
-        <div class="side-nav">
-          <p class="title">Categories</p>
-          <ul class="top-categories">
+#set($bcCount = 0)
+<div class="side-nav">
+	<h3> Categories</h3>
+		<ul class="no-bullet">
 #set($bcMax = $categoryPathDTO.size())
 #foreach($clink in $categoryPathDTO)
-            <li>
-              <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$clink.cid")"><span>$clink.getName()</span></a>
-            </li>
+  #set($bcCount = $bcCount + 1)
+			<li>
+				<a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$clink.cid")"><span>$clink.getName()</span></a>
+			</li>
 #end
 #if($childCategoriesDTO.getItems().size() > 0)
    #foreach($itemIter in $childCategoriesDTO.getItems())
@@ -16,6 +18,19 @@
               <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")"><strong>$category.name</strong></a>
             </li>
   #end
+#end
+#if($bcCount==0)
+            <li>
+              <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId")"><span><b>Home</b></span></a>
+            </li>
+#end
+#if($bcCount < 2)
+  #foreach($temp in $menuCategories.items)
+    #set($category = $pageTile.getItemObject($menuCategories, $temp, "c"))
+            <li>             
+              <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")"> $category.name </a>
+            </li>
+  #end            
 #end
           </ul>
         </div>

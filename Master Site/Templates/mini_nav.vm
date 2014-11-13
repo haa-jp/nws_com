@@ -7,6 +7,23 @@
 #foreach($product in $miniBasketDTO.details.products)
   #set($totalPrice = $math.add($totalPrice,  $product.totalPrice))
 #end
+<div id="mini">		
+	<div class="row">
+		<div class="small-6 columns"> &nbsp;</div>
+		<div class="small-6 columns">
+			<ul class="inline-list">
+				<li> <a href="myaccount.html?mode=vieworder" alt="Account Access"> My Account</a></li>
+				<li> <a href="$seourl.encodeURL("basket.html?vid=$vendorSettingsDTO.vendorId")" alt=""> Shopping Cart ($!basketItemsTotal): $number.format('currency', $totalPrice).replace('¤','$')</a></li>
+				<li> <a href="yourinfo.html?vid=$vid" alt="Place order"> Checkout</a></li>
+				#if(${welcomematDTO.loggedIn})
+				<li> <a href="signout.html?vid=$vid" alt="Sign Out"> Log Out</a></li>
+				#end
+			</ul>
+		</div>
+	</div> <!-- end row -->
+</div> <!-- end mini -->
+
+#*
 
           <div class="row-fluid" id="mini-nav">
             <div class="container-fluid">
@@ -25,10 +42,12 @@
                 </div>
                 #if(${welcomeMatDTO.loggedIn})
                 <div class="span3 text-right">
-                  <a href="signout.html?vid=$vid">Logout</a>
+                  <a href="signout.html?vid="$vid>Logout</a>
                 </div>
                 #end
               </div>
               <!-- End Top Menus -->  
             </div>
           </div>
+*#        
+

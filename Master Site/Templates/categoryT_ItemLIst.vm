@@ -1,0 +1,32 @@
+## The following variables is needed to define the DTO in the pagination
+##set($itemsDTO = $childItemsDTO)
+<div class="row">
+	#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/pagination.vm")
+</div>
+
+<!-- Start item listing -->
+<div class="row">
+	<div class="listing $!itemViewClass">
+		<ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3">
+
+#foreach($itemIter in $itemsDTO.getItems())
+  #set($item = $pageTile.getItemObject($itemsDTO, $itemIter, "i"))
+  #set($price = $item.itemPrice)
+
+  #foreach($itemRev in $itemReviewDTO.getItems())
+    #set($itemreview = $pageTile.getItemObject($itemReviewDTO, $itemRev, "i"))
+    #if($itemreview.itemid == $item.itemid)
+           <!-- you can get the star rating here-->
+    #end
+  #end
+
+  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/product.vm")
+#end
+		</ul>
+	</div>
+</div> <!-- end row -->
+<!-- End item listing -->
+
+<div class="row">
+	#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/pagination.vm")
+</div>

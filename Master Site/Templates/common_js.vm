@@ -1,12 +1,24 @@
+
 <!-- start common_js.vm -->
 <input type="hidden" value="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName" name="themePath" />
   <script type="text/javascript">
     var baselink = '$!baselink';
     var vid= '$!vendorSettingsDTO.vendorId';
   </script>
-<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/foundation/vendor/jquery.js" />
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/foundation/vendor/jquery.js"></script>
 
-<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/foundation/foundation.js" />
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/foundation/foundation.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/backbone/underscore.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/backbone/backbone.js"></script>
+
+
+  <script type="text/javascript">
+  jQuery('.navbar-form').submit(function(evt){
+    evt.preventDefault();
+    window.location = 'asearch.html?vid=${vid}&keyword=' + encodeURIComponent(jQuery(this).find('input').val().trim()) + '&catalog=RV+%2F+MH+Catalog';
+  });
+  </script>
+
 
 
   <script type="text/javascript">
@@ -28,6 +40,11 @@
       keyword.value = $vendorSettingsDTO.vendorId;
   }
 </script>
+
+<script>
+$(document).foundation();
+</script>
+
 <!-- End common_js.vm -->
 
 #*

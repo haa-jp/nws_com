@@ -1,26 +1,29 @@
-<div class="row-fluid" id="footer">
-	<div class="container-fluid">
-		<div class="span3">
+<div id="footer">
+    <div class="row">
+		<div class="small-3 columns">
 			<a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")">Home</a>
-		</div>
-		<div class="span3">
+		</div>	
+		
+		<div class="small-3 columns">
 			<a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")">Shop</a>
-			<ul>
-				<li><a href="basket.html?vid=$vid">Shopping Basket</a></li>
-				<li><a href="#">Advanced Search</a></li>
-				<li><a href="#">My Wishlist</a></li>
-			</ul>
-		</div>
-		<div class="span3">
-			<a href="#">Customer Service</a>
-			<ul>
-				<li><a href="#">Contact Us</a></li>
-				<li><a href="myaccount.html?mode=vieworder">My Account</a></li>
-				<li><a href="myaccount.html?mode=shippingaddress">Change my Address</a></li>
-				<li><a href="myaccount.html?mode=changepassword">Change my Password</a></li>
-			</ul>
-		</div>
-		<div class="span3">
+				<ul>
+					<li><a href="basket.html?vid=$vid">Shopping Basket</a></li>
+					<li><a href="#">Advanced Search</a></li>
+					<li><a href="#">My Wishlist</a></li>
+				</ul>
+		</div>	
+		
+		<div class="small-3 columns">
+				<a href="#">Customer Service</a>
+				<ul>
+					<li><a href="#">Contact Us</a></li>
+					<li><a href="myaccount.html?mode=vieworder">My Account</a></li>
+					<li><a href="myaccount.html?mode=shippingaddress">Change my Address</a></li>
+					<li><a href="myaccount.html?mode=changepassword">Change my Password</a></li>
+				</ul>
+		</div>	
+		
+		<div class="small-3 columns">
 			<a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")">Store Policies</a>
 			<ul>
 				<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")">Shipping Information</a></li>
@@ -28,9 +31,13 @@
 				<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")">Privacy Policy</a></li>
 				<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")">Terms of Use</a></li>
 			</ul>
-		</div>
-	</div>
-	<div class="container-fluid">
-		<p class="text-center"> &copy; 2013 <b> $storeName</b></p>
-	</div>
-</div>
+		</div>	
+	</div> <!-- end row -->
+</div> <!-- end footer -->
+
+<div id="tagline">
+	<div class="row">
+		<p class="text-center"> &copy; 2015 <b> $storeName</b></p>
+	</div> <!-- end row -->
+</div> <!-- end tagline -->
+	

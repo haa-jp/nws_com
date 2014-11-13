@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 #set($focusNum = $productsDetails.products.size())
 #if($crossSell.size())
@@ -32,22 +32,23 @@
 #end
 
 #set( $propName = "SessionCustomerDTO_"+$vid)
-<html  xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <meta name="interestgroup" content="tp">
-    <meta name="prodtype" content="">
-    <title>#springMessage('vm.basket.title')</title>
-    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/deliveryoption/deliveryoption.css"/>
-    <link rel="stylesheet" type="text/css" href="assets/plugins/yahooUI/build/calendar/assets/calendar.css">
-    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/datepicker/datepicker.css" type="text/css" media="all" />
-#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<meta name="interestgroup" content="tp">
+		<meta name="prodtype" content="">
+		<title>#springMessage('vm.basket.title')</title>
+		<link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/deliveryoption/deliveryoption.css"/>
+		<link rel="stylesheet" type="text/css" href="assets/plugins/yahooUI/build/calendar/assets/calendar.css">
+		<link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/datepicker/datepicker.css" type="text/css" media="all" />
+		#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
 
-<style type="text/css">
-.modal.fade.in {top: 100%;}
-</style>
-  </head>
-  <body class="nws">
+	<style type="text/css">
+	.modal.fade.in {top: 100%;}
+	</style>
+	</head>
+	
+	<body>
 
     ############################ Header ####################################
 #if($vendorSettingsDTO.themeId == $storeSkinId)
@@ -61,14 +62,16 @@
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
     ############################ End Search Bar ############################
 
-    <div id="wrapper" class="row-fluid">
-      <div class="span2" id="left-col">
-#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/breadcrumbs.vm")
-      </div>
-      <div class="span10" id="right-col">
+		<div class="row">
+			<div  id="left-col" class="small-4 columns">
+#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/breadcrumbs.vm")
+			</div>
+		
+			<div id="right-col" class="small-8 columns" >
+				
         <form name="VIEWCART" action="" method="post" onSubmit="javascript:updateQuantities();">
           <div class="container-fluid">
-            <h1 class="inline-middle">#springMessage('vm.basket.title')</h1>
+            <h2 class="inline-middle">#springMessage('vm.basket.title')</h2>
             <input class="btn" type="button" value="#springMessage('vm.basket.toshop')" onclick="javascript:document.location='store.html?vid=${vendorSettingsDTO.vendorId}&cid=23049' " />
 #if($productsDetails.allowanceswarningmsg  && $productsDetails.enableOrderAllowance == 'ALLOWANCE')
             <div class="alert alert-error span6">#springMessage('vm.basket.warningallowancesmsg')$regExp.showPrice($cusalllowances)</div>

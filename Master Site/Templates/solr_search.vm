@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 #if($CookiesDTO && $CookiesDTO.getCookieValue('preferences'))
@@ -48,6 +49,7 @@
 ##set($facet_cat_searchDTO = $facet_simple_searchDTO)
 #set($facet_cat_searchDTO = $nwsFacetDTO)
 
+
 #if($itemsDTO.getItems().size() == 1)
   #foreach($itemIter in $itemsDTO.getItems())
     #set($childItem = $pageTile.getItemObject($itemsDTO, $itemIter, "i"))
@@ -60,6 +62,7 @@
   #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/facets_menu.vm")
 </div>
 #end
+
   #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/categoryT_itemList.vm")
           </div><!-- end content -->
         </div><!-- end span10 -->

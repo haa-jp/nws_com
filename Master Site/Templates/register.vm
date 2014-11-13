@@ -1,3 +1,4 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 <html>
@@ -94,11 +95,11 @@
   #foreach($error in $status.errorMessages)
             <li>$error</li>
   #end
-            <li id="payment_method_alert" style="display:none;">#springMessage('vm.register.msg4')</li>
+            <li id="alert alert-error payment_method_alert" style="display:none;">#springMessage('vm.register.msg4')</li>
           </ul>
         </div>
 #end
-        <div class="alert alert-error uppercase" id="registerErrors" style="display:none"></div>
+        <div class="error-text-area uppercase" id="registerErrors" style="display:none"></div>
         <div class="row-fluid">
           <input type="hidden" name="mid" id="mid" value="demo"/>
           <input type="hidden" id="anchorName_id" name="anchorName" value="">
@@ -124,7 +125,7 @@
   <script type="text/javascript" src="assets/commercelib/ajax/ajax_object.js"></script>
   <script type="text/javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
 
-<script type="text/javascript">
+<script language="javascript">
     /** variable indicates whether register successfully*/
     var login = #if($registerViewDTO.islogin) true #else false #end;
     /** variable indicates if only one payment method exists */

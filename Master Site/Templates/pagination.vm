@@ -1,0 +1,82 @@
+#set($childItemsViewDTO = $multiPageViews.get("$itemsPaginationDTO"))
+#if($itemsDTO.getItems().size() > 0)
+          <div class="listing-pagination">
+            <div class="view-switch">
+              <a class="grid#{if}($itemViewClass != "list") selected#{end}" href="#"></a>
+              <a class="list#{if}($itemViewClass == "list") selected#{end}" href="#"></a>
+            </div>
+  #if (!$sortBy)
+    #set($sortBy = $request.getParameter('sortci'))
+  #end
+  #set($itemCount = $childItemsViewDTO.pageItemsCount)
+	<div class="small-3 columns">
+		
+            <div class="sort">
+              <form class="form-inline">
+                <label for="per-page">Items Per page:</label>
+        <ul class="inline-list">
+        	<li>
+        		  <select class="per-page" name="pageItemsCount">
+                  <option value="15" #if($itemCount <= 15) selected="selected" #end>15</option>
+                  <option value="20" #if($itemCount > 15 && $itemCount <= 20) selected="selected" #end>20</option>
+                  <option value="25" #if($itemCount > 20 && $itemCount <= 25) selected="selected" #end>25</option>
+                </select>
+               </li>
+               <li>
+                <select name="sortby" class="sortby">
+                  <option value=""> #springMessage("vm.categoryT_itemList.sortby") </option>
+                  <option value="stitle+asc" #if($sortBy.equalsIgnoreCase('stitle ASC'))  SELECTED   #end>#springMessage("vm.categoryT_itemList.title") A --> Z</option>
+                  <option value="newest+desc" #if($sortBy.equalsIgnoreCase('newest DESC'))  SELECTED   #end>#springMessage("vm.categoryT_itemList.newitems")</option>
+                  <option value="price+asc" #if($sortBy.equalsIgnoreCase('price ASC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.lowtohigh") </option>
+                  <option value="price+desc" #if($sortBy.equalsIgnoreCase('price DESC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.hightolow") </option>
+                  <option value="topsellers+asc" #if($sortBy.equalsIgnoreCase('topsellers ASC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.popular") </option>
+                  <option value="orderscount+desc" #if($sortBy.equalsIgnoreCase('orderscount DESC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.bestsellers") </option>
+                  <option value="averagereview+desc" #if($sortBy.equalsIgnoreCase('averagereview DESC'))  SELECTED   #end> #springMessage("vm.categoryT_itemList.bestrated") </option>
+                </select>
+               </li>
+               </ul>
+              </form>
+            </div>
+	</div>
+  #if($childItemsViewDTO.pagesCount > 1)
+	<div class="small-9 columns">
+            <div class="pagination-centered">
+              <ul class="pagination">
+    #if ($childItemsViewDTO.previousUrl)
+                <li>
+      #if($childItemsViewDTO.currentPageIndex > 1)
+    	              <a href="${childItemsViewDTO.multiPageURL}1" class="first">First</a>
+                </li>
+      #end
+                <li>
+                  <a href="$childItemsViewDTO.previousUrl" class="prev">&laquo;</a>
+                </li>
+    #end
+    #foreach($page in $childItemsViewDTO.indexList)
+      #if($page == $childItemsViewDTO.currentPageIndex)
+                <li class="active">
+                  <a href="${childItemsViewDTO.multiPageURL}$page#">$childItemsViewDTO.currentPageIndex</a>
+                </li>
+      #elseif($velocityCount < $childItemsViewDTO.pagesCount+1)
+                <li>
+                  <a href="${childItemsViewDTO.multiPageURL}$page">$page</a>
+                </li>
+      #end
+    #end
+    #if ($childItemsViewDTO.nextUrl)
+                <li>
+                  <a href="$childItemsViewDTO.nextUrl" class="next">&raquo;</a>
+                </li>
+      #if($childItemsViewDTO.currentPageIndex < $childItemsViewDTO.pagesCount)
+                <li>
+                  <a href="${childItemsViewDTO.multiPageURL}$childItemsViewDTO.pagesCount" class="last">Last</a>
+                </li>
+      #end
+    #end
+                <li class="pages-count"><span>($itemCount of $childItemsViewDTO.itemsCount) items displayed</span></li>
+              </ul>
+            </div>
+  #end
+          </div>
+          </div>
+#end

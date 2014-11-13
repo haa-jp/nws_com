@@ -906,7 +906,7 @@
 
 
                             var placeOrderBtn = $('<input>', {type: 'button', 'class': 'btn btn-success', value: vars['place_order_label']});
-                            var checkoutStepBtn = $('<input>', {type: 'button', 'class': 'btn btn-primary', value: vars['checkout_label']});
+                            var checkoutStepBtn = $('<input>', {type: 'button', 'class': 'btn btn-primary', 'id': 'stepbutton', value: vars['checkout_label']});
                             var helpLink = $('<a><b>Which one ? </b></a>');
 
                             buttons = $('<div class="span12 form-actions">');
@@ -1527,6 +1527,13 @@
                     methods.removeFieldError($this.purchaseOrder);
 
                 }
+                // TESTING
+
+$('#stepbutton').hide();
+
+
+
+
 
                 thisBtn
                         .val(vars['process_order_label'])

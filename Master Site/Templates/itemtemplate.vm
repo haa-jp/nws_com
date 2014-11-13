@@ -1,4 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 #set($itemRow = $singleItemDTO.getItem(0))
 #if($itemRow)
@@ -32,37 +33,41 @@
 #end
 
 
-<html xmlns:og="http://opengraphprotocol.org/schema/" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns="http://www.w3.org/1999/xhtml"  xml:lang="en" lang="en">
-  <!-- itemtemplate.vm--><head>
+<html>
+	<head>
       <!-- Facebook Graph Protocol -->
-    <meta property="og:title" content="${esc.html($item.title)}" />
-    <meta property="og:type" content="product" />
-    <meta property="og:url" content="${baselink}${seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")}" />
-    <meta property="og:image" content="${baselink}$item.itemimage" />
-    <meta property="og:site_name" content="$vendorSettingsDTO.SiteName" />
+		<meta property="og:title" content="${esc.html($item.title)}" />
+		<meta property="og:type" content="product" />
+		<meta property="og:url" content="${baselink}${seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")}" />
+		<meta property="og:image" content="${baselink}$item.itemimage" />
+		<meta property="og:site_name" content="$vendorSettingsDTO.SiteName" />
 <!--
-    <meta property="fb:admins" content="100001477813120" />
+		<meta property="fb:admins" content="100001477813120" />
 -->
-    <meta property="fb:app_id" content="263181867092117"/>
+		<meta property="fb:app_id" content="263181867092117"/>
 
-    <meta property="og:description" content="!${esc.html($item.shortdesc)}" />
+		<meta property="og:description" content="!${esc.html($item.shortdesc)}" />
     <!-- End of Facebook Graph Protocol -->
 
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="description" content="$!metadescription" />
-    <meta name="keywords" content="$!keywords" />
-    <base href="$baselink" />
-    <title >$storeName - $item.Title</title>
-    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/deliveryoption/deliveryoption.css"/>
-    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/showimage/showimage.css">
-    <link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/commerce/commerce_shop.css"/>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<meta name="description" content="$!metadescription" />
+		<meta name="keywords" content="$!keywords" />
+		<base href="$baselink" />
+		<title >$storeName - $item.Title</title>
+		<link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/deliveryoption/deliveryoption.css"/>
+		<link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/showimage/showimage.css">
+		<link rel="stylesheet" type="text/css" media="all" href="assets/commercelib/commerce/commerce_shop.css"/>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
 #if($printView && $printView == "y")
-    <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/print.css" media="screen,print"/>
+		<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/print.css" media="screen,print"/>
 #end
-  </head>
-  <body class="nws item" id="item">
-
+	</head>
+	<body>
+<!-- itemtemplate.vm-->
+    ############################ Mini Nav #################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
+    ############################ Ends Mini Nav ############################ 
+    
     ############################ Header ####################################
 #if($vendorSettingsDTO.themeId == $storeSkinId)
     #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
@@ -76,17 +81,23 @@
     ############################ End Search Bar ############################
 
     <input type="hidden" id="js-vid" value="$vendorSettingsDTO.vendorId">
-      <div id="wrapper" class="wrapper-menu">
-        <div class="left-menu" id="left-col">
+		<div class="row">
+			<div  id="left-col" class="small-4 columns">
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/breadcrumbs.vm")
-        </div>
-        <div class="content-area" id="right-col">
+			</div>
+        
+			<div id="right-col" class="small-8 columns">
+				<!-- <div class="row"> crunbs </div> -->
+				<div class="row">
+					<h2 class="title itemTitle" id="js-item-title-$item.itemid">$item.Title</h2>
+					<h3> $item.shortdesc</h3>
 #parse($item_topDTO.getItems().get(0).get('item_top'))
-          <h1 class="title itemTitle" id="js-item-title-$item.itemid">$item.Title</h1>
-          <h2> $item.shortdesc</h2>
-          <div class="row-fluid">
-            <div class="span7">
-              <div class="preview span6">
+				</div><!-- end row -->
+          	
+          	
+          		<div class="row">
+					<div class="small-8 columns">
+						<div class="row">
                     #if($item.storeFeatured )
                       Storewide Feature &nbsp;&nbsp;
                     #end
@@ -105,51 +116,53 @@
 ##else
   ##set($itemimage = $item.itemimage)
 ##end
-                <a id="js-item-imagelink2-$item.itemid" href="$item.largeimage" rel="showImage" title="$item.title"><img id="js-item-image-$item.itemid" name="slika" src="$item.itemimage"></a>
-          ## <a id="js-item-imagelink-$item.itemid" href="$item.largeimage" rel="showImage" title="$item.title">#springMessage("vm.itemTemplate.msg1")</a>
-              </div>
-              <div class="top-details span6">
+						<a id="js-item-imagelink2-$item.itemid" href="$item.largeimage" rel="showImage" title="$item.title"><img id="js-item-image-$item.itemid" name="slika" src="store$item.itemimage"></a>
+						## <a id="js-item-imagelink-$item.itemid" href="$item.largeimage" rel="showImage" title="$item.title">#springMessage("vm.itemTemplate.msg1")</a>
+					</div> <!-- end row -->
+              		
+              		<div class="row">
+					<div class="thumbs span12" style="height:72px">
+                  #if($item.smallimage!="")
+                <a href="#" rel="tb"><img id="js-item-cimage-$item.itemid" src="store$item.smallimage" alt=""/></a>
+                  #end
+                  #if($item.smallimage2!="")
+                <a href="#" rel="tbA"><img src="store$item.smallimage2" alt=""/></a>
+                  #end
+                  #if($item.smallimage3!="")
+                <a href="#" rel="tbB"><img src="store$item.smallimage3" alt=""/></a>
+                  #end
+                  #if($item.smallimage4!="")
+                <a href="#" rel="tbC"><img src="store$item.smallimage4" alt=""/></a>
+                  #end
+                  #if($item.smallimage5!="")
+                <a href="#" rel="tbD"><img src="store$item.smallimage5" alt=""/></a>
+                  #end
+					</div>
+				</div> <!-- end row -->
+             </div> 
+              
+					<div class="small-4 columns">
                 #*
                   ## Whenever reviews is ready, verify css that margins is not messing up layout
                   <div class="reviews"></div> <!-- review place holder -->
                 *#
-                <p><strong>Product Number: </strong><span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></p>
-                <p><strong>MFG Item Number: </strong> $item.mfgpartno</p>
+							<p><strong>Product Number: </strong><span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></p>
+							<p><strong>MFG Item Number: </strong> $item.mfgpartno</p>
 #if($list.size($item.attributes) != 0)
-                <div class="item-attributes">
-                  <p class="section-title">
+							<div class="item-attributes">
+							<p class="section-title">
                     Options for this item are available.
                     Please make you selection.
-                  </p>
-                  <img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/preloader.gif" alt="Loading" id="preloader" />
-                  <div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
-                </div>
+							</p>
+                  			<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/preloader.gif" alt="Loading" id="preloader" />
+							<div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
+						</div>
 #else
-                <div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
+					<div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
 #end
-              </div>
-              <div class="thumbs span12">
-                  #if($item.smallimage!="")
-                <a href="#" rel="tb"><img id="js-item-cimage-$item.itemid" src="$item.smallimage" alt=""/></a>
-                  #end
 
-                  #if($item.smallimage2!="")
-                <a href="#" rel="tbA"><img src="$item.smallimage2" alt=""/></a>
-                  #end
-                  #if($item.smallimage3!="")
-                <a href="#" rel="tbB"><img src="$item.smallimage3" alt=""/></a>
-                  #end
-                  #if($item.smallimage4!="")
-                <a href="#" rel="tbC"><img src="$item.smallimage4" alt=""/></a>
-                  #end
-                  #if($item.smallimage5!="")
-                <a href="#" rel="tbD"><img src="$item.smallimage5" alt=""/></a>
-                  #end
-              </div>
-            </div><!-- end span7-->
-            <div class="span1"></div>
-            <div class="span4">
 
+ 
   ##if($math.round($price.listPrice) > $math.round($price.price))
               <div class="retail list-price">#springMessage("vm.itemTemplate.msrp"):
                 <em id="_listPrice_0">
@@ -202,9 +215,7 @@
                   </div>                       
                 </div>
               </form>
-#* #else
-              <p>You must first <a href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=${welcomeMatDTO.currentEncodePage}&loginway=header'>#springMessage("vm.header.login")</a> to view pricing and purchase items</p>
-#end *#
+
               <!-- <p><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank>#springMessage('vm.itemTemplate.printerfriendly')</a></p> -->
               <p><a href="action.html?mode=addWishlist&iid=$item.itemid&vid=$vendorSettingsDTO.vendorId&qty=1&url=storeitem.html%3Fiid%3D$item.itemid%26vid%3D$vendorSettingsDTO.vendorId">Add to your Wish List</a></p>
               <p> <a href="wishlist.html?vid=$vendorSettingsDTO.vendorId&action=add" title="add this ite tot you wish list"> View Your Wish List </a></p>
@@ -212,55 +223,53 @@
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_logo.vm")
                 </div><!-- end span4 -->
               </div>
-              ############### Mini Basket for SKUs ################
-              #if($list.size($item.attributes) != 0)
-              <div class="row-fluid">
-                <div class="span9 offset3">
-                  <ul id="item-basket"></ul>
-                </div>
-              </div>
-              #end
-              ############### End Mini Basket for SKUs ################
+
             <div>
 
- #parse($item_centerDTO.getItems().get(0).get('item_center'))
-            <div class="separator grey">&nbsp;</div>
-            <div class="item-secondary">
-#if($item.longdesc!="" )
-              <div class="title subTitle2">#springMessage('vm.itemTemplate.desc')</div>
-              <div id="js-item-longdesc-$item.itemid" class="desc">$!item.longdesc</div>
-#end
-#if($item.longdesc2!="")
-              <div class="title subTitle2">Features </div>
-              <div id="js-item-longdesc2-$item.itemid" class="desc">$!item.longdesc2</div>
-#end
-            </div>
-          </div>
-          <div class="separator">&nbsp;</div>
-          <div class="row-fluid">
-            <div class="span12">
+
+
+
+
+
+
+				</div> <!-- end row -->
+              
+
+				<div class="row">
+#parse($item_centerDTO.getItems().get(0).get('item_center'))
+					<div class="separator grey">&nbsp;</div>
+					<div class="item-secondary">
+					#if($item.longdesc!="" )
+						<h4> #springMessage('vm.itemTemplate.desc')</h4>
+						<div id="js-item-longdesc-$item.itemid" class="desc">$!item.longdesc</div>
+						#end
+						#if($item.longdesc2!="")
+						<h4> Features</h4
+						<div id="js-item-longdesc2-$item.itemid" class="desc">$!item.longdesc2</div>
+					#end
+    	        	</div>
+				</div> <!-- end row -->
+
+
+    	        <div class="row">
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_accessoryItems.vm")
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_alsolike.vm")
 ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_reviews.vm")
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_recentlyViewed.vm")
-            </div>
-          </div>
-          <div class="separator">&nbsp;</div>
-        </div><!-- end span9 -->
-      </div>
-      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
-    <div id="deliverypopup" class="popup_menu"></div>
-    <script language="javascript" src="assets/plugins/prototype/prototype.js"></script>
-    <script language="javascript" src="assets/commercelib/commerce/commerce.js"></script>
-    <script language="javascript" src="assets/commercelib/commerce/commerce_shop.js"></script>
+    	        </div> <!-- end row -->
+
+#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
+
+<div id="deliverypopup" class="popup_menu"></div>
+  <script type="text/javascript" src="assets/commercelib/commerce/commerce_jQuery.js"></script>
+  <script type="text/javascript" src="assets/commercelib/commerce/commerce_shop_jQuery.js"></script>
+
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
 <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/js/overrides.js"></script>
-##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quicklook_ext.vm")
-##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/quickadd_ext.vm")
-    <script type="text/javascript" src="assets/plugins/juitter/jquery.juitter.js"></script>
-    <script src="assets/plugins/extlogin/popup.js" type="text/javascript"></script>
-    <script src="assets/commercelib/showimage/showimage.js" type="text/javascript"></script>
-    <script type="text/javascript">
+<script type="text/javascript" src="assets/plugins/juitter/jquery.juitter.js"></script>
+<script src="assets/plugins/extlogin/popup.js" type="text/javascript"></script>
+<script src="assets/commercelib/showimage/showimage.js" type="text/javascript"></script>
+<script type="text/javascript">
       var $j = jQuery.noConflict();
 
       //multi-images support
@@ -277,7 +286,7 @@
         jQuery('.addToCartBtn').show();
         jQuery('.listing .select-all').click(checkAllItems(this));
       });
-    </script>
+</script>
 
     #set( $tweetHash= ${tweetHelper.tweetHash($request.getServerName(), $item)})
     <!-- $tweetHash -->

@@ -1,0 +1,251 @@
+<div class="row">
+	<div class="small-12 columns">
+		<h2> Narrow Your Search</h2>
+		<div><p> Use the form below  to add additional keywords to you search. Or, click the keyword to remove it.</p></div>
+	</div>
+</div> <!-- end row -->
+
+<div class="row">	
+	<div class="small-6 columns">
+
+#set($keyword=${request.getParameter('keyword')})
+#set($searchHistory = ${request.getParameter('search_history')})
+#if(!$searchHistory)
+   #set($searchHistory = $keyword)
+#end
+
+#if($searchHistory)
+
+	#set($historyList = $searchHistory.split('\|'))
+
+	#foreach($historyKey in $historyList )
+		#if( $velocityCount == 1 ) #set($pref="-") #else #set($pref="+") #end
+
+		#set($velocityCountCopy = $velocityCount )
+
+		#set($newhistory = "")
+		#set($newKeyword = "")
+		#foreach($hist in $historyList)
+		  #if( $velocityCount !=$velocityCountCopy)
+			  #if(!$newhistory.isEmpty())
+				   #set($newhistory = "${newhistory}|")
+				   #set($newKeyword = "${newKeyword} ")
+			  #end
+			  #set($newhistory = "${newhistory}${hist}")
+			  #set($newKeyword= "${newKeyword}${hist}")
+		  #end
+		#end
+<p>
+		#if($historyKey != $vid)
+			#if($list.size($historyList) > 1)
+				  <a href="#hrefNewParameters("search_history",$newhistory,"keyword", $newKeyword)"> $pref$historyKey </a>
+			#else
+				   $pref$historyKey 
+			#end
+		#end
+</p>
+	#end
+#end
+
+<form action="asearch.html" onsubmit="handleKey(this); checkKey();" id="searchRefinementForm" class="navbar-search">
+          <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+           #formParameters( "keyword"  "search_history")
+
+          <input type="hidden" name="keyword" value="$keyword" id="key">
+          <input type="hidden" name="search_history" value="$searchHistory" id="search_history">
+
+          <input  value="" id="refinement_key" type="text" placeholder="Search" class="input-medium search-query">
+        <button class="button" type="submit">GO</button>
+</form>
+
+<script language="JavaScript" type="text/javascript">
+
+function handleKey(form) {
+
+   form.search_history.value= form.search_history.value + "|" + form.refinement_key.value;
+
+   form.key.value=form.key.value +' ' + form.refinement_key.value;
+
+   form.searchRefinementForm.refinement_key.desabled=true;
+
+
+}
+</script>
+
+	</div>
+	<div class="small-6 columns">
+
+  #macro ( hrefNewParameters $paramName1 $paramValue1 $paramName2 $paramValue2)
+    #set($hrefString = "$request.getRequestURI()?")
+    #if($request.getParameterMap().size()>0)
+    #foreach($parName in $request.getParameterNames())
+      #foreach($parVal in $request.getParameterValues($parName))
+      #if(!$parName.equals($paramName1) && !$parName.equals($paramName2) && $hrefString.indexOf("${parName}=${parVal}")<0)
+        #set($hrefString = "${hrefString}${parName}=${parVal}&")
+      #end
+      #end
+    #end
+    #end
+    #set($hrefString = "${hrefString}${paramName1}=${response.encodeURL($paramValue1)}&${paramName2}=${response.encodeURL($paramValue2)}")
+
+    $hrefString
+  #end
+
+
+
+
+#macro ( formParameters $param1Name $param2Name)
+  #set($hrefString = "")
+  #if($request.getParameterMap().size()>0)
+    #foreach($parName in $request.getParameterNames())
+      #set($oriv="")
+      #foreach($parVal in $request.getParameterValues($parName))
+        #if($oriv=='' || $oriv!=$parVal)
+          #set($oriv=$parVal )
+          #if(!$parName.equals($param1Name) && !$parName.equals($param2Name))
+            #set($hrefString = "${hrefString}<input type=hidden name=${parName} value='${parVal}'>")
+          #end
+        #end
+      #end
+    #end
+  #end
+  $hrefString
+#end
+
+#macro (facetLine $name $line)
+  #if(!$number.toNumber($name) && $name != "" )
+<input class="vat" type="radio" id="${propParam}" name="${propParam}" value="$esc.html($line.fieldValue)" onclick="document.shb${propParam}.submit();">
+$name
+<span class="productCount">&nbsp;($line.count)</span>
+  #end
+#end
+
+#**
+ * This Macro will display all the properties defined in the System anad available in the DTO
+ * To use properly this macro enable the properties in the solr DTO and the childItemsDTO (Data DTO)
+ *
+ * @params property - system property
+ *
+ *#
+#macro (facetsearch $property)
+
+#set($propertySuffix = "_p")
+#if($property.endsWith("_dim"))
+      #set($propertySuffix = "_dim_p")
+      #set($property= $property.substring(0,$property.lastIndexOf('_dim')))
+#end
+
+
+  #set($propParam = $property.toLowerCase().replace("_", ""))
+
+  #if($pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}") && $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}").size()>0 && !$request.getParameter("${propParam}"))
+    #if($childItemsViewDTO)
+      #set ($totalItemCount = $childItemsViewDTO.itemsCount)
+    #else
+      #set ($multiPageViewDTO = $multiPageViews.get("AdvancedSearchUsingSolrNew"))
+      #set ($totalItemCount = $multiPageViewDTO.itemsCount)
+    #end
+    #if($totalItemCount > $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}").size())
+      #set($showFacet = true)
+    #else
+      #set($showFacet = false)
+    #end
+
+    #if($vendorSettingsDTO.templateName.indexOf("solr_advanced_search") != -1)
+      #set($action = "advancedsearch.html")
+    #elseif($vendorSettingsDTO.templateName.indexOf("solr_search") != -1)
+        #set($action = "asearch.html")
+    #else
+      #set($action = "store.html")
+    #end
+
+		<div class="filter facet">
+			<div class="title">$property.replace("_", " ")</div>
+			<div class="bd">
+				<form method="get" name="shb${propParam}" action="${action}">
+					#formParameters( "${propParam}" "")
+					#foreach($line in $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}"))
+					<label>
+
+					#if($line.fieldValue == "01")
+						#facetLine("Manufactured Housing", $line)
+					#elseif($line.fieldValue == "02")
+						#facetLine("RV Parts &amp; Accessories", $line)
+					#elseif($line.fieldValue == "03")
+						#facetLine("Marine Parts &amp; Accessories", $line)
+					#elseif($line.fieldValue == "04")
+						#facetLine("Hydronics", $line)
+					#elseif($line.fieldValue == "05")
+						#facetLine("Powersports Parts &amp; Accessories", $line)
+					#else
+						#facetLine($line.fieldValue, $line)
+					#end
+					</label>
+					#end
+				</form>
+			</div> <!-- end bd -->
+		</div> <!-- end filter-->
+	</div>
+  #end
+#end
+##End Macro
+
+#**
+ * This Macro will display as a dropdown all the properties defined in the System and available in the DTO
+ * To use properly this macro enable the properties in the solr DTO and the childItemsDTO (Data DTO)
+ *
+ * @params property - system property
+ *
+ *#
+#macro (facetsearchsel $property)
+  #set($propParam = $property.toLowerCase().replace("_", ""))
+
+  #if($pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}_p") && $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}_p").size()>0 && !$request.getParameter("${propParam}"))
+
+    #if($pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}_p").size() != $facet_cat_searchDTO.items.size())
+      #set($showFacet = true)
+    #end
+
+    #if($vendorSettingsDTO.templateName.indexOf("search") != -1)
+      #set($action = "advancedsearch.html")
+    #else
+      #set($action = "store.html")
+    #end
+</div> <!-- end row -->
+
+
+
+    
+<div class="span3">
+<div class="filter">
+  <div class="title">$property.replace("_", " ")</div>
+  <div class="bd">
+    <form method="get" name="shb${propParam}" action="${action}">
+      #formParameters( "${propParam}" "")
+      <select name='${propParam}' onchange="document.shb${propParam}.submit()">
+        <option>#springMessage("vm.facets_menu.selectcate")</option>
+      #foreach($line in $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}_p"))
+      ${property}_p
+        <option value='$line.fieldValue'>
+               $line.fieldValue
+          &nbsp;($line.count)
+        </option>
+      #end
+      </select>
+    </form>
+  </div>
+  <!-- end bd -->
+</div>
+<!-- end filter-->
+</div> <!-- end span3 -->
+  #end
+#end
+##End Macro
+
+#if($facet_cat_searchDTO && $facet_cat_searchDTO.items && $facet_cat_searchDTO.items.size()>0)
+  #set($facets = $facet_cat_searchDTO.items.get(0))
+  #set( $propertyNames = ["Item_Class_dim", "Catalog_dim", "Brand"] )
+  #foreach($propName in $propertyNames)
+      #facetsearch($propName)
+  #end
+#end ##Facet_dto validation

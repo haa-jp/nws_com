@@ -30,7 +30,11 @@
 ##  master theme = $masterSkinId || 
 ##  store theme = $storeSkinId
 
-  <body class="home">
+	<body class="home">
+    ############################ Mini Nav #################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
+    ############################ Ends Mini Nav ############################ 
+     	
     ############################ Header ####################################
 #if($vendorSettingsDTO.themeId == $storeSkinId)
     #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
@@ -43,28 +47,27 @@
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
     ############################ End Search Bar ############################
 
-    <div id="wrapper" class="row-fluid">
-      <div class="span4" id="left-col"> OMG !! can you beleive this?
+		<div class="row">
+			<div class="small-4 columns"> 
     ############################ Left Column ##############################
     #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/${storeclass}_home_left.vm")
     ############################ End Left Column ##########################
-      </div>
-      <div class="span8" id="right-col">
-    ############################ Mini Nav #################################
-    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
-    ############################ Ends Mini Nav ############################
+			</div>
 
+			<div class="small-8 columns">
     ############################ Page Content #############################
 <!-- right here -->
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/home_content.vm")
     ############################ Edns Page Content ########################
-      </div>
-    </div>
+			</div>
+		</div> <!-- end row -->
+		
     ############################ Footer ###################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
     ############################ Ends Footer ##############################    
     
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
+
 
     ################## Featured Items Scripts #############################
 #if($vendorSettingsDTO.themeId == $storeSkinId)
@@ -73,5 +76,5 @@
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/featured-items.vm")
 #end
     ################## Ends Featured Items Scripts ########################
-  </body>
+	</body>
 </html>
