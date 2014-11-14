@@ -32,12 +32,16 @@
     this.templates = {
       container: ' \
         <div class="container-fluid"> \
+          <h2> Featured Items</h2> \
           <div id="featured-items-container" class="row-fluid"> \
+		<ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3"> \
+		</ul> \
           </div> \
         </div> \
       ',
       item: ' \
-          <h4><%= title %></h4> \
+	  <div> \
+          <h5><%= title %></h5> \
           <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
           <div class="prev-price"> \
             <label>was:</label> \
@@ -49,8 +53,9 @@
           </div> \
           <form class="form-inline"> \
             <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>">About this item</a> \
-            <button class="btn btn-info btn-small buy-button" type="button">Buy</button> \
+            <button class="button small buy-button" type="button">Buy</button> \
           </form> \
+	  </div> \
       '
     };
 
@@ -80,9 +85,11 @@
 
     var _viewModel = Backbone.View.extend({
       
-      tagName: 'div',
+      //tagName: 'div',
+      tagName: 'li',
 
-      className: 'span3 featured-item',
+      //className: 'span3 featured-item',
+      className: 'james',
 
       template: _.template(this.templates.item),
 
@@ -157,13 +164,13 @@
       _renderReady: function(renderedView) {
         this.views.push(renderedView);
         if (this.views.length === this._collection.length) {
-          this.$el.find('#featured-items-container').html(this.template({elements: this.views.join('')}));  
+          this.$el.find('#featured-items-container ul').html(this.template({elements: this.views.join('')}));  
         }
         return true;
       },
 
       render: function() {
-        var container = this.$el.find('#featured-items-container');
+        var container = this.$el.find('#featured-items-container ul');
         container.empty();
         _.each(this._collection.models, function(model){
           var view = new _viewModel({model: model});
