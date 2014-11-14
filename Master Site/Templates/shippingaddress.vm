@@ -1,4 +1,4 @@
-<h1>#springMessage("vm.shippingaddress.title")</h1>
+<h2>#springMessage("vm.shippingaddress.title")</h2>
 
 #if( $myAccountDTO.shippingAddress.size() > 0 )
 <table class="table">
@@ -71,7 +71,9 @@
 <p>Currently there are no shipping address defined</p>
 <br />
 #end
-<a class="btn-large btn-primary" name="add" href="myaccount.html?mode=newshippingaddress&vid=$vendorSettingsDTO.vendorId">#springMessage('vm.shippingaddress.newadd')</a>  
+
+<a class="btn btn-primary" name="add" href="myaccount.html?mode=newshippingaddress&vid=$vendorSettingsDTO.vendorId">#springMessage('vm.shippingaddress.newadd')</a>  
+<br><br>
 <div class="row-fluid">
   <div class="span11">
     <div class="alert alert-warning">

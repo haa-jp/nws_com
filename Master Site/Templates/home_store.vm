@@ -31,6 +31,7 @@
 ##  store theme = $storeSkinId
 
 	<body class="home">
+	<!-- home_store.vm -->
     ############################ Mini Nav #################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
     ############################ Ends Mini Nav ############################ 

@@ -34,8 +34,10 @@
                     </a>
                     <p> MFG #: $item.mfgpartno</p>
                     <p>Product Number: $item.code.replace("-", ".")</p>
+                    
 #set($instock = $pageTile.getItemObject($itemsDTO, $itemIter, "instock"))
                     <p>In stock: #if($instock >= 1)yes#{else}no#end</p>
+                    
                     <p>
 #if($math.round($price.listPrice) > $math.round($price.price))
                       <span class="price">$number.format('currency', $price.price, $viewStoreCurrency.locale)</span>

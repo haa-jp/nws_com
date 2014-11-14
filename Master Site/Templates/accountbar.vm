@@ -1,25 +1,14 @@
+<h3>Account Management</h3>
 
-<div class="yui3-u side-nav">
-  <div class="accountbar">
-    <div class="yui3-u-1">
-      <div class="filter">
-        <div class="title">
-          Account Management
-        </div>
-        <ul>
-          <li><a href="myaccount.html?mode=vieworder">#springMessage("vm.myaccount.vieworders")</a></li>          
-          <li><a href="myaccount.html?mode=billingaddress">#springMessage("vm.myaccount.billingadd")</a></li>          
-          <li><a href="myaccount.html?mode=changepassword">#springMessage("vm.myaccount.changepassword")</a></li>          
-          <li><a href="myaccount.html?mode=customerinfo">#springMessage("vm.myaccount.customeradd")</a></li>          
-          <li><a href="myaccount.html?mode=shippingaddress">#springMessage("vm.myaccount.shippingadd")</a></li>          
-     <!-- <li><a href="myaccount.html?mode=viewproperties">#springMessage("vm.myaccount.accountpref")</a></li>  -->        
-          <li><a href="myaccount.html?mode=giftcertcodes">#springMessage("vm.myaccount.mygccard")</a></li>
-        #if($isAdmin)
-          <li><a href="nwrevieworders.html?vid=$vid">Review Customer Orders</a></li>
-        #end
-        </ul>
-
-      </div>
-    </div>
-  </div>
-</div>
+<ul class="no-bullet">
+	<li><a href="myaccount.html?mode=vieworder"> #springMessage("vm.myaccount.vieworders")</a></li>          
+	<li><a href="myaccount.html?mode=billingaddress"> #springMessage("vm.myaccount.billingadd")</a></li>          
+	<li><a href="myaccount.html?mode=changepassword"> #springMessage("vm.myaccount.changepassword")</a></li>          
+	<li><a href="myaccount.html?mode=customerinfo"> #springMessage("vm.myaccount.customeradd")</a></li>          
+	<li><a href="myaccount.html?mode=shippingaddress"> #springMessage("vm.myaccount.shippingadd")</a></li>          
+	<!-- <li><a href="myaccount.html?mode=viewproperties">#springMessage("vm.myaccount.accountpref")</a></li>  -->        
+	<li><a href="myaccount.html?mode=giftcertcodes_local&vid=$vid"> #springMessage("vm.myaccount.mygccard")</a></li>
+#if($isAdmin)
+	<li><a href="nwrevieworders.html?vid=$vid"> Review Customer Orders</a></li>
+#end
+</ul>

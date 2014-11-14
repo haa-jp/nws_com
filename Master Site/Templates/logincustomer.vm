@@ -35,10 +35,14 @@
     ############################ End Search Bar ############################
 
     <div class="row">
+		<div class="small-6 large-centered columns">
+          <h2>Welcome, Please #springMessage("vm.logincustomer.title")</h2>
+		</div>
+	</div> <!-- end row -->
+
+    <div class="row">
       <div class="small-6 columns">
 
-    ############################ Page Content #############################
-          <h2>Welcome, Please #springMessage("vm.logincustomer.title")</h2>
           <div id="loginBox" class="panel"> 
                 <h3>#springMessage("nw.vm.logincustomer.returning")</h3> 
                 <form id="nws-form" class="login-form" name="frm" method="POST" action="signin.html?vid=${vendorSettingsDTO.vendorId}">
@@ -66,7 +70,7 @@
                     
                   <div>
                     <input type="hidden" name="mode" value="Log In">
-                    <input class="btn btn-primary" type="submit" value="#springMessage('vm.logincustomer.title')" onclick="JavaScript:document.frm.hiddenlogin.value='Log In';"/>
+                    <input class="button small" type="submit" value="#springMessage('vm.logincustomer.title')" onclick="JavaScript:document.frm.hiddenlogin.value='Log In';"/>
                     <input type="hidden" value="$!authenticationSubmitURL" name="Log In">                    
                   </div>                    
                     <br/>
@@ -97,7 +101,7 @@
               </p> 
 
               <p>
-                <input type="button" value="#springMessage('vm.logincustomer.creat')" class="btnLogin btnclass" onclick="window.location='register.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26fr%3Dregister#end';"/>
+                <input type="button" value="#springMessage('vm.logincustomer.creat')" class="button small" onclick="window.location='register.html?vid=${vendorSettingsDTO.vendorId}#if(${loginViewDTO.memberType})&mt=${loginViewDTO.memberType}#else&mt=3#end#if($authenticationRedirectURL && $authenticationRedirectURL!='')&redirecturl=${authenticationRedirectURL}%26fr%3Dregister#end';"/>
               </p>
 
               <p>

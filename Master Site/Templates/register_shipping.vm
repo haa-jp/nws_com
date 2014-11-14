@@ -1,4 +1,5 @@
-              <div class="span6" id="shippingInfo" style="display:none">
+
+<div class="span6" id="shippingInfo" style="display:none">
 #if($registerViewDTO.billingandshippinginonepage && $registerViewDTO.memberType != '1')
                 <h3>Your Shipping Infomation</h3>
                 <div class="required"><span class="needed_star">*</span> required information</div>

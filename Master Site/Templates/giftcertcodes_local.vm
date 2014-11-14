@@ -1,0 +1,97 @@
+<div class="row">
+	<h2>#springMessage("vm.myaccount.mygccard")</h2>
+</div><!-- end row -->
+
+<div class="row">
+	<div class="small-4 columns">
+		<p><b>#springMessage("vm.giftcertcodes.totalbalance"):</b></p>
+	</div>
+		<div class="small-4 columns">
+			<span>
+			#if($request.getSession().getAttribute("AdditionalInformation_${vendorSettingsDTO.vendorId}"))
+				#if($viewStoreCurrency)
+					<b>$number.format('currency', $request.getSession().getAttribute("AdditionalInformation_${vendorSettingsDTO.vendorId}").giftCertTotalAvailableAmount , $viewStoreCurrency.locale)</b>
+				#else
+					<b>$number.format('currency', $request.getSession().getAttribute("AdditionalInformation_${vendorSettingsDTO.vendorId}").giftCertTotalAvailableAmount)</b>
+				#end
+			#else
+				#if($viewStoreCurrency)
+					<b>$number.format('currency',0, $viewStoreCurrency.locale)</b>
+				#else
+					<b>$number.format('currency', 0)</b>
+				#end
+			#end
+			</span>
+	</div>	
+</div><!-- end row -->
+
+<div class="row">
+	<div class="panel">
+		<label>#springMessage("vm.giftcertcodes.redeem"):</label>
+	#springBind("myAccountDTO.giftCertCode")
+		<input value="$!{status.value}" name="${status.expression}" type="text" maxlength="30">
+	#foreach($error in $status.errorMessages)<b class="warning">$error</b>#end
+	</div>
+</div><!-- end row -->
+
+<div class="row">
+	<div class="f-buttons">
+		<input type="hidden" name="_targetgiftcertcodes_local" value="myaccount.html?mode=giftcertcodes_local"/>
+		<input type="hidden" name="submit" value="update"/>
+		<input type="submit" class="button small" name="TODO" value="#springMessage('button.OK')"/>
+		<input type="submit" class="button small" name="TODO" value="#springMessage('button.APPLY')"/>
+	</div>
+</div><!-- end row -->
+
+#foreach($codehistory in $myAccountDTO.giftCertCodesHistories)
+	#set($giftcodes=$codehistory)
+#end
+
+#if($giftcodes)
+	#set($rowCount=1)
+<div class="row">
+	<h3>#springMessage("vm.giftcertcodes.activegiftcert")</h3>
+</div> <!-- end row -->
+<div class="row">
+	<table class="p-table">
+		<thead>
+			<tr align="left">
+				<th>#springMessage("vm.giftcertcodes.giftcertcard")</th>
+				<th>#springMessage("vm.giftcertcodes.effectivedate")</th>
+				<th>#springMessage("vm.giftcertcodes.originalamt")</th>
+				<th>#springMessage("vm.giftcertcodes.currentbalance")</th>
+				<th>#springMessage("vm.giftcertcodes.expirationdate")</th>
+			</tr>
+		</thead>
+		#foreach($codehistory in $myAccountDTO.giftCertCodesHistories)
+			#set($balance=$math.sub($codehistory.originalamount,$codehistory.amountused))
+			#if($balance&&$balance>0)
+
+				#if($rowCount%2==0)
+			<tr class="dark">
+				#else
+			<tr>
+				#end
+				<td> $codehistory.giftcertcode</td>
+				<td> $date.format('MM-dd-yyyy',$$codehistory.startingdate)</td>
+				#if($viewStoreCurrency)
+				<td> $number.format('currency', $codehistory.originalamount, $viewStoreCurrency.locale)</td>
+				<td> $number.format('currency', $balance, $viewStoreCurrency.locale)</td>
+				#else
+				<td> $number.format('currency', $codehistory.originalamount)</td>
+				<td> $number.format('currency', $balance)</td>
+				#end
+				<td> $date.format('MM-dd-yyyy',$codehistory.expirydate)</td>
+			</tr>
+			
+			#set($rowCount=$rowCount+1)
+			#end
+		#end
+	</table>
+</div><!-- end row -->
+#else
+	#springMessage("vm.giftcertcodes.nogiftcertificates")
+#end
+	
+
+

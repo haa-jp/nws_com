@@ -1,3 +1,4 @@
+
                 <div class="span12">
 #if($registerViewDTO.onepagecheckout)
   #if($registerViewDTO.memberType != '1' && $productsDetails.products.size() > 0)
@@ -313,9 +314,10 @@
                   <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
 <!-- END OF External Login -->
 #if($registerViewDTO.memberType == '1' || !($productsDetails.products.size() > 0) || !$productsDetails)
+##modJp. 11/12/14 - Buttons
                   <div class="form-actions">
-                    <input type="button" class="btn btn-primary" value="#springMessage('button.CONTINUE')" onclick="javascript:document.getElementById('hiddensubmit').value='register';document.registerForm.submit();"/>
-                    <input type="button" class="btn" value="#springMessage('button.CANCEL')" onclick="javascript:document.location='signin.html?vid=$vendorSettingsDTO.vendorId&mt=$registerViewDTO.memberType'"/>
+                    <input type="button" class="button small" value="#springMessage('button.CONTINUE')" onclick="javascript:document.getElementById('hiddensubmit').value='register';document.registerForm.submit();"/>
+                    <input type="button" class="bytton small" value="#springMessage('button.CANCEL')" onclick="javascript:document.location='signin.html?vid=$vendorSettingsDTO.vendorId&mt=$registerViewDTO.memberType'"/>
                   </div>
 #else
                   <div class="form-actions">

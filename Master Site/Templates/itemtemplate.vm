@@ -61,6 +61,7 @@
 #if($printView && $printView == "y")
 		<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/print.css" media="screen,print"/>
 #end
+ <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script> 
 	</head>
 	<body>
 <!-- itemtemplate.vm-->
@@ -142,12 +143,33 @@
              </div> 
               
 					<div class="small-4 columns">
+						
+						<div class="pricing">
+							<p class="retail list-price"><b>#springMessage("vm.itemTemplate.msrp"):</b><br />
+							<em id="_listPrice_0">
+								<span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+								<span id="js-item-listprice-$item.itemid">$regExp.showPrice($math.roundTo(2,$price.listPrice))</span>
+							</em>
+							</p>
+              
+							<p class="price"><b> Your Price:</b><br />
+							##springMessage("vm.itemTemplate.dealer"):
+							<em>
+								<span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+								<span id="js-item-pricedollar-$item.itemid" class="integer">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span><span>.</span><span id="js-item-pricecent-$item.itemid" class="decimal">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+							</em>
+							</p>
+						</div>
+
+						<p><b>Product Number: </b><br />
+						    <span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></p>
+						<p><b>MFG Item Number: </b><br />
+						    $item.mfgpartno</p>
+						
                 #*
                   ## Whenever reviews is ready, verify css that margins is not messing up layout
                   <div class="reviews"></div> <!-- review place holder -->
                 *#
-							<p><strong>Product Number: </strong><span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></p>
-							<p><strong>MFG Item Number: </strong> $item.mfgpartno</p>
 #if($list.size($item.attributes) != 0)
 							<div class="item-attributes">
 							<p class="section-title">
@@ -160,23 +182,13 @@
 #else
 					<div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
 #end
+			            <!-- <p><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank>#springMessage('vm.itemTemplate.printerfriendly')</a></p> -->
+						<p><a href="action.html?mode=addWishlist&iid=$item.itemid&vid=$vendorSettingsDTO.vendorId&qty=1&url=storeitem.html%3Fiid%3D$item.itemid%26vid%3D$vendorSettingsDTO.vendorId"> Add to your Wish List</a></p>
+						<p> <a href="wishlist.html?vid=$vendorSettingsDTO.vendorId&action=add" title="add this ite tot you wish list"> View Your Wish List </a></p>
 
 
  
-  ##if($math.round($price.listPrice) > $math.round($price.price))
-              <div class="retail list-price">#springMessage("vm.itemTemplate.msrp"):
-                <em id="_listPrice_0">
-                  <span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
-                  <span id="js-item-listprice-$item.itemid">$regExp.showPrice($math.roundTo(2,$price.listPrice))</span>
-                </em>
-              </div>
-              <div class="price"> Your Price:
-                ##springMessage("vm.itemTemplate.dealer"):
-                <span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
-                <em>
-                  <span id="js-item-pricedollar-$item.itemid" class="integer">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span><span>.</span><span id="js-item-pricecent-$item.itemid" class="decimal">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
-                </em>
-              </div>
+
   ##end
   #if($item.itemid)
     #set($formName = "F$item.itemid")
@@ -188,7 +200,7 @@
                 <div id="js-item-hiddenfields-$item.itemid"></div>
                 <div id="js-item-inventory-$item.itemid" class="inventory"></div>
   ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_attributes.vm")
-                <input type="hidden" name="redirectMode" value="false"/>
+                <input type="hidden" name="redirectMode" value="true"/>
   #springBind( "storeItemDTO.*" )
   #if($status.errors.errorCount>0)
                 <div class="msg">
@@ -202,11 +214,20 @@
                     <label for="qty_0">Order #springMessage("vm.itemTemplate.quantity"):</label>
                     <input class="qty-input span2 align-center" type='text' id="js-item-qtybox-$item.itemid" maxlength="3" />
                     <br/><br/>
-                    <div class="btnclass addToCartBtn hide" id="js-item-addtocartbtn-$item.itemid" ><span class="btn btn-primary"> #springMessage('vm.itemTemplate.addtocart')</span></div>
-                    #*<div class="btnclass hide" id="lost-sale"><br /><span class="btn btn-warning">Lost Sale</span></div>*#
+                    <div class="btnclass addToCartBtn hide" id="js-item-addtocartbtn-$item.itemid" ><span class="button btn btn-primary"> #springMessage('vm.itemTemplate.addtocart')</span></div>
+                    #*
+                    <div class="btnclass hide" id="lost-sale"><br /><span class="btn btn-warning">Lost Sale</span></div>
+                   
+                   
+                   
+                   
+                   
                     <span class="addToCartDummy">
                       <button class="btn btn-primary addToCartBtn">#springMessage('vm.itemTemplate.addtocart')</button>
                     </span>
+              <input id="js-stayaftadd2crt" value="true"/>
+
+                    *#
                     #foreach($prop in $item.properties)
                        #if($prop.propname && ($prop.propname == 'Additional Freight Code' && $prop.propvalue != '' ))
                        <p> Due to Size and/or weight this item can not ship by standard methods and will require additional fees for shipping and handling.</p>
@@ -216,15 +237,12 @@
                 </div>
               </form>
 
-              <!-- <p><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank>#springMessage('vm.itemTemplate.printerfriendly')</a></p> -->
-              <p><a href="action.html?mode=addWishlist&iid=$item.itemid&vid=$vendorSettingsDTO.vendorId&qty=1&url=storeitem.html%3Fiid%3D$item.itemid%26vid%3D$vendorSettingsDTO.vendorId">Add to your Wish List</a></p>
-              <p> <a href="wishlist.html?vid=$vendorSettingsDTO.vendorId&action=add" title="add this ite tot you wish list"> View Your Wish List </a></p>
-              ##<p><a href="${seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$item.itemid")}?tptm=ex_en">Extended View</a></p>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_logo.vm")
                 </div><!-- end span4 -->
-              </div>
+      </div> <!-- endo row -->
 
-            <div>
+</div> <!-- end s8 -->
+
 
 
 
@@ -261,11 +279,16 @@
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
 
 <div id="deliverypopup" class="popup_menu"></div>
-  <script type="text/javascript" src="assets/commercelib/commerce/commerce_jQuery.js"></script>
-  <script type="text/javascript" src="assets/commercelib/commerce/commerce_shop_jQuery.js"></script>
+
 
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
-<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/js/overrides.js"></script>
+
+<script type="text/javascript" src="assets/plugins/lowpro/lowpro.js"></script>
+<script language="javascript" src="assets/plugins/jshashtable/jshashtable.js"></script>
+<script language="javascript" src="assets/plugins/domec/domec.js"></script>
+<script type="text/javascript" src="assets/commercelib/commerce/commerce_jQuery.js"></script>
+<script type="text/javascript" src="assets/commercelib/commerce/commerce_shop_jQuery.js"></script>
+<!-- <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/js/overrides.js"></script> -->
 <script type="text/javascript" src="assets/plugins/juitter/jquery.juitter.js"></script>
 <script src="assets/plugins/extlogin/popup.js" type="text/javascript"></script>
 <script src="assets/commercelib/showimage/showimage.js" type="text/javascript"></script>

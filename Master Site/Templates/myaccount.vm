@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 #if($request.isSecure())
   #if ($request.getServerPort() ==443)
@@ -21,38 +21,48 @@
 #end
 
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <base href="$baselink">
-    <link rel="shortcut icon" href="/favicon.png">
-    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
-    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/megamenu.css" type="text/css" media="all" />
-  </head>
+	<head>
+		<title>$storeName. - #springMessage("vm.myaccount.title")</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<base href="$baselink">
+		<link rel="shortcut icon" href="/favicon.png">
+		#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+		<link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/css/megamenu.css" type="text/css" media="all" />
+	</head>
 
-  <body class="myaccount nws">
+	<body>
+	<!-- myaccount.vm -->
+	############################ Mini Nav #################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
+    ############################ Ends Mini Nav ############################ 
+    
     ############################ Header ####################################
-    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/a_banner.vm")
+#if($vendorSettingsDTO.themeId == $storeSkinId)
+    #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
+#else
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+#end
     ############################ End Header ################################
-
+    
     ############################ Search Bar ################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
     ############################ End Search Bar ############################
 
-    <div id="wrapper" class="row-fluid">
-      <div class="span2" id="left-col">
-        #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/accountbar.vm")
-      </div>
+		<div class="row">
+			<div class="small-4 columns">
+				#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/accountbar.vm")
+			</div> <!-- end s4 -->
 
-      <div class="span10" id="right-col">
-        <form class="form-horizontal" action="" method="post" name="frm" >
-          <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
-            #if($myAccountDTO.subtemplate)
-              #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/$myAccountDTO.subtemplate")
-            #end
-        </form>
-      </div>
-    </div> <!-- end wrapper -->
+			<div class="small-8 columns">
+
+				<form class="form-horizontal" action="" method="post" name="frm" >
+					<input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+					#if($myAccountDTO.subtemplate)
+						#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/$myAccountDTO.subtemplate")
+					#end
+				</form>
+			</div> <!-- end s8 -->
+		</div> <!-- end row -->
 
     ############################ Footer ###################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
@@ -60,33 +70,35 @@
 
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
 
-    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/megamenu.js"></script>
-    <script type="text/javascript">
-    var panels = new Array('myinfo-content','billingadd-content','shippingadd-content','changepass-content');
-    var tabStubs = new Array('myinfo-menu','billing-menu','shippingadd-menu','changepass-menu');
-    var selectedTab = null;
-    var selectedStub = null;
-    function swapTab(tab, name, stub) {
-      selectedTab = tab;
-    for(i = 0; i < panels.length; i++) {
-    document.getElementById(panels[i]).style.display = (name == panels[i]) ? 'block':'none';
-    }
-    selectedStub = stub;
-    for(i = 0; i < tabStubs.length; i++) {
-    document.getElementById(tabStubs[i]).className = '';
-    }
-    document.getElementById(selectedStub).className = 'current';
-    //return false;
-    }
+	<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/megamenu.js"></script>
+	<script type="text/javascript">
+		var panels = new Array('myinfo-content','billingadd-content','shippingadd-content','changepass-content');
+		var tabStubs = new Array('myinfo-menu','billing-menu','shippingadd-menu','changepass-menu');
+		var selectedTab = null;
+		var selectedStub = null;
 
-    function changeResion(countryid) {
-    var c = document.getElementById("province");
-    var oc = document.getElementById("otherprovince");
-    c.length=0;
-       if(countryid > 0){
-            #foreach($country in ${myAccountDTO.countyInUse})
-              if(countryid == ${country.country.id})  {
-            #if($country.provinces.size()>0)
+		function swapTab(tab, name, stub) {
+			selectedTab = tab;
+			for(i = 0; i < panels.length; i++) {
+				document.getElementById(panels[i]).style.display = (name == panels[i]) ? 'block':'none';
+			}
+			selectedStub = stub;
+			for(i = 0; i < tabStubs.length; i++) {
+				document.getElementById(tabStubs[i]).className = '';
+			}
+
+		    document.getElementById(selectedStub).className = 'current';
+			//return false;
+		}
+
+		function changeResion(countryid) {
+			var c = document.getElementById("province");
+			var oc = document.getElementById("otherprovince");
+			c.length=0;
+			if(countryid > 0){
+				#foreach($country in ${myAccountDTO.countyInUse})
+					if(countryid == ${country.country.id})  {
+				#if($country.provinces.size()>0)
               c.options[c.length]=new Option("#springMessage("vm.register.choseprovince")","-1");##-1 stand for this country has region but select none
                #foreach($province in ${country.provinces})
                c.options[c.length]=new Option("$province.province.name","$province.province.id");
@@ -146,6 +158,5 @@
       });
     </script>
 
-  </body>
+	</body>
 </html>
-

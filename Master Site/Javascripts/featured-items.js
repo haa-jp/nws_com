@@ -38,7 +38,7 @@
       ',
       item: ' \
           <h4><%= title %></h4> \
-          <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="<%= cimage %>"/></a> \
+          <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
           <div class="prev-price"> \
             <label>was:</label> \
             <span>$ <%= listprice %></span> \

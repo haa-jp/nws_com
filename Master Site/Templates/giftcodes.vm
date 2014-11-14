@@ -1,0 +1,46 @@
+<div class="row">
+	<h2>#springMessage("vm.myaccount.mygccard")</h2>
+</div> <!-- end row -->
+
+<div class="row">
+	<div class="small-4 columns">
+		<p><b>#springMessage("vm.giftcertcodes.totalbalance"):</b></p>
+	</div>
+	<div class="small-4 columns">
+		<span>
+		#if($request.getSession().getAttribute("AdditionalInformation_${vendorSettingsDTO.vendorId}"))
+			#if($viewStoreCurrency)
+				<b>$number.format('currency', $request.getSession().getAttribute("AdditionalInformation_${vendorSettingsDTO.vendorId}").giftCertTotalAvailableAmount , $viewStoreCurrency.locale)</b>
+			#else
+				<b>$number.format('currency', $request.getSession().getAttribute("AdditionalInformation_${vendorSettingsDTO.vendorId}").giftCertTotalAvailableAmount)</b>
+			#end
+		#else
+			#if($viewStoreCurrency)
+				<b>$number.format('currency',0, $viewStoreCurrency.locale)</b>
+			#else
+				<b>$number.format('currency', 0)</b>
+			#end
+		#end
+		</span>
+	</div>
+</div> <!-- end row -->
+	
+<div class="row">
+		<div class="panel">
+			<label>#springMessage("vm.giftcertcodes.redeem"):</label>
+	#springBind("myAccountDTO.giftCertCode")
+			<input value="$!{status.value}" name="${status.expression}" type="text" maxlength="30">
+	#foreach($error in $status.errorMessages)<b class="warning">$error</b>#end
+		</div>
+</div> <!-- end row -->
+
+<div class="row">
+	<div class="f-buttons">
+		<input type="hidden" name="_targetgiftcertcodes" value="myaccount.html?mode=giftcertcodes&vid=$vendorSettingsDTO.vendorId"/>
+		<input type="hidden" class="button small" name="submit" value="update"/>
+		<input type="submit" class="button small" name="TODO" value="#springMessage('button.OK')"/>
+		<input type="submit" class="button small" name="TODO" value="#springMessage('button.APPLY')"/>
+	</div>
+</div> <!-- end row -->
+
+

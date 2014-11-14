@@ -1,18 +1,17 @@
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 <html>
-  <!-- guestregister.vm; orig: register.vm--><head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-
-    <title>Register</title>
-    <link rel="shortcut icon" href="/favicon.png">
+  <!-- guestregister.vm; orig: register.vm-->
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<title>Register</title>
+		<link rel="shortcut icon" href="/favicon.png">
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
 #set( $pgcodenocc = ["NCC","GL","PP","IB","NOCHEX","UFS","DPS","ALIGNET","PCI2NONE","PCI2CC",""] )
 <!-- <script type="text/javascript" src="assets/plugins/jQuery/jquery-1.4.1.min.js"></script> -->
 #if($registerViewDTO.onepagecheckout)
-  <link rel="stylesheet" href="/C7pcisecureorderform2/assets/pcisecureorderform.css" type="text/css" media="all"/>
-  <script type="text/javascript" src="/C7pcisecureorderform2/assets/pcisecureorderform.js"></script>
+		<link rel="stylesheet" href="/C7pcisecureorderform2/assets/pcisecureorderform.css" type="text/css" media="all"/>
+		<script type="text/javascript" src="/C7pcisecureorderform2/assets/pcisecureorderform.js"></script>
 #end
 
 <style>
@@ -65,8 +64,9 @@
       }
     /*style for ajax register*/
 </style>
-</head>
-<body id="register" class="nws">
+	</head>
+	<body id="register">
+	<!-- register.vm -->		
     ############################ Header ####################################
 #if($vendorSettingsDTO.themeId == $storeSkinId)
     #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
@@ -78,52 +78,56 @@
     ############################ Search Bar ################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
     ############################ End Search Bar ############################
-  <div id="wrapper" class="row-fluid">
-    <div class="span2" id="left-col">
+
+		<div class="row">
+			<div class="small-4 columns">
 ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/a_home_left.vm")
-    </div>
-    <div class="span10 offset1" id="right-col">
-      <form class="form-horizontal" name="registerForm" method="post" action="">
-        <div class="heading1">
-           <h1>#springMessage("vm.register.yourinfor")</h1>
-        </div>
+			</div> <!-- end s4 -->
+			
+			<div class="small-8 columsn">
+				<form class="form-horizontal" name="registerForm" method="post" action="">
+					<div class="heading1">
+						<h2>#springMessage("vm.register.yourinfor")</h2>
+					</div>
 #springBind( "registerViewDTO.*" )
 
-#if($status.errors.errorCount>0)
-        <div class="alert alert-error error-text-area uppercase" id="postErrors">#springMessage("vm.register.error"):
-          <ul>
-  #foreach($error in $status.errorMessages)
-            <li>$error</li>
-  #end
-            <li id="alert alert-error payment_method_alert" style="display:none;">#springMessage('vm.register.msg4')</li>
-          </ul>
-        </div>
-#end
-        <div class="error-text-area uppercase" id="registerErrors" style="display:none"></div>
-        <div class="row-fluid">
-          <input type="hidden" name="mid" id="mid" value="demo"/>
-          <input type="hidden" id="anchorName_id" name="anchorName" value="">
-#springBind("registerViewDTO.doSubmit")
-          <input type="hidden" id="hiddensubmit" name="$status.expression">
-          <input type="hidden" name="customertype" value="guest">
-          <input type="hidden"  name="register" value="$authenticationSubmitURL">
-          <input type="hidden" name="customerDTO.allCustomerProperties['Customer Number']" value="$customerNumber">
-          <input type="hidden" name="customerDTO.allCustomerProperties['Customer Type']" id="customerDTO.allCustomerProperties['Customer Type']" value="retail" />
-          <input type="hidden" name="customerDTO.allCustomerProperties['offercode']" id="customerDTO.allCustomerProperties['OFFERCODE']" value="$offercode" />
-<!-- start input Fields -->
-#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_billing.vm")
-#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_shipping.vm")
-        </div>
-        <div class="fow-fluid">
-#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_onepage_checkout.vm")
-        </div>
-      </form>
-    </div><!-- end span8 -->
-  </div><!--end wrapper-->
+		#if($status.errors.errorCount>0)
+					<div class="alert alert-error error-text-area uppercase" id="postErrors">#springMessage("vm.register.error"):
+						<ul>
+						#foreach($error in $status.errorMessages)
+							<li>$error</li>
+						#end
+							<li id="alert alert-error payment_method_alert" style="display:none;">#springMessage('vm.register.msg4')</li>
+						</ul>
+					</div>
+		#end
+					<div class="error-text-area uppercase" id="registerErrors" style="display:none"></div>
+					<div class="row-fluid">
+						<input type="hidden" name="mid" id="mid" value="demo"/>
+						<input type="hidden" id="anchorName_id" name="anchorName" value="">
+						#springBind("registerViewDTO.doSubmit")
+						<input type="hidden" id="hiddensubmit" name="$status.expression">
+						<input type="hidden" name="customertype" value="guest">
+						<input type="hidden"  name="register" value="$authenticationSubmitURL">
+						<input type="hidden" name="customerDTO.allCustomerProperties['Customer Number']" value="$customerNumber">
+						<input type="hidden" name="customerDTO.allCustomerProperties['Customer Type']" id="customerDTO.allCustomerProperties['Customer Type']" value="retail" />
+						<input type="hidden" name="customerDTO.allCustomerProperties['offercode']" id="customerDTO.allCustomerProperties['OFFERCODE']" value="$offercode" />
+					<!-- start input Fields -->
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_billing.vm")
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_shipping.vm")
+					</div>
+
+					<div class="fow-fluid">
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/register_onepage_checkout.vm")
+        			</div>
+				</form>
+			</div><!-- end s8 -->
+		</div><!--end row -->
+		
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
-  <script type="text/javascript" src="assets/commercelib/ajax/ajax_object.js"></script>
-  <script type="text/javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
+	<script type="text/javascript" src="assets/commercelib/ajax/ajax_object.js"></script>
+	<script type="text/javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
 
 <script language="javascript">
     /** variable indicates whether register successfully*/
@@ -781,6 +785,6 @@ var otherregion = document.getElementById("otherregionForShipping");
       $(":input[name ='selectedPaymentGatewayCode']").hide();
     }
     });
-  </script>
-</body>
+	</script>
+	</body>
 </html>
