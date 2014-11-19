@@ -21,8 +21,8 @@
 
 <!--     <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$storeSkinName/css/app.css" media="all"/> -->
 
- #set($test = $vendorSettingsDTO.themeId)
-  $test
+##set($test = $vendorSettingsDTO.themeId)
+## $test
 
 	</head>
 ##set($test = $vendorSettingsDTO.themeId)
@@ -49,13 +49,12 @@
     ############################ End Search Bar ############################
 
 		<div class="row">
-			<div class="small-4 columns"> 
+
+			<div class="small-12 columns">
     ############################ Left Column ##############################
     #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/${storeclass}_home_left.vm")
-    ############################ End Left Column ##########################
-			</div>
-
-			<div class="small-8 columns">
+    ############################ End Left Column ##########################			
+ 
     ############################ Page Content #############################
 <!-- right here -->
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/home_content.vm")

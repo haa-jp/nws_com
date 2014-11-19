@@ -1,43 +1,59 @@
 <div id="footer">
     <div class="row">
-		<div class="small-3 columns">
-			<h5><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")"> Home</a></h5>
+
+		<div class="small-6 large-3 columns">
+			<div class="footcol1">
+				<h5><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")"> Shop</a></h5>
+					<ul>
+						<li><a href="basket.html?vid=$vid">Shopping Basket</a></li>
+						<li><a href="#">Advanced Search</a></li>
+						<li><a href="#">My Wishlist</a></li>
+					</ul>
+			</div>
 		</div>	
 		
-		<div class="small-3 columns">
-			<h5><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")"> Shop</a></h5>
-				<ul>
-					<li><a href="basket.html?vid=$vid">Shopping Basket</a></li>
-					<li><a href="#">Advanced Search</a></li>
-					<li><a href="#">My Wishlist</a></li>
-				</ul>
-		</div>	
-		
-		<div class="small-3 columns">
-				<h5><a href="#"> Customer Service</a></h5>
+		<div class="small-6 large-3 columns">
+			<div class="footcol">
+				<h5><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Customer Service</a></h5>
 				<ul>
 					<li><a href="#"> Contact Us</a></li>
 					<li><a href="myaccount.html?mode=vieworder"> My Account</a></li>
 					<li><a href="myaccount.html?mode=shippingaddress"> Change my Address</a></li>
 					<li><a href="myaccount.html?mode=changepassword"> Change my Password</a></li>
 				</ul>
+			</div>
 		</div>	
 		
-		<div class="small-3 columns">
-			<h5><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Store Policies</a></h5>
-			<ul>
-				<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Shipping Information</a></li>
-				<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Return Policy</a></li>
-				<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Privacy Policy</a></li>
-				<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Terms of Use</a></li>
-			</ul>
-		</div>	
+		<div class="small-6 large-3 columns">
+			<div class="footcol">
+				<h5><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Store Policies</a></h5>
+				<ul>
+					<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Shipping Information</a></li>
+					<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Return Policy</a></li>
+					<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Privacy Policy</a></li>
+					<li><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=20601")"> Terms of Use</a></li>
+				</ul>
+			</div>
+		</div>
+		
+		<div class="small-6 large-3 columns">
+			<div class="footcol">
+				<h5><a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049")"> Store Home</a></h5>
+				<div class="storeInfo">
+					<h5> $storeName</h5>
+					<p> <a href="$homePage" alt="Home Page"> Our home page</a></p> 
+					<p> $storePhone -  $storeMail</p>
+				</div>
+			</div>
+		</div>		
 	</div> <!-- end row -->
 </div> <!-- end footer -->
 
 <div id="tagline">
 	<div class="row">
-		<p class="text-center"> &copy; 2015 <b> $storeName</b></p>
+		<div class="small-6 large-centered columns">
+			<p class="text-center"> &copy; 2015 <b> $storeName</b></p>
+		</div>
 	</div> <!-- end row -->
 </div> <!-- end tagline -->
 	

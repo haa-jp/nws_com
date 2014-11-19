@@ -38,13 +38,11 @@
     ############################ End Search Bar ############################
 
 		<div class="row">
-
  			<div  id="left-col" class="small-4 columns">
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/breadcrumbs.vm")
 			</div>
 
 			<div id="right-col" class="small-8 columns">
-
 ##set($itemsDTO = $AdvancedSearchUsingSolr)
 ##set($itemsPaginationDTO = "AdvancedSearchUsingSolr")
  #set($itemsDTO = $nwsSolrDTO)
@@ -68,15 +66,14 @@
 #end
 
   #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/categoryT_itemList.vm")
-        </div><!-- end span10 -->
-      </div>
+        	</div><!-- end s8 -->
+		</div> <!-- end row -->
   #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
-    </div><!-- end container-fluid -->
-  </div>
-  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
+
+	#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
     <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/category.js"></script>
-    <script type="text/javascript" language="javascript">
-      Category.initialize();
-    </script>
-  </body>
+	<script type="text/javascript" language="javascript">
+		Category.initialize();
+	</script>
+	</body>
 </html>

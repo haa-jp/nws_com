@@ -30,6 +30,8 @@
 #set($storeName = "Lewie's RV Center")
 #set($storeMail = "rv-parts@b2cparts.com")
 #set($storePhone = "(800) 627-2160")
+#set($storeCSHours =  "Monday-Friday 9:00 to 5:00, Saturday: 9:00 to Noon")
+#set($homePage = "http://www.b2cparts.com")
 
 #set($offercode = "retail")
 #set($storetype = $request.getParameter('sd'))

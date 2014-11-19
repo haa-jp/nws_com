@@ -1,14 +1,19 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 <html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <title>#springMessage("vm.checkout_payment.title")</title>
-    <meta content=" " name="keywords">
-    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
-    #set( $pgcodenocc = ["NCC","GL","PP","IB","NOCHEX","UFS","DPS","ALIGNET","PCI2NONE","PCI2CC", "PCICC",""] )
-  </head>
-  <body class="checkout" id="checkout">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>#springMessage("vm.checkout_payment.title")</title>
+		<meta content=" " name="keywords">
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+#set( $pgcodenocc = ["NCC","GL","PP","IB","NOCHEX","UFS","DPS","ALIGNET","PCI2NONE","PCI2CC", "PCICC",""] )
+	</head>
+	<body class="checkout" id="checkout">
+	<!-- checkout_pyment.vm-->
+    ############################ Mini Nav #################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
+    ############################ Ends Mini Nav ############################ 
+
     ############################ Header ####################################
 #if($vendorSettingsDTO.themeId == $storeSkinId)
     #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
@@ -16,25 +21,20 @@
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
 #end
     ############################ End Header ################################
+  		<div class="row">
+			<div class="small-12">
+				<ul class="co-breadcrumb step3">
+					<li class="yi"><a href="yourinfo.html?vid=$vendorSettingsDTO.vendorId">#springMessage("vm.checkout_customerinfo.infor")</a> </li>
+					<li class="sp"><a href="shipping.html?vid=$vendorSettingsDTO.vendorId">#springMessage("vm.checkout_customerinfo.shipping")</a> </li>
+					<li class="py active"><strong>#springMessage("vm.checkout_customerinfo.payment")</strong></li>
+					<li class="rv">#springMessage("vm.checkout_customerinfo.placeorder")</li>
+					<li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
+				</ul>
+			</div>
+		</div> <!-- end row -->
 
-    <div id="wrapper" class="row-fluid">
-
-      <div class="container">
-        <ul class="co-breadcrumb step4">
-          <li class="yi"><a href="yourinfo.html?vid=$vendorSettingsDTO.vendorId">#springMessage("vm.checkout_customerinfo.infor")</a> </li>
-          <li class="sp"><a href="shipping.html?vid=$vendorSettingsDTO.vendorId">#springMessage("vm.checkout_customerinfo.shipping")</a> </li>
-          <li class="py active"><strong>#springMessage("vm.checkout_customerinfo.payment")</strong></li>
-          <li class="rv">#springMessage("vm.checkout_customerinfo.placeorder")</li>
-          <li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
-        </ul>
-      </div>
-
-
-      <div class="container">
-       <div class="row=fluid">
-          <div class="span10 offset1">
-
-            <h2>#springMessage('vm.checkout_customerinfo.payment')</h2>
+		<div class="row">
+			<h2>#springMessage('vm.checkout_customerinfo.payment')</h2>
             #parse($checkout_paymentDTO.getItems().get(0).get('checkout_payment'))
 
             #if($checkoutViewDTO.giftCertificate.status.keySet() && ($checkoutViewDTO.giftCertificate.status.containsValue("0") ||
@@ -70,8 +70,10 @@
                 </ul>
               </div>
             #end
+		</div> <!-- end row -->            
 
-            <form class="form-horizontal" name="frm" action="payment.html" method="POST" id="nws-form">
+		<div class="row">
+			<form class="form-horizontal" name="frm" action="payment.html" method="POST" id="nws-form">
               #springBind("checkoutViewDTO.*")
 
               #if($status.errors.errorCount&&$status.errors.errorCount>0)
@@ -106,34 +108,31 @@
               #end
 
               #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutP-gateway.vm")
+		</div> <!-- end row -->
 
-              <div class="f-buttons">
-                <p class="info_needed"> #springMessage('vm.checkout_payment.msg7')</p>
-                <input type="button" class="btn btn-primary" value="#springMessage('button.CONTINUE')" onClick="doContinue('frm', 't', this,'review');" />
-                <input type="button" class="btn" value="#springMessage('button.CANCEL')" onClick="javascript:history.back();"/>
-                <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
-              </div>
-
-            </form>
-
-          </div>
-        </div>
-      </div>
-
-    </div><!-- wrapper -->
+		<div class="row">
+			<div class="form-actions">
+				<p class="info_needed"> #springMessage('vm.checkout_payment.msg7')</p>
+				<input type="button" class="button small" value="#springMessage('button.CONTINUE')" onClick="doContinue('frm', 't', this,'review');" />
+				<input type="button" class="button small" value="#springMessage('button.CANCEL')" onClick="javascript:history.back();"/>
+				<input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+			</div>
+		</div> <!-- end row -->
+			</form>
+   
     ############################ Footer ###################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
     ############################ Ends Footer ##############################
 
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
 
-    <script src="store/$checkoutViewDTO.vendorId/assets/limitText.js"></script>
-    <script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
-    <script src="store/$checkoutViewDTO.vendorId/assets/toggleDisplay.js"></script>
+	<script src="store/$checkoutViewDTO.vendorId/assets/limitText.js"></script>
+	<script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
+	<script src="store/$checkoutViewDTO.vendorId/assets/toggleDisplay.js"></script>
 #*
-    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/js/pcisecureorderform.js"></script>
+<script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/js/pcisecureorderform.js"></script>
 *#   
- <script language="JavaScript" type="text/javascript">
+	<script language="JavaScript" type="text/javascript">
       function upAddress(productidx,addressidx,addressid,mode)
       {
         document.frm.t.value=mode;
@@ -312,7 +311,7 @@
         setFocus($checkoutViewDTO.productidx,$checkoutViewDTO.addressidx,$checkoutViewDTO.shipaddressid);
         showhide('$checkoutViewDTO.selectedPaymentGatewayId','$!checkoutViewDTO.selectedPaymentGatewayCode','$!checkoutViewDTO.radioButtonId','$!checkoutViewDTO.inputFieldId');
       });
-    </script>
+	</script>
 
-  </body>
+	</body>
 </html>

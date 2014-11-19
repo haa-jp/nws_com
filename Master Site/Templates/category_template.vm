@@ -108,6 +108,10 @@ window.location = "$baselink/signin.html?vid=20120606532&mt=1"
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
     ############################ End Search Bar ############################
 
+<div class="row">
+	<h2 class="category-title">$categoryDescription</h2>
+</div>
+
 
 		<div class="row">
 			<div  id="left-col" class="small-4 columns">
@@ -138,7 +142,6 @@ window.location = "$baselink/signin.html?vid=20120606532&mt=1"
     ######################## End Advertising Area ##########################
 
 				<div class="row">
-					<h2 class="category-title">$categoryDescription</h2>
 
 #parse($category_centerDTO.getItems().get(0).get('category_center'))
 

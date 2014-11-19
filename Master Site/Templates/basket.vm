@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
+
 #set($focusNum = $productsDetails.products.size())
 #if($crossSell.size())
-  #set($itemsCount = $crossSell.size() + $focusNum)
+	#set($itemsCount = $crossSell.size() + $focusNum)
 #else
-  #set($itemsCount = $focusNum)
+	#set($itemsCount = $focusNum)
 #end
 
 #if($focusNum > 0)
-  #set($focusNum = $focusNum - 1)
+	#set($focusNum = $focusNum - 1)
 #end
 
 #if($customerAllowances)
-  #set($cusalllowances=$math.roundTo(2,$!customerAllowances))
+	#set($cusalllowances=$math.roundTo(2,$!customerAllowances))
 #else
-  #set($cusalllowances=0)
+	#set($cusalllowances=0)
 #end
 
 #set($navigationDTO = $request.session.getAttribute("Navigation").navigations.get($vendorSettingsDTO.vendorId))
 
 #if(!$navigationDTO)
-   #set($error2 = "no navigation")
+	#set($error2 = "no navigation")
 #else
-   #set($error2 = "navigation present")
+	#set($error2 = "navigation present")
 #end
 
 #if ($request.session.getAttribute().size()!= 0)
-   #set($test = "more that 0")
+	#set($test = "more that 0")
 #else
-  #set($test = "zero")
+	#set($test = "zero")
 #end
 
 #set( $propName = "SessionCustomerDTO_"+$vid)
@@ -49,6 +50,10 @@
 	</head>
 	
 	<body>
+<!-- basket.vm-->
+    ############################ Mini Nav #################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
+    ############################ Ends Mini Nav ############################ 
 
     ############################ Header ####################################
 #if($vendorSettingsDTO.themeId == $storeSkinId)
@@ -63,11 +68,7 @@
     ############################ End Search Bar ############################
 
 		<div class="row">
-			<div  id="left-col" class="small-4 columns">
-#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/breadcrumbs.vm")
-			</div>
-		
-			<div id="right-col" class="small-8 columns" >
+			<div id="" class="small-10 small-centered columns" >
 				
         <form name="VIEWCART" action="" method="post" onSubmit="javascript:updateQuantities();">
           <div class="container-fluid">
@@ -206,12 +207,12 @@
       });*#
     </script>
 #end
-    ##<script language="javascript" src="assets/commercelib/basket/saveBasket.js"></script>
+	<script language="javascript" src="assets/commercelib/basket/saveBasket.js"></script>
     <script type="text/javascript" src="assets/plugins/yahooUI/build/yahoo-dom-event/yahoo-dom-event.js"></script>
     <script type="text/javascript" src="assets/commercelib/basket/basket.js"></script>
     <script language="javascript" src="assets/commercelib/ajax/ajax_object.js"></script>
     <script language="javascript" src="assets/commercelib/deliveryoption/deliveryoption.js"></script>
-    ##<script type="text/javascript" src="assets/plugins/yahooUI/build/calendar/calendar-min.js"></script>
+	<script type="text/javascript" src="assets/plugins/yahooUI/build/calendar/calendar-min.js"></script>
     <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/datepicker/bootstrap-datepicker.js"></script>
 
 #set ($basketForceRefresh = $request.getParameter('bfr'))
@@ -242,5 +243,5 @@
     </script>
 
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/shipping_cost_estimator.vm")
-  </body>
+	</body>
 </html>

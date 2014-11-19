@@ -57,7 +57,8 @@
           <input  value="" id="refinement_key" type="text" placeholder="Search" class="input-medium search-query">
         <button class="button" type="submit">GO</button>
 </form>
-
+	</div> <!-- END S6 -->
+	
 <script language="JavaScript" type="text/javascript">
 
 function handleKey(form) {
@@ -72,43 +73,42 @@ function handleKey(form) {
 }
 </script>
 
-	</div>
-	<div class="small-6 columns">
+		<div class="small-6 columns">
 
-  #macro ( hrefNewParameters $paramName1 $paramValue1 $paramName2 $paramValue2)
-    #set($hrefString = "$request.getRequestURI()?")
-    #if($request.getParameterMap().size()>0)
-    #foreach($parName in $request.getParameterNames())
-      #foreach($parVal in $request.getParameterValues($parName))
-      #if(!$parName.equals($paramName1) && !$parName.equals($paramName2) && $hrefString.indexOf("${parName}=${parVal}")<0)
-        #set($hrefString = "${hrefString}${parName}=${parVal}&")
-      #end
-      #end
-    #end
-    #end
+#macro ( hrefNewParameters $paramName1 $paramValue1 $paramName2 $paramValue2)
+	#set($hrefString = "$request.getRequestURI()?")
+	#if($request.getParameterMap().size()>0)
+		#foreach($parName in $request.getParameterNames())
+			#foreach($parVal in $request.getParameterValues($parName))
+				#if(!$parName.equals($paramName1) && !$parName.equals($paramName2) && $hrefString.indexOf("${parName}=${parVal}")<0)
+					#set($hrefString = "${hrefString}${parName}=${parVal}&")
+				#end
+			#end
+		#end
+	#end
+    
     #set($hrefString = "${hrefString}${paramName1}=${response.encodeURL($paramValue1)}&${paramName2}=${response.encodeURL($paramValue2)}")
-
     $hrefString
-  #end
+#end
 
 
 
 
 #macro ( formParameters $param1Name $param2Name)
-  #set($hrefString = "")
-  #if($request.getParameterMap().size()>0)
-    #foreach($parName in $request.getParameterNames())
-      #set($oriv="")
-      #foreach($parVal in $request.getParameterValues($parName))
-        #if($oriv=='' || $oriv!=$parVal)
-          #set($oriv=$parVal )
-          #if(!$parName.equals($param1Name) && !$parName.equals($param2Name))
-            #set($hrefString = "${hrefString}<input type=hidden name=${parName} value='${parVal}'>")
-          #end
-        #end
-      #end
-    #end
-  #end
+	#set($hrefString = "")
+	#if($request.getParameterMap().size()>0)
+		#foreach($parName in $request.getParameterNames())
+			#set($oriv="")
+			#foreach($parVal in $request.getParameterValues($parName))
+				#if($oriv=='' || $oriv!=$parVal)
+					#set($oriv=$parVal )
+					#if(!$parName.equals($param1Name) && !$parName.equals($param2Name))
+						#set($hrefString = "${hrefString}<input type=hidden name=${parName} value='${parVal}'>")
+					#end
+				#end
+			#end
+		#end
+	#end
   $hrefString
 #end
 
@@ -119,6 +119,7 @@ $name
 <span class="productCount">&nbsp;($line.count)</span>
   #end
 #end
+
 
 #**
  * This Macro will display all the properties defined in the System anad available in the DTO
@@ -136,29 +137,31 @@ $name
 #end
 
 
-  #set($propParam = $property.toLowerCase().replace("_", ""))
+#set($propParam = $property.toLowerCase().replace("_", ""))
 
-  #if($pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}") && $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}").size()>0 && !$request.getParameter("${propParam}"))
-    #if($childItemsViewDTO)
-      #set ($totalItemCount = $childItemsViewDTO.itemsCount)
-    #else
-      #set ($multiPageViewDTO = $multiPageViews.get("AdvancedSearchUsingSolrNew"))
-      #set ($totalItemCount = $multiPageViewDTO.itemsCount)
-    #end
-    #if($totalItemCount > $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}").size())
-      #set($showFacet = true)
-    #else
-      #set($showFacet = false)
+#if($pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}") && $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}").size()>0 && !$request.getParameter("${propParam}"))
+	#if($childItemsViewDTO)
+		#set ($totalItemCount = $childItemsViewDTO.itemsCount)
+	#else
+		#set ($multiPageViewDTO = $multiPageViews.get("AdvancedSearchUsingSolrNew"))
+		#set ($totalItemCount = $multiPageViewDTO.itemsCount)
+	#end
+
+	#if($totalItemCount > $pageTile.getItemObject($facet_cat_searchDTO,$facets,"${property}${propertySuffix}").size())
+		#set($showFacet = true)
+	#else
+		#set($showFacet = false)
+	#end
+
+	#if($vendorSettingsDTO.templateName.indexOf("solr_advanced_search") != -1)
+		#set($action = "advancedsearch.html")
+	#elseif($vendorSettingsDTO.templateName.indexOf("solr_search") != -1)
+		#set($action = "asearch.html")
+	#else
+		#set($action = "store.html")
     #end
 
-    #if($vendorSettingsDTO.templateName.indexOf("solr_advanced_search") != -1)
-      #set($action = "advancedsearch.html")
-    #elseif($vendorSettingsDTO.templateName.indexOf("solr_search") != -1)
-        #set($action = "asearch.html")
-    #else
-      #set($action = "store.html")
-    #end
-
+			
 		<div class="filter facet">
 			<div class="title">$property.replace("_", " ")</div>
 			<div class="bd">
@@ -185,9 +188,11 @@ $name
 				</form>
 			</div> <!-- end bd -->
 		</div> <!-- end filter-->
-	</div>
-  #end
 #end
+		</div>
+#end
+
+	</div> <!-- end row -->
 ##End Macro
 
 #**
@@ -211,7 +216,7 @@ $name
     #else
       #set($action = "store.html")
     #end
-</div> <!-- end row -->
+
 
 
 

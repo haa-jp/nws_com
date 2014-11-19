@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 #if($request.getServerPort() == 443)
   #if($request.isSecure())
@@ -14,16 +14,20 @@
   #end
 #end
 <html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
-    <title>#springMessage("vm.checkout_customerinfo.title")</title>
-    <meta content="processing your order" name="keywords"/>
-    <base href="$baselink"/>
-    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
-    <link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/avetti-checkout.css" />
+	<head>
+		<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+		<title>#springMessage("vm.checkout_customerinfo.title")</title>
+		<meta content="processing your order" name="keywords"/>
+		<base href="$baselink"/>
+		#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
+		<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/avetti-checkout.css" />
+	</head>
+	<body id="checkout" class="checkout" onload="showhidepayment_info($checkoutViewDTO.shipTypes.currentType);showhideShipping();">
+<!-- checkout_customerinfo.vm-->
+    ############################ Mini Nav #################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
+    ############################ Ends Mini Nav ############################ 
 
-  </head>
-  <body id="checkout" class="checkout" onload="showhidepayment_info($checkoutViewDTO.shipTypes.currentType);showhideShipping();">
     ############################ Header ####################################
     #if($vendorSettingsDTO.themeId == $storeSkinId)
         #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
@@ -31,80 +35,75 @@
         #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
     #end
     ############################ End Header ################################    
-    <div id="wrapper" class="row-fluid">
-      <div class="container">
-        <div class="row-fluid">
-          <ul class="co-breadcrumb step2">
-            <li class="yi"><strong>#springMessage("vm.checkout_customerinfo.infor")</strong></li>
-            <li class="sp">#springMessage("vm.checkout_customerinfo.shipping")</li>
-            <li class="py">#springMessage("vm.checkout_customerinfo.payment")</li>
-            <li class="rv">#springMessage("vm.checkout_customerinfo.placeorder")</li>
-            <li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
-          </ul>
-        </div>
-      </div>
+		<div class="row">
+			<div class="small-12">
+				<ul class="co-breadcrumb step2">
+					<li class="yi"><strong>#springMessage("vm.checkout_customerinfo.infor")</strong></li>
+					<li class="sp">#springMessage("vm.checkout_customerinfo.shipping")</li>
+					<li class="py">#springMessage("vm.checkout_customerinfo.payment")</li>
+					<li class="rv">#springMessage("vm.checkout_customerinfo.placeorder")</li>
+					<li class="ty">#springMessage("vm.checkout_customerinfo.confirm")</li>
+				</ul>
+			</div>
+		</div> <!-- end row -->
 
-      <div class="container">
+		<div class="row">
+			<h2>#springMessage("vm.checkout_customerinfo.infor")</h2>
+			<div class="warning" id="yourinfoErrors" style="display:none"></div>
+ 
+ 			#parse($checkoutDTO.getItems().get(0).get('checkout'))
+			<form class="form-horizontal" name="frm" action="" method="POST" id="nws-form">
+				<input type="hidden" name="mid" id="mid" value="demo"/>
+				<input type="hidden" name="t">
+				<input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
+			#springBind( "checkoutViewDTO.productidx" )
+				<input type="hidden" name="$status.expression" value="$!{status.value}">
+			#springBind( "checkoutViewDTO.addressidx" )
+				<input type="hidden" name="$status.expression" value="$!{status.value}">
+			#springBind( "checkoutViewDTO.addresses.billingAddress.addressId" )
+				<input type="hidden" name="$status.expression" value="$!{status.value}">
+			#springBind( "checkoutViewDTO.qty" )
+				<input type="hidden" name="$status.expression" value="$!{status.value}">
+				<input type="hidden" id="anchorName_id" name="anchorName" value="">
+			#springBind("checkoutViewDTO.*")
 
+			#if($status.errors.errorCount&&$status.errors.errorCount>0)
+				<div class="alert alert-error">
+					<button type="button" class="close" data-dismiss="alert">×</button>
+					<h4>#springMessage("vm.register.error")</h4>
+					<br/>
+					<ul>
+				#foreach($error in $status.errorMessages)
+						<li>$error</li>
+				#end
+					</ul>
+				</div>
+			#end
+		</div> <!-- end row -->
+		
+ 		<div class="row">
+    	    <div class="small-12">
+				#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-billing.vm")
+					#if($checkoutViewDTO.billingandshippinginonepage)
+						#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-shipping.vm")
+				#end
+			</div>
+	  	</div> <!-- end row -->
 
+		##One page checkout include
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-onepage.vm")
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-externalLogin.vm")
 
-          <h2>#springMessage("vm.checkout_customerinfo.infor")</h2>
-          <div class="warning" id="yourinfoErrors" style="display:none"></div>
-          #parse($checkoutDTO.getItems().get(0).get('checkout'))
-          <form class="form-horizontal" name="frm" action="" method="POST" id="nws-form">
-            <input type="hidden" name="mid" id="mid" value="demo"/>
-            <input type="hidden" name="t">
-            <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
-            #springBind( "checkoutViewDTO.productidx" )
-            <input type="hidden" name="$status.expression" value="$!{status.value}">
-            #springBind( "checkoutViewDTO.addressidx" )
-            <input type="hidden" name="$status.expression" value="$!{status.value}">
-            #springBind( "checkoutViewDTO.addresses.billingAddress.addressId" )
-            <input type="hidden" name="$status.expression" value="$!{status.value}">
-            #springBind( "checkoutViewDTO.qty" )
-            <input type="hidden" name="$status.expression" value="$!{status.value}">
-            <input type="hidden" id="anchorName_id" name="anchorName" value="">
-            #springBind("checkoutViewDTO.*")
+		<div class="row">
+			<div class="form-actions">
+				<input type="button" class="button small" value="#springMessage('button.CONTINUE')"/>
+				<input type="button" class="button small" value="#springMessage('button.CANCEL')" onClick="JavaScript:window.location.href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/basket.html?vid=${vendorSettingsDTO.vendorId}'"/>
 
-            #if($status.errors.errorCount&&$status.errors.errorCount>0)
-            <div class="alert alert-error">
-              <button type="button" class="close" data-dismiss="alert">×</button>
-              <h4>#springMessage("vm.register.error")</h4>
-              <br/>
-              <ul>
-                #foreach($error in $status.errorMessages)
-                <li>$error</li>
-                #end
-              </ul>
-            </div>
-            #end
+				<div id="payment_method_alert" style="display:none;" class="warning" >#springMessage('vm.register.msg4')</div>
+			</div>
+	  	</div> <!-- end row -->
+			</form>
 
-            <div class="container-fluid">
-              <div class="row-fluid">
-              #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-billing.vm")
-              #if($checkoutViewDTO.billingandshippinginonepage)
-                #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-shipping.vm")
-              #end
-              </div>
-            </div>
-
-            ##One page checkout include
-            #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-onepage.vm")
-            #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-externalLogin.vm")
-
-            <div class="form-actions">
-              <input type="button" class="btn btn-primary" value="#springMessage('button.CONTINUE')"/>
-              <input type="button" class="btn" value="#springMessage('button.CANCEL')" onClick="JavaScript:window.location.href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/basket.html?vid=${vendorSettingsDTO.vendorId}'"/>
-              <div id="payment_method_alert" style="display:none;" class="warning" >#springMessage('vm.register.msg4')</div>
-            </div>
-          </form>
-
-
-
-
-      </div>
-
-    </div><!--end wrapper -->
 
     ############################ Footer ###################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")

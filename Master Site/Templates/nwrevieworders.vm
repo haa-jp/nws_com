@@ -1,22 +1,27 @@
 <!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
-#if(!$isAdmin)
-  $response.sendRedirect($seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049"))
-#end
+##if(!$isAdmin)
+##  $response.sendRedirect($seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=23049"))
+##end
 <html>
-  <head>
-    <title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <base href="$baselink">
-    <link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/datepicker/datepicker.css" type="text/css" media="all" />
-    #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
-  </head>
-  <body class="nws">
+	<head>
+		<title>Northern Wholesale Supply, Inc. - #springMessage("vm.myaccount.title")</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<base href="$baselink">
+		<link rel="stylesheet" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/datepicker/datepicker.css" type="text/css" media="all" />
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_css.vm")
+	</head>
+	<body class="nws">
+<!-- nwrevieworders.vm-->
+    ############################ Mini Nav #################################
+    #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/mini_nav.vm")
+    ############################ Ends Mini Nav ############################ 
+
     ############################ Header ####################################
     #if($vendorSettingsDTO.themeId == $storeSkinId)
         #parse("/$vendorSettingsDTO.vendorId/$storeSkinId/banner.vm")
       #else
-	#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
+        #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
     #end
     ############################ End Header ################################
 
@@ -24,17 +29,16 @@
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
     ############################ End Search Bar ############################
 
-    <div id="wrapper" class="row-fluid">
-      <div class="span2" id="left-col">
-        #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/accountbar.vm")
-      </div>
-      <div class="span10" id="right-col">
+		<div class="row">
+			<div class="small-4 columns">
+				#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/accountbar.vm")
+			</div> <!-- end s4 -->
 
+			<div class="small-8 columns">
+				<div class="row">
     ############################ Page Content #############################
-        <div class="row-fluid">
-          <div class="span12">
             <form class="form-horizontal" id="nws-form" action="nwrevieworders.html" method="GET" >
-              <h1>Review Orders</h1>
+              <h2>Review Customer Orders</h2>
               <div class="row-fluid">
                 <div class="span6">
                   <div class="control-group">
@@ -60,7 +64,7 @@
                 </div>
                 <div class="span6">
                   <p>When searching for orders by date range, the starting date for your query will be set to 30 days prior to the end date you selected above. </p>
-                  <p> <a href="$seourl.encodeURL("myaccount.html?mode=vieworder&vid=$vendorSettingsDTO.vendorId")">View web orders only.  </a>  </p>
+                  <p> <a href="$seourl.encodeURL("myaccount.html?mode=vieworder&vid=$vendorSettingsDTO.vendorId")">View my orders only.  </a>  </p>
                 </div>
               </div>                  
               <input type="hidden" name="mode" value="show">
@@ -68,6 +72,10 @@
               <input type="hidden" name="page" value="">
               <input type="hidden" name="_targetshow" value="nwrevieworders.html">
             </form>
+				</div> <!-- end row -->            
+
+				<div class="row">
+            
             <table class="table orderstable">
               <tr>
                 <th scope="col">Order Number</th>
@@ -111,6 +119,9 @@
               </tr>
     #end
             </table>
+				</div> <!-- end row -->            
+
+
             <form name="cpfrm" action="nwrevieworders.html" method="POST" >
               <input type="hidden" name="ornum" id="ornum">
               <input type="hidden" name="hseq" id="hseq">
@@ -135,11 +146,9 @@
     #end
               </ul>
             </div>
-          </div>
-        </div><!--end bd -->
     ############################ Edns Page Content ########################
-      </div>
-    </div>
+			</div> <!-- end s8 -->
+		</div> <!-- end row -->
     ############################ Footer ###################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
     ############################ Ends Footer ##############################    

@@ -4,7 +4,7 @@
                     <tr>
                       <th class="description-col">#springMessage('vm.basket.desc')</th>
                       <th class="msrp-col">#springMessage('vm.basket.msrp')</th>
-                      <th class="dealer-col">#springMessage('vm.basket.dealer')</th>
+                      <th class="dealer-col">Price Each##springMessage('vm.basket.dealer')</th>
                       <th class="qty-col">#springMessage('vm.basket.qty')</th>
                       <th class="total-col">#springMessage('vm.basket.total')</th>
                       <th class="update-col">&nbsp;</th>
@@ -49,7 +49,7 @@
     #if($product.cimage!= "")
                         <div class="item-img" style="float:left">
                           <a href="$seourl.encodeURL("storeitem.html?iid=$product.itemid&vid=$vendorSettingsDTO.vendorId")?biid=$product.basketItemId">
-                            <img src="$product.cimage" alt='$product.title'/>
+                            <img src="store$product.cimage" alt='$product.title'/>
                           </a>
                         </div>
     #end
@@ -61,7 +61,7 @@
                         <div class="item-img">
     #if($product.cimage!= "")
                           <a href="$seourl.encodeURL("storeitem.html?iid=$product.itemid&vid=$vendorSettingsDTO.vendorId")?biid=$product.basketItemId">
-                            <img src="$product.cimage" alt="$product.title" height="50px" width="50px"/>
+                            <img src="store$product.cimage" alt="$product.title" height="50px" width="50px"/>
                           </a>
     #else
                           <a href="$seourl.encodeURL("storeitem.html?iid=$product.itemid&vid=$vendorSettingsDTO.vendorId")?biid=$product.basketItemId">
@@ -99,9 +99,9 @@
                       </td>
                       <td>
     #if($math.toInteger($math.sub($product.listprice, $product.price)) > $math.toInteger(0))
-                        <p class="list-price text-right">$$basketDTO.formatter.currency($product.listprice)</p>
+                        <p class="list-price text-right">$$basketDTO.formatter.currency($product.listprice)  </p>
     #end
-                      </td>
+                     </td>
                       <td>
                         #if($math.toInteger($product.price)==$math.toInteger(0))
                         <p class="price text-right">#springMessage('vm.basket.free')</p>

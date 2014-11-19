@@ -81,18 +81,24 @@
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
     ############################ End Search Bar ############################
 
+
     <input type="hidden" id="js-vid" value="$vendorSettingsDTO.vendorId">
+
+		<div class="row">
+					<h2 class="title itemTitle" id="js-item-title-$item.itemid">$item.Title</h2>
+					<h3> $item.shortdesc</h3>
+		</div> <!-- end row -->
+
+
 		<div class="row">
 			<div  id="left-col" class="small-4 columns">
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/breadcrumbs.vm")
-			</div>
+			</div> <!-- ens s4 -->
         
 			<div id="right-col" class="small-8 columns">
 				<!-- <div class="row"> crunbs </div> -->
 				<div class="row">
-					<h2 class="title itemTitle" id="js-item-title-$item.itemid">$item.Title</h2>
-					<h3> $item.shortdesc</h3>
-#parse($item_topDTO.getItems().get(0).get('item_top'))
+			#parse($item_topDTO.getItems().get(0).get('item_top'))
 				</div><!-- end row -->
           	
           	
@@ -145,33 +151,34 @@
 					<div class="small-4 columns">
 						
 						<div class="pricing">
-							<p class="retail list-price"><b>#springMessage("vm.itemTemplate.msrp"):</b><br />
-							<em id="_listPrice_0">
-								<span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
-								<span id="js-item-listprice-$item.itemid">$regExp.showPrice($math.roundTo(2,$price.listPrice))</span>
-							</em>
-							</p>
-              
-							<p class="price"><b> Your Price:</b><br />
-							##springMessage("vm.itemTemplate.dealer"):
-							<em>
-								<span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
-								<span id="js-item-pricedollar-$item.itemid" class="integer">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span><span>.</span><span id="js-item-pricecent-$item.itemid" class="decimal">$regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
-							</em>
-							</p>
+							<ul class="no-bullet">
+								<li>
+									<b> Your Price:</b>
+									<span class="currency"> $regExp.currencySymbol($viewStoreCurrency.locale)</span>
+									<span id="js-item-pricedollar-$item.itemid" class="integer">$regExp.currencyInteger($viewStoreCurrency.locale, $price.price)</span>
+									<span>.</span><span id="js-item-pricecent-$item.itemid" class="decimal"> $regExp.currencyFraction($viewStoreCurrency.locale, $price.price)</span>
+								</li>
+								<li>  <em id="_listPrice_0"></em>
+									<span class="retail list-price"><b>#springMessage("vm.itemTemplate.msrp"):</b>
+									<span class="currency">$regExp.currencySymbol($viewStoreCurrency.locale)</span>
+									<span id="js-item-listprice-$item.itemid">$regExp.showPrice($math.roundTo(2,$price.listPrice))</span>
+								</li>
+							</ul>
 						</div>
-
-						<p><b>Product Number: </b><br />
-						    <span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></p>
-						<p><b>MFG Item Number: </b><br />
-						    $item.mfgpartno</p>
+						<div>
+							<ul class="no-bullet">
+								<li><b> Item:</b> <span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></li>
+								<li><b>MFG Item Number:</b> $item.mfgpartno</li>
+							</ul>
+						</div>
 						
-                #*
-                  ## Whenever reviews is ready, verify css that margins is not messing up layout
-                  <div class="reviews"></div> <!-- review place holder -->
-                *#
+#*
+## Whenever reviews is ready, verify css that margins is not messing up layout
+<div class="reviews"></div> <!-- review place holder -->
+*#
+
 #if($list.size($item.attributes) != 0)
-							<div class="item-attributes">
+						<div class="item-attributes">
 							<p class="section-title">
                     Options for this item are available.
                     Please make you selection.
@@ -180,78 +187,79 @@
 							<div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
 						</div>
 #else
-					<div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
+					 <div id="js-item-attributes-$item.itemid" class="item-attr-section"></div> 
 #end
-			            <!-- <p><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank>#springMessage('vm.itemTemplate.printerfriendly')</a></p> -->
-						<p><a href="action.html?mode=addWishlist&iid=$item.itemid&vid=$vendorSettingsDTO.vendorId&qty=1&url=storeitem.html%3Fiid%3D$item.itemid%26vid%3D$vendorSettingsDTO.vendorId"> Add to your Wish List</a></p>
-						<p> <a href="wishlist.html?vid=$vendorSettingsDTO.vendorId&action=add" title="add this ite tot you wish list"> View Your Wish List </a></p>
-
-
+						<div>
+							<ul class="no-bullet">
+							<!-- <li><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank>#springMessage('vm.itemTemplate.printerfriendly')</a></li> -->
+								<li><a href="action.html?mode=addWishlist&iid=$item.itemid&vid=$vendorSettingsDTO.vendorId&qty=1&url=storeitem.html%3Fiid%3D$item.itemid%26vid%3D$vendorSettingsDTO.vendorId"> Add to your Wish List</a></li>
+								<li><a href="wishlist.html?vid=$vendorSettingsDTO.vendorId&action=add" title="add this ite tot you wish list"> View Your Wish List </a></li>
+							</ul>
+						</div>
  
 
-  ##end
-  #if($item.itemid)
-    #set($formName = "F$item.itemid")
-  #end
-              <form method="POST" name="$formName" action="storeitem.html?$vendorSettingsDTO.vendorId&iid=$item.itemid" class="form-inline">
-                <input type="hidden" name="productoption" value="productoption.html?vid=$vendorSettingsDTO.vendorId&cid=20609&qp=0">
-                <input type="hidden" id="compCode_0" value="$item.code"/>
-  #set ($found = 'false')
-                <div id="js-item-hiddenfields-$item.itemid"></div>
-                <div id="js-item-inventory-$item.itemid" class="inventory"></div>
-  ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_attributes.vm")
-                <input type="hidden" name="redirectMode" value="true"/>
-  #springBind( "storeItemDTO.*" )
-  #if($status.errors.errorCount>0)
-                <div class="msg">
-    #foreach($error in $status.errorMessages)
-      $error
-    #end
-                </div>
-  #end
-                <div class="addToCartContainer">
-                  <div class="addToCartFields">
-                    <label for="qty_0">Order #springMessage("vm.itemTemplate.quantity"):</label>
-                    <input class="qty-input span2 align-center" type='text' id="js-item-qtybox-$item.itemid" maxlength="3" />
-                    <br/><br/>
-                    <div class="btnclass addToCartBtn hide" id="js-item-addtocartbtn-$item.itemid" ><span class="button btn btn-primary"> #springMessage('vm.itemTemplate.addtocart')</span></div>
-                    #*
-                    <div class="btnclass hide" id="lost-sale"><br /><span class="btn btn-warning">Lost Sale</span></div>
-                   
-                   
-                   
-                   
-                   
-                    <span class="addToCartDummy">
-                      <button class="btn btn-primary addToCartBtn">#springMessage('vm.itemTemplate.addtocart')</button>
-                    </span>
-              <input id="js-stayaftadd2crt" value="true"/>
 
-                    *#
-                    #foreach($prop in $item.properties)
-                       #if($prop.propname && ($prop.propname == 'Additional Freight Code' && $prop.propvalue != '' ))
-                       <p> Due to Size and/or weight this item can not ship by standard methods and will require additional fees for shipping and handling.</p>
-                       #end
-                    #end
-                  </div>                       
-                </div>
-              </form>
+	#if($item.itemid)
+		#set($formName = "F$item.itemid")
+	#end
+			<form method="POST" name="$formName" action="storeitem.html?$vendorSettingsDTO.vendorId&iid=$item.itemid" class="form-inline">
+				<input type="hidden" name="productoption" value="productoption.html?vid=$vendorSettingsDTO.vendorId&cid=20609&qp=0">
+				<input type="hidden" id="compCode_0" value="$item.code"/>
+	#set ($found = 'false')
+				<div id="js-item-hiddenfields-$item.itemid"></div>
+				<div id="js-item-inventory-$item.itemid" class="inventory"></div>
+			##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_attributes.vm")
+				<input type="hidden" name="redirectMode" value="true"/>
+	#springBind( "storeItemDTO.*" )
+	#if($status.errors.errorCount>0)
+				<div class="msg">
+		#foreach($error in $status.errorMessages)
+			$error
+		#end
+				</div>
+	#end
+						<div class="addToCartContainer">
+							<div class="addToCartFields">
+								
+								<div class="row collapse rounded">
+									<div class="small-9 columns">
+										<label for="qty_0" class="prefix"> Order #springMessage("vm.itemTemplate.quantity"):</label>
+									</div>
+									<div class="small-3 columns">
+										<input class="qty-input span2 align-center" type='text' id="js-item-qtybox-$item.itemid" maxlength="3" />
+									</div>
+								</div> <!-- end row colapse -->
+
+								<div class="row">
+									<div class="btnclass addToCartBtn" id="js-item-addtocartbtn-$item.itemid" >
+										<span class="button"> #springMessage('vm.itemTemplate.addtocart')</span>
+									</div>
+								</div>
+								
+								
+								
+#*
+<div class="btnclass hide" id="lost-sale"><br /><span class="btn btn-warning">Lost Sale</span></div>
+<span class="addToCartDummy">
+<button class="btn btn-primary addToCartBtn">#springMessage('vm.itemTemplate.addtocart')</button>
+</span>
+<input id="js-stayaftadd2crt" value="true"/>
+
+*#
+								#foreach($prop in $item.properties)
+									#if($prop.propname && ($prop.propname == 'Additional Freight Code' && $prop.propvalue != '' ))
+										<p> Due to Size and/or weight this item can not ship by standard methods and will require additional fees for shipping and handling.</p>
+									#end
+								#end
+							</div>                       
+						</div>
+			</form>
 
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_logo.vm")
                 </div><!-- end span4 -->
       </div> <!-- endo row -->
 
-</div> <!-- end s8 -->
-
-
-
-
-
-
-
-
-				</div> <!-- end row -->
-              
+             
 
 				<div class="row">
 #parse($item_centerDTO.getItems().get(0).get('item_center'))
@@ -275,6 +283,9 @@
 ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_reviews.vm")
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/ItemT_recentlyViewed.vm")
     	        </div> <!-- end row -->
+
+	</div> <!-- end s8 -->
+</div> <!-- end row -->
 
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
 

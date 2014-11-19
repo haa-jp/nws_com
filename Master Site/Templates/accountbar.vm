@@ -1,4 +1,4 @@
-<h3>Account Management</h3>
+<h5>Account Management</h5>
 
 <ul class="no-bullet">
 	<li><a href="myaccount.html?mode=vieworder"> #springMessage("vm.myaccount.vieworders")</a></li>          

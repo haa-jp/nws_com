@@ -32,11 +32,19 @@
     #end
                       </span>
                     </a>
-                    <p> MFG #: $item.mfgpartno</p>
-                    <p>Product Number: $item.code.replace("-", ".")</p>
-                    
+					<ul class="no-bullet">
+						<li><b>Item:</b> $item.code.replace("-", ".")</li>
+						<li><b>Mfg#:</b> $item.mfgpartno</li>
 #set($instock = $pageTile.getItemObject($itemsDTO, $itemIter, "instock"))
-                    <p>In stock: #if($instock >= 1)yes#{else}no#end</p>
+						<li><b>In stock:</b> #if($instock >= 1)yes#{else}no#end</li>
+						<li>
+							
+						</li>
+						
+					</ul>
+
+                    
+
                     
                     <p>
 #if($math.round($price.listPrice) > $math.round($price.price))
@@ -45,7 +53,7 @@
                       ##<span id="_price_0">#springMessage("vm.itemTemplate.callprice")</span>
                       <span id="_price_0" class="no-price">Login to View Pricing</span>
 #else
-                      $number.format('currency', $price.price, $viewStoreCurrency.locale)
+                      <span class="price_0"> $number.format('currency', $price.price, $viewStoreCurrency.locale)</span>
 #end
                     </p>
                   </div>
