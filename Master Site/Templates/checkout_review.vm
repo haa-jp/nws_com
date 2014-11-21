@@ -57,31 +57,80 @@
 
 		<div class="row">
 			<h2>#springMessage("vm.checkout_review.review")</h2>
- 
- <div class="container-fluid">
- <div class="row-fluid">
- <div class="span12">
+		</div> <!-- end row -->
 
- <h4>Ship To:</h4>
- #foreach($productgroup in $checkoutViewDTO.details.shippinggroup)
- #foreach($productitem in $productgroup.shipItems)
- #if($velocityCount == 1 )
- $productgroup.address.address.nickname &nbsp;&nbsp; <a href="shipping.html?vid=$checkoutViewDTO.vendorId" class="edit">#springMessage('word.edit')</a><br/>
- $productgroup.address.address.firstname $productgroup.address.address.middlename $!productgroup.address.address.lastname<br/>
- $productgroup.address.address.company<br/>
- $productgroup.address.address.address1<br/>
- #if($!productgroup.address.address.address2 != '')
- $!productgroup.address.address.address2<br/>
- #end
- $productgroup.address.address.city, $!productgroup.address.province.a3 $productgroup.address.address.postal
- ##$!productgroup.address.address.anotherprovince 
- ##$!productgroup.address.country.name<br/> 
- #end
- #end
- #end
- </div>
- </div>
- </div>
+		<div class="row">
+			<div class="small-5 columns">
+					<div class="pay-to">
+						<h4>#springMessage('vm.vieworderdetail.method')</h4>
+					#if($checkoutViewDTO.creditCard.ccNumber.length() > 0)
+								<p><b> #springMessage('vm.register.creditcard')</b>:
+								#if($checkoutViewDTO.selectedPaymentGatewayCode == "PCICC" || $checkoutViewDTO.selectedPaymentGatewayCode == "PCINONE")
+									************$checkoutViewDTO.creditCard.last4cc 
+								#else $checkoutViewDTO.creditCard.ccSecureNumber 
+								#end
+								
+								#if(!$checkoutViewDTO.onepagecheckout)
+									<a href="payment.html?vid=$checkoutViewDTO.vendorId&fo=2" class="edit right"> #springMessage('word.edit')</a>
+								#end						
+						
+								</p> 
+						#if($checkoutViewDTO.selectedPaymentGatewayCode != "PCICC" && $checkoutViewDTO.selectedPaymentGatewayCode != "PCINONE")
+							#set ($cardtypekeys = $checkoutViewDTO.creditCard.ccTypes.keySet())
+
+							#foreach ($cardtypekey in $cardtypekeys)
+								#if ($cardtypekey == $checkoutViewDTO.creditCard.ccType)
+								<p><b> #springMessage('vm.register.cctype')</b>:
+									$checkoutViewDTO.creditCard.ccTypes.get($cardtypekey)</p>
+								#end
+						#end
+
+								<p><b> #springMessage('vm.register.expirydate')</b>:
+							#if($checkoutViewDTO.creditCard.expMonth > 0) 
+									$checkoutViewDTO.creditCard.expMonth/$checkoutViewDTO.creditCard.expYear
+							#end 
+								</p>
+					#end
+				#else
+							$!checkoutViewDTO.ccPreferencesDTO.currentPaymentgateway.displayname
+
+				#if($checkoutViewDTO.customerInput && $checkoutViewDTO.customerInput!="")
+							:$checkoutViewDTO.customerInput
+				#end
+				#end 
+
+					</div> <!-- end pay-to -->
+			</div>	<!-- end s5 -->
+			
+			<div class="small-5 columns">
+				<div class="ship-to">
+					<h4>Ship To:</h4>
+
+#foreach($productgroup in $checkoutViewDTO.details.shippinggroup)
+	#foreach($productitem in $productgroup.shipItems)
+		#if($velocityCount == 1 )
+			<p>$productgroup.address.address.nickname &nbsp;&nbsp; <br/>
+				<a href="shipping.html?vid=$checkoutViewDTO.vendorId" class="edit right"> #springMessage('word.edit')</a><br/>
+			</p>
+			<p>$productgroup.address.address.firstname $productgroup.address.address.middlename $!productgroup.address.address.lastname</p>
+			<p>$productgroup.address.address.company</p>
+			<p>$productgroup.address.address.address1
+
+			#if($!productgroup.address.address.address2 != '')
+				<br/>
+				$!productgroup.address.address.address2
+			#end
+			</p>
+			<p>$productgroup.address.address.city, $!productgroup.address.province.a3 $productgroup.address.address.postal</p>
+			##$!productgroup.address.address.anotherprovince 
+			##$!productgroup.address.country.name<br/> 
+		#end
+	#end
+#end
+				</div> <!-- ship-to -->
+			</div> <!-- end s5 -->
+		</div> <!-- end row -->
+ 
  
 		<div class="separator grey">&nbsp;</div>
  
@@ -284,60 +333,13 @@
 		</div> <!-- end row -->	
 
 
-
-	<div class="row-fluid">
-		<div class="span6">
-			
- <div class="edit-payment">
- <h4>#springMessage('vm.vieworderdetail.method')</h4>
- #if($checkoutViewDTO.creditCard.ccNumber.length() > 0)
- <div class="review_card">
- <div class="control-group">
- <label class="control-label">#springMessage('vm.register.creditcard'):</label>
- <div class="controls">#if($checkoutViewDTO.selectedPaymentGatewayCode == "PCICC" || $checkoutViewDTO.selectedPaymentGatewayCode == "PCINONE")************$checkoutViewDTO.creditCard.last4cc #else $checkoutViewDTO.creditCard.ccSecureNumber #end</div> 
- </div>
- #if($checkoutViewDTO.selectedPaymentGatewayCode != "PCICC" && $checkoutViewDTO.selectedPaymentGatewayCode != "PCINONE")
- #set ($cardtypekeys = $checkoutViewDTO.creditCard.ccTypes.keySet())
- #foreach ($cardtypekey in $cardtypekeys)
- #if ($cardtypekey == $checkoutViewDTO.creditCard.ccType)
- <div class="control-group">
- <label class="control-label">#springMessage('vm.register.cctype'): </label>
- <div class="controls">$checkoutViewDTO.creditCard.ccTypes.get($cardtypekey)</div>
- </div>
- #end
- #end
- <div class="control-group">
- <label class="control-label">#springMessage('vm.register.expirydate'): </label>
- #if($checkoutViewDTO.creditCard.expMonth > 0) 
- <div class="controls">$checkoutViewDTO.creditCard.expMonth/$checkoutViewDTO.creditCard.expYear </div>
- #end 
- </div>
- #end
- </div> <!-- end class="review_card -->
- #else
- $!checkoutViewDTO.ccPreferencesDTO.currentPaymentgateway.displayname
- #if($checkoutViewDTO.customerInput && $checkoutViewDTO.customerInput!="")
- :$checkoutViewDTO.customerInput
- #end
- #end 
- #if(!$checkoutViewDTO.onepagecheckout) 
- <a href="payment.html?vid=$checkoutViewDTO.vendorId&fo=2">#springMessage('word.edit')</a>
- #end
- </div><!-- end edit-payment -->
-
-		</div>
 		
-		<div class="span5 offset1">
-			<div class="alert alert-info">
-				<p> This transaction will appear on your statement as a charge to "B2CPARTS.COM", a third party drop-shipping service utilized by $storeName. All refunds and exchanges are subject to $storeName's policies and must be transacted through $storeName. DO NOT ship product back to the address from which it was shipped. Warranty claims are subject to all manufacturer's claim policies and procedures.</p>
+		<div class="row">
+			<div data-alert class="alert-box warning radius">
+				<p> This transaction will appear on your statement as a charge to "<b>B2CPARTS.COM</b>", a third party drop-shipping service utilized by $storeName. All refunds and exchanges are subject to $storeName's policies and must be transacted through $storeName. DO NOT ship product back to the address from which it was shipped. Warranty claims are subject to all manufacturer's claim policies and procedures.</p>
+				<a href="#" class="close">&times;</a>
 			</div>
-
-		</div>
-		
-	</div>
-	
-
-		<!-- end row -->
+		</div> <!-- end row -->
 		
 		<div class="row">
 			<div class="form-actions">
@@ -356,15 +358,15 @@
 
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_js.vm")
 
-<script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
-<script type="text/javascript"> 
-function checkbrowserTYPE(){
-document.getElementById('browser').value=navigator.userAgent.toLowerCase();
-}
+	<script src="store/$checkoutViewDTO.vendorId/assets/submit.js"></script>
+	<script type="text/javascript"> 
+		function checkbrowserTYPE(){
+			document.getElementById('browser').value=navigator.userAgent.toLowerCase();
+		}
  
-$(document).ready(function(){
-checkbrowserTYPE();
-});
+			$(document).ready(function(){
+				checkbrowserTYPE();
+		});
 	</script>
 	</body>
 </html>

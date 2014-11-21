@@ -17,13 +17,13 @@ jQuery(document).ready(function(){
         	if(wishlist.items.length > 0){
             jQuery('<input type="hidden" name="clientId" value="'+wishlist.items[0].clientId+'">').appendTo(container);
             for(var index in wishlist.items){
-              var item = wishlist.items[index]
+              var item = wishlist.items[index];
 
               var row = jQuery('<tr></tr>').appendTo(table);
               var td1 = jQuery('<td class="ac"><input type="checkbox" name="select" value="'+item.compcode+'"><input type="hidden" id="item_'+item.itemid+'" name="'+item.compcode+'" value="false"></td>');
               var td2 = jQuery('<td><div class="item_img"><a href="'+item.itemURL+'"><img src="store'+item.cimage+'" alt="'+item.title+'" onerror="javascript:this.src=\'store/'+item.vid+'/items/thumbnails/na_sm.png\'"/></a></div></td>');
               if(item.supplier == 'catalog'){
-                jQuery('<div class="item-desc"><p class="item-title"><a href="'+item.itemURL+'">'+item.title+'</a><p class="code">Part Number: '+item.compcode.replace("-",".")+'</p></div>').appendTo(td2)
+                jQuery('<div class="item-desc"><p class="item-title"><a href="'+item.itemURL+'">'+item.title+'</a><p class="code">Part Number: '+item.compcode.replace("-",".")+'</p></div>').appendTo(td2);
                 jQuery('<input type="hidden" id="'+item.compcode+'.'+(index+1)+'" value="catalog">').appendTo(td2);
               }
               if(item.owner){

@@ -69,13 +69,12 @@
 
 		<div class="row">
 			<div id="" class="small-10 small-centered columns" >
+				<h2 class="inline-middle">#springMessage('vm.basket.title')</h2>
 				
-        <form name="VIEWCART" action="" method="post" onSubmit="javascript:updateQuantities();">
-          <div class="container-fluid">
-            <h2 class="inline-middle">#springMessage('vm.basket.title')</h2>
-            <input class="btn" type="button" value="#springMessage('vm.basket.toshop')" onclick="javascript:document.location='store.html?vid=${vendorSettingsDTO.vendorId}&cid=23049' " />
+				<form name="VIEWCART" action="" method="post" onSubmit="javascript:updateQuantities();">
+					<input class="btn" type="button" value="#springMessage('vm.basket.toshop')" onclick="javascript:document.location='store.html?vid=${vendorSettingsDTO.vendorId}&cid=23049' " />
 #if($productsDetails.allowanceswarningmsg  && $productsDetails.enableOrderAllowance == 'ALLOWANCE')
-            <div class="alert alert-error span6">#springMessage('vm.basket.warningallowancesmsg')$regExp.showPrice($cusalllowances)</div>
+						<div class="alert alert-error span6">#springMessage('vm.basket.warningallowancesmsg')$regExp.showPrice($cusalllowances)</div>
 #end
 #springBind( "basketDTO.*" )
 #if($status.errors.errorCount>0)
@@ -96,78 +95,82 @@
             </div>
   #end
 #end
-
-            <input type="hidden" name="_targetupdateBasket" value="basket.html?vid=$vendorSettingsDTO.vendorId"/>
-            <input type="hidden" name="mode" value=""/>
-            <input type="hidden" name="itemscount" value="$itemsCount"/>
+					<input type="hidden" name="_targetupdateBasket" value="basket.html?vid=$vendorSettingsDTO.vendorId"/>
+					<input type="hidden" name="mode" value=""/>
+					<input type="hidden" name="itemscount" value="$itemsCount"/>
 #if($productsDetails.products.size()>0)
-  #if(!$currencyInUse)
-    #foreach($cur in $storeCurrencies)
-      #if($cur.def==1)
-            <input type="hidden" name="c" value="$cur.id" />
-      #end
+	#if(!$currencyInUse)
+		#foreach($cur in $storeCurrencies)
+			#if($cur.def==1)
+					<input type="hidden" name="c" value="$cur.id" />
+			#end
+		#end
+	#else
+					<input type="hidden" name="c" value="$currencyInUse" />
+	#end
+					<input type="hidden" name="orderType" value="P"/>
+					<input type="hidden" name="_targetcheckout" value="checkout.html?vid=$vendorSettingsDTO.vendorId"/>
+	
+					#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_products.vm")
+
+			
+		<div class="row">
+	#if($totalQty > 0)
+            <div class="large-1 columns"> &nbsp;</div>
+            <div class="large-8 large-offset-3 columns">
+            
+                <div class="checkout-total">
+                    Total ($totalQty #if($totalQty > 1)#springMessage('vm.register.items')#else #springMessage('vm.register.item')#end)</span>:
+                </div>
+                <div class="checkout-total">
+    	#set($total=$math.sub($subtotal, 0))
+                    <span class="grand-total">$$!regExp.currencyInteger($viewStoreCurrency.locale, $total).<sup>$!regExp.currencyFraction($viewStoreCurrency.locale, $total)</sup></span>
+                </div>
     #end
-  #else
-            <input type="hidden" name="c" value="$currencyInUse" />
-  #end
-            <input type="hidden" name="orderType" value="P"/>
-            <input type="hidden" name="_targetcheckout" value="checkout.html?vid=$vendorSettingsDTO.vendorId"/>
-  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_products.vm")
-
-            <div class="row-fluid">
-#if($totalQty > 0)
-              <div class="span3 offset7">
-                <div class="checkout-total">
-                  Total ($totalQty #if($totalQty > 1)#springMessage('vm.register.items')#else #springMessage('vm.register.item')#end)</span>:
-                </div>
-              </div>
-              <div class="span2">
-                <div class="checkout-total">
-  #set($total=$math.sub($subtotal, 0))
-                  <span class="grand-total">$$!regExp.currencyInteger($viewStoreCurrency.locale, $total).<sup>$!regExp.currencyFraction($viewStoreCurrency.locale, $total)</sup></span>
-                </div>
-#end
-              </div><!-- span12 -->
-            </div><!-- row-fluid -->
+            </div>
+        </div> <!-- end row -->
 
 
-            <div class="row-fluid">
-              <div class="span12">
-#if(!${welcomeMatDTO.loggedIn})
-                  <div class="form-actions restoreBasket">
+        <div class="row">
+            <div class="small-12">
+	#if(!${welcomeMatDTO.loggedIn})
+                <div class="form-actions restoreBasket">
                     <strong>#springMessage('vm.basket.logintorestoreasavedbasket'):</strong> <input type="button" class="btn btn-primary" onclick="JavaScript:window.location.href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=${welcomeMatDTO.currentEncodePage}'" class="proceed btnLogin" value="#springMessage("button.LOGIN")">
-                  </div>
-#else
-  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_saveforlater.vm")
-#end
-              </div>
+                </div>
+    #else
+        #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_saveforlater.vm")
+    #end
             </div>
+        </div> <!-- end row -->
 
-
+        <div class="row">
             <div class="form-actions">
-              <input id="checkoutbtn" type="button" class="btn btn-primary" value="#springMessage('vm.basket.tocheckout')" onclick="javascript:document.VIEWCART.mode.value='checkout';document.VIEWCART.submit();"/>
-              <input class="btn" type="button" value="#springMessage('vm.basket.toshop')" onclick="javascript:document.location='store.html?vid=${vendorSettingsDTO.vendorId}'"/>
+                <input id="checkoutbtn" type="button" class="button small" value="#springMessage('vm.basket.tocheckout')" onclick="javascript:document.VIEWCART.mode.value='checkout';document.VIEWCART.submit();"/>
+                <input class="btn" type="button" value="#springMessage('vm.basket.toshop')" onclick="javascript:document.location='store.html?vid=${vendorSettingsDTO.vendorId}'"/>
             </div>
+        </div> <!-- end row -->
 
-  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_crosssell.vm")
+	#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/basket_crosssell.vm")
 #else
-            <div class="basket-item-desc f-buttons">
-              <b>#springMessage('vm.basket.msg')</b>
-              <a href="store.html?vid=${vendorSettingsDTO.vendorId}">#springMessage('vm.basket.toshop')</a>
+ 		<div class="row">
+			<div class="form-actions">
+                <b>#springMessage('vm.basket.msg')</b>
+                <a href="store.html?vid=${vendorSettingsDTO.vendorId}">#springMessage('vm.basket.toshop')</a>
   #if(!${welcomeMatDTO.loggedIn})
-              <b><a href="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=${welcomeMatDTO.currentEncodePage}">#springMessage('vm.header.login')</a> #springMessage('vm.basket.loginmsg')  </b>
+                <b><a href="https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/signin.html?vid=${vendorSettingsDTO.vendorId}&mt=1&redirecturl=${welcomeMatDTO.currentEncodePage}">#springMessage('vm.header.login')</a> #springMessage('vm.basket.loginmsg')  </b>
   #end
             </div>
+        </div> <!-- end row -->    
 #end
-          </div><!-- end container-fluid -->
-        </form>
-      </div> <!-- end span 8 -->
-    </div>
+
+
+			</div>
+		</div> <!-- end row -->
+    </form>
+
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/footer.vm")
-    <div id= "test" class="yui-skin-sam">
-      <div id="cal1Container"></div>
-    </div>
     <div id="deliverypopup" class="popup_menu" style="top:140%"></div>
+
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/common_js.vm")
     <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/js/basket.js"></script>
 
@@ -243,5 +246,5 @@
     </script>
 
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/shipping_cost_estimator.vm")
-	</body>
+  </body>
 </html>

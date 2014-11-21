@@ -1,3 +1,4 @@
+
 <!DOCTYPE html> 
 	#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -22,7 +23,7 @@
     ############################ End Header ################################
  		<div class="row">
 			<div class="small-12">
-				<ul class="co-breadcrumb step3">
+				<ul class="co-breadcrumb step5">
 					<li class="yi"> #springMessage("vm.checkout_customerinfo.infor")</li>
 					<li class="sp"> #springMessage("vm.checkout_customerinfo.shipping")</li>
 					<li class="py"> #springMessage("vm.checkout_customerinfo.payment")</li>
@@ -44,51 +45,56 @@
 				</div>
 				#end
 		</div> <!-- end row -->
+		
           
 		<div class="row">
-			<div class="small-7 columns">
-				<div class="notice orderNo">
+			<div class="large-7 columns">
+				<div class="notice orderNo panel">
 					<h4>#springMessage("vm.checkout_completed.ordernum"): $!checkoutViewDTO.details.orderid</h4>
 					<p>#springMessage("vm.checkout_completed.msg1")</p>
 					<p>#springMessage("vm.checkout_completed.msg2")</p>
 				</div>
-			</div> <!-- end s7 -->
+			</div> <!-- end l7 -->
 
-			<div class="small-5 columns">
+			<div class="large-5 columns">
+				<div class="ship-to">
+
 				<h4>Ship To:</h4>
 				#foreach($productgroup in $checkoutViewDTO.details.shippinggroup)
 					#foreach($productitem in $productgroup.shipItems)
 						#if($velocityCount == 1 )
-						<ul class="no-bullet">
-							<li>$productgroup.address.address.nickname </li>
-							<li>$productgroup.address.address.firstname $productgroup.address.address.middlename $!productgroup.address.address.lastname</li>
+							<p>$productgroup.address.address.nickname </p>
+							<p>$productgroup.address.address.firstname $productgroup.address.address.middlename $!productgroup.address.address.lastname</p>
 							#if($!productgroup.address.address.company != '')
-								<li>$productgroup.address.address.company</li>
+								<p>$productgroup.address.address.company</p>
 							#end
-							<li>$productgroup.address.address.address1</li>
+							<p>$productgroup.address.address.address1
 						
 							#if($!productgroup.address.address.address2 != '')
-								<li>$!productgroup.address.address.address2</li>
+							<br/>
+								$!productgroup.address.address.address2
 							#end
-							<li>$productgroup.address.address.city, $!productgroup.address.province.a3 $productgroup.address.address.postal
+							</p>
+							<p>$productgroup.address.address.city, $!productgroup.address.province.a3 $productgroup.address.address.postal</p>
 							##$!productgroup.address.address.anotherprovince  
 							##$!productgroup.address.country.name 
-						</ul>
 						#end
 					#end
 				#end
 				
-			</div> <!-- end s5 -->
+				</div>
+			</div> <!-- end l5 -->
         </div> <!-- end row -->
         
 		<div class="row">
-	<table class="table">
+	<table class="table" width="100%">
 		<thead>
 			<tr>
-				<th>#springMessage('vm.register.description')</th>
-				<th>#springMessage('vm.register.shipmethod')</th>
-				<th>#springMessage('vm.register.qty')</th>
-				<th>#springMessage('vm.register.total')</th>
+				<th> Item</th> 
+				<th> #springMessage('vm.register.description')</th>
+				<th> #springMessage('vm.register.shipmethod')</th>
+				<th> #springMessage('vm.register.qty')</th>
+				<th> #springMessage('vm.register.total')</th>
 			</tr>
 		</thead>
 
@@ -100,7 +106,8 @@
                 #foreach($productitem in $productgroup.shipItems)
                   #set($creditneed = "N")
                   <tr>
-                    <td >${productitem.product.title}</td>
+                  	<td> ${productitem.product.code}</td>
+                    <td> ${productitem.product.title}</td>
                     <td>                    
                       #if($itemidx == 0 )
                         #if($productgroup.singleship)
@@ -118,10 +125,8 @@
                         #end
                       #end
                     </td>
-                    <td class="ac">${productitem.shipaddr.qty}</td>
-                    <td class="ar">
-                      <span>&#36;$checkoutViewDTO.formatter.currency(${productitem.shipaddr.totalPrice})</span>
-                    </td>
+                    <td class="ac"> ${productitem.shipaddr.qty}</td>
+                    <td class="ar"> <span>&#36;$checkoutViewDTO.formatter.currency(${productitem.shipaddr.totalPrice})</span> </td>
                   </tr>
                   #set($itemidx = $itemidx + 1)
                 #end
@@ -130,7 +135,7 @@
                 #if($productgroup.shipGroupTaxDetails)
                   #if($productgroup.shipGroupTaxDetails.nationtax>0.0 || $productgroup.shipGroupTaxDetails.regiontax>0.0 || $productgroup.shipGroupTaxDetails.taxHST>0.0)
                     <tr>
-                      <td colspan="2" class="empty-cell">&nbsp;</td>
+                      <td colspan="3" class="empty-cell">&nbsp;</td>
                       <td>
                         #if($productgroup.downloadable)
                            #springMessage('vm.register.taxdownloadable'): <br/> 
@@ -178,8 +183,8 @@
 
 		<tfoot class="totals">
 			<tr class="subtotal">
-				<td colspan="2" class="empty-cel">&nbsp;</td>
-				<td class="ar vat lbl"> #springMessage("vm.register.subtotal") ($checkoutViewDTO.details.totalQty #if($checkoutViewDTO.details.totalQty > 1)#springMessage("vm.register.items")#else #springMessage("vm.register.item")#end):</td>
+				<td colspan="3" class="empty-cel">&nbsp;</td>
+				<td class="ar vat lbl right"> #springMessage("vm.register.subtotal") ($checkoutViewDTO.details.totalQty #if($checkoutViewDTO.details.totalQty > 1)#springMessage("vm.register.items")#else #springMessage("vm.register.item")#end):</td>
                 <td class="ar vat val"> $number.format('currency', $checkoutViewDTO.details.total, $viewStoreCurrency.locale)</td>
 			</tr>
 			
@@ -187,8 +192,8 @@
             
 			#if($math.round($checkoutViewDTO.details.totalDiscount )> 0)
 			<tr class="discount">
-				<td colspan="2" class="empty-cel">&nbsp;</td>
-				<td class="ar vat lbl">#springMessage("vm.register.discounts"):</td>
+				<td colspan="3" class="empty-cel">&nbsp;</td>
+				<td class="ar vat lbl right">#springMessage("vm.register.discounts"):</td>
 				<td class="ar vat val"> $number.format('currency', $checkoutViewDTO.details.totalDiscount, $viewStoreCurrency.locale)</td>
 			</tr>
 			#end
@@ -196,36 +201,36 @@
 			#set($tempgiftcert=0)
 			#if($checkoutViewDTO.giftCertificate.giftCertificates && $checkoutViewDTO.giftCertificate.giftCertificates.size() > 0 )
 			<tr class="discount">
-				<td colspan="2" class="empty-cel">&nbsp;</td>
-				<td class="ar vat lbl"> #springMessage("vm.register.giftapplied"):</td>
+				<td colspan="3" class="empty-cel">&nbsp;</td>
+				<td class="ar vat lbl right"> #springMessage("vm.register.giftapplied"):</td>
 				<td class="ar vat val"> $number.format('currency', $checkoutViewDTO.giftCertificate.totalAvailable, $viewStoreCurrency.locale)</td>
 			</tr>
 				#set($tempgiftcert=$checkoutViewDTO.giftCertificate.totalAvailable)
 			#end
 
 			<tr class="shipping">
-				<td colspan="2" class="empty-cel">&nbsp;</td>
-				<td class="ar vat lbl"> #springMessage("vm.register.shipping"):</td>
+				<td colspan="3" class="empty-cel">&nbsp;</td>
+				<td class="ar vat lbl right"> #springMessage("vm.register.shipping"):</td>
 				<td class="ar vat val"> $number.format('currency',$checkoutViewDTO.details.shipTotal,$viewStoreCurrency.getLocale())</td>
 			</tr>
 
 			#if($checkoutViewDTO.details.perShippingDiscount>0)
 			<tr class="discount" id="shippingDiscount">
-				<td colspan="2" class="empty-cel">&nbsp;</td>
-				<td class="ar vat lbl"> <span id="shippinglab1"> #springMessage("vm.checkout_completed.shipdiscount"):</span></td>
+				<td colspan="3" class="empty-cel">&nbsp;</td>
+				<td class="ar vat lbl right"> <span id="shippinglab1"> #springMessage("vm.checkout_completed.shipdiscount"):</span></td>
 				<td class="ar vat val"> $number.format('currency', $checkoutViewDTO.details.perShippingDiscount,$viewStoreCurrency.locale)</td>
 			</tr>
 			#end
             
 			<tr class="tax">
-				<td colspan="2" class="empty-cel">&nbsp;</td>
-				<td class="ar vat lbl"> <span id="taxlab1"> #springMessage("vm.register.tax"):</span></td>
+				<td colspan="3" class="empty-cel">&nbsp;</td>
+				<td class="ar vat lbl right"> <span id="taxlab1"> #springMessage("vm.register.tax"):</span></td>
 				<td class="ar vat val"> $number.format('currency', $checkoutViewDTO.details.taxTotal, $viewStoreCurrency.locale)</td>
 			</tr>
 
 			<tr class="total">
-				<td colspan="2" class="empty-cel">&nbsp;</td>
-				<td class="ar vat lbl"> #springMessage("vm.register.totalbill"):</td>
+				<td colspan="3" class="empty-cel">&nbsp;</td>
+				<td class="ar vat lbl right"> #springMessage("vm.register.totalbill"):</td>
 				<td class="ar vat val" id="totalcost">
 					#set($totalwithdis=$math.sub($math.sub($checkoutViewDTO.details.total,$checkoutViewDTO.details.totalDiscount),$checkoutViewDTO.details.perShippingDiscount))
 					$number.format('currency', $math.abs($math.sub($math.add($math.add(${totalwithdis},${checkoutViewDTO.details.taxTotal}),${checkoutViewDTO.details.shipTotal}),${tempgiftcert})), $viewStoreCurrency.locale) 
@@ -234,8 +239,8 @@
 			
 			#if($checkoutViewDTO.details.usepoints!=0)
 			<tr class="balance">
-				<td colspan="2" class="empty-cel">&nbsp;</td>
-				<td class="ar vat lbl">
+				<td colspan="3" class="empty-cel">&nbsp;</td>
+				<td class="ar vat lbl right">
 					#if($checkoutViewDTO.details.usepoints==2)
 						#springMessage('vm.basket.balancedue'):
 					#elseif($checkoutViewDTO.details.usepoints==1)
@@ -285,9 +290,11 @@
 *************************************************#  
 
 		<div class="row">
-			<a class="button small" alt="view your account"
-				href="$seourl.encodeURL("myaccount.html?mode=vieworder&vid=$vendorSettingsDTO.vendorId")">
+			<div class="form-actions">
+				<a class="button small" alt="view your account"
+					href="$seourl.encodeURL("myaccount.html?mode=vieworder&vid=$vendorSettingsDTO.vendorId")">
 					#springMessage("vm.checkout_completed.gotomyacc")</a>
+			</div>
 		</div> <!-- end row -->
 
     ############################ Footer ###################################

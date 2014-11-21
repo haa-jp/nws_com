@@ -61,7 +61,7 @@
 
 #if($itemsDTO.getItems().size() >1)
 <div class="alert" style="overflow: auto;">
-  #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/facets_menu.vm")
+  ##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/facets_menu.vm")
 </div>
 #end
 

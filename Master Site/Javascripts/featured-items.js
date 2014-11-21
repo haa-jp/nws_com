@@ -43,13 +43,15 @@
 	  <div> \
           <h5><%= title %></h5> \
           <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
-          <div class="prev-price"> \
-            <label>was:</label> \
-            <span>$ <%= listprice %></span> \
-          </div> \
-          <div class="price"> \
-            <label>On Sale:</label> \
-            <span>$ <%= price %></span> \
+          <div class="row"> \
+            <div class="prev-price"> \
+              <label>was:</label> \
+              <span>$ <%= listprice %></span> \
+            </div> \
+            <div class="price"> \
+              <label>On Sale:</label> \
+              <span>$ <%= price %></span> \
+            </div> \
           </div> \
           <form class="form-inline"> \
             <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>">About this item</a> \

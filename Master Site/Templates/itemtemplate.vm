@@ -146,10 +146,9 @@
                   #end
 					</div>
 				</div> <!-- end row -->
-             </div> 
+     </div> <!-- end s8 -->
               
 					<div class="small-4 columns">
-						
 						<div class="pricing">
 							<ul class="no-bullet">
 								<li>
@@ -184,10 +183,10 @@
                     Please make you selection.
 							</p>
                   			<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/preloader.gif" alt="Loading" id="preloader" />
-							<div id="js-item-attributes-$item.itemid" class="item-attr-section"></div>
+							<div id="js-item-attributes-$item.itemid" class="item-attr-section hide"></div>
 						</div>
 #else
-					 <div id="js-item-attributes-$item.itemid" class="item-attr-section"></div> 
+					 <div id="js-item-attributes-$item.itemid" class="item-attr-section hide"></div> 
 #end
 						<div>
 							<ul class="no-bullet">
@@ -207,7 +206,36 @@
 				<input type="hidden" id="compCode_0" value="$item.code"/>
 	#set ($found = 'false')
 				<div id="js-item-hiddenfields-$item.itemid"></div>
-				<div id="js-item-inventory-$item.itemid" class="inventory"></div>
+				<div id="js-item-inventory-$item.itemid" class="inventory hide"></div>
+					
+### show or hide the buy button - begin ###					
+					#set ($inv=$itemInventoryDTO.getItem(0))
+					#if($inv)
+						#if($inv.instock>0) 
+						<div class="row">
+							##springMessage("vm.itemTemplate.instock")
+							<div class="row collapse rounded">
+									<div class="small-9 columns">
+										<label for="qty_0" class="prefix"> Order #springMessage("vm.itemTemplate.quantity"):</label>
+									</div>
+									<div class="small-3 columns">
+										<input class="qty-input span2 align-center" type='text' id="js-item-qtybox-$item.itemid" maxlength="3" />
+									</div>
+							</div> <!-- end row colapse -->
+
+							<div class="row">
+								<div class="btnclass addToCartBtn" id="js-item-addtocartbtn-$item.itemid" >
+									<span class="button"> #springMessage('vm.itemTemplate.addtocart')</span>
+								</div>
+							</div>
+						</div> <!-- end row to buy -->
+                                    
+						#else 
+						<p><b>#springMessage("vm.itemTemplate.outstock")</b></p> 
+						#end
+					#end
+### show or hide the buy button - end ###					
+                                
 			##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_attributes.vm")
 				<input type="hidden" name="redirectMode" value="true"/>
 	#springBind( "storeItemDTO.*" )
@@ -218,24 +246,23 @@
 		#end
 				</div>
 	#end
-						<div class="addToCartContainer">
-							<div class="addToCartFields">
-								
-								<div class="row collapse rounded">
-									<div class="small-9 columns">
-										<label for="qty_0" class="prefix"> Order #springMessage("vm.itemTemplate.quantity"):</label>
-									</div>
-									<div class="small-3 columns">
-										<input class="qty-input span2 align-center" type='text' id="js-item-qtybox-$item.itemid" maxlength="3" />
-									</div>
-								</div> <!-- end row colapse -->
 
-								<div class="row">
-									<div class="btnclass addToCartBtn" id="js-item-addtocartbtn-$item.itemid" >
-										<span class="button"> #springMessage('vm.itemTemplate.addtocart')</span>
-									</div>
-								</div>
-								
+#*
+			<div class="row collapse rounded">
+				<div class="small-9 columns">
+					<label for="qty_0" class="prefix"> Order #springMessage("vm.itemTemplate.quantity"):</label>
+				</div>
+				<div class="small-3 columns">
+					<input class="qty-input span2 align-center" type='text' id="js-item-qtybox-$item.itemid" maxlength="3" />
+				</div>
+			</div> <!-- end row colapse -->
+
+			<div class="row">
+				<div class="btnclass addToCartBtn" id="js-item-addtocartbtn-$item.itemid" >
+					<span class="button"> #springMessage('vm.itemTemplate.addtocart')</span>
+				</div>
+			</div>
+*#			
 								
 								
 #*
@@ -251,18 +278,17 @@
 										<p> Due to Size and/or weight this item can not ship by standard methods and will require additional fees for shipping and handling.</p>
 									#end
 								#end
-							</div>                       
-						</div>
 			</form>
-
-#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_logo.vm")
+			
+		
+		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_logo.vm")
                 </div><!-- end span4 -->
-      </div> <!-- endo row -->
+      </div> <!-- end row -->
 
              
 
 				<div class="row">
-#parse($item_centerDTO.getItems().get(0).get('item_center'))
+					#parse($item_centerDTO.getItems().get(0).get('item_center'))
 					<div class="separator grey">&nbsp;</div>
 					<div class="item-secondary">
 					#if($item.longdesc!="" )
@@ -270,7 +296,7 @@
 						<div id="js-item-longdesc-$item.itemid" class="desc">$!item.longdesc</div>
 						#end
 						#if($item.longdesc2!="")
-						<h4> Features</h4
+						<h4> Features</h4>
 						<div id="js-item-longdesc2-$item.itemid" class="desc">$!item.longdesc2</div>
 					#end
     	        	</div>
@@ -303,6 +329,7 @@
 <script type="text/javascript" src="assets/plugins/juitter/jquery.juitter.js"></script>
 <script src="assets/plugins/extlogin/popup.js" type="text/javascript"></script>
 <script src="assets/commercelib/showimage/showimage.js" type="text/javascript"></script>
+
 <script type="text/javascript">
       var $j = jQuery.noConflict();
 

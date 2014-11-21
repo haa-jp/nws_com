@@ -1,0 +1,444 @@
+<div class="row">
+	<h2>#springMessage("vm.vieworderdetail.title"):</h2>
+	
+	<table>
+		<tr>
+			<td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.vieworderdetail.orderid"):</font></td>
+			<td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!myAccountDTO.order.orderid</font></td>
+		</tr>
+		<tr>
+			<td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.vieworderdetail.date"):</font></td>
+			<td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$date.format('medium',$!myAccountDTO.order.updatetime)</font></td>
+		</tr>
+    #set($paytypeid = 0)
+    #set($strcc = "")
+    #set($strgc = "")
+    #foreach($orderpayment in $myAccountDTO.order.orderPayments)
+        #if ($orderpayment.paytype == 'CC') 
+            #set($paytypeid = $paytypeid + 100)
+            #set($strcc = "Credit Card")
+        #end
+        #if ($orderpayment.paytype == 'GC') 
+            #set($paytypeid = $paytypeid + 1)
+            #set($strgc = "Gift Card")
+        #end                        
+    #end
+    
+    #if($paytypeid > 0)
+		<tr>
+			<td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.vieworderdetail.method"):</font></td>
+			<td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$strcc #if ($strcc!="" && $strgc!="") , #end $strgc</font></td>
+		</tr>
+    #end     
+</table>
+
+<hr/>      
+
+	
+	<h3>#springMessage("vm.vieworderdetail.billto"):</h3>
+#set ($addrno = 0)
+  <!-- billing address -->
+	<table border="0" width="100%">
+     #foreach($addr in $myAccountDTO.order.orderAddresses)
+       #if ($addr.addressdesc == 'BILLING ADDRESS')
+          #set ($addrno = 1)
+		<tr>
+            <td colspan="5"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>$!addr.nickname</b></font></td>
+            <td width="16">&nbsp;</td>
+          </tr>
+          
+          <tr>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.vieworderdetail.attention"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> $!addr.firstname $!addr.lastname</font></td>
+            <td width="16">&nbsp;</td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.province"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#if ($addr.province.id != 0)
+                 $!addr.province.name #else $!addr.anotherprovince #end</font></td>
+            <td width="16">&nbsp;</td>
+          </tr>
+
+          <tr>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.company"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.company</font></td>
+            <td width="16">&nbsp; </td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.country"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#if ($addr.country.id != 0)
+                 $!addr.country.name #end</font></td>
+            <td width="16">&nbsp;</td>
+          </tr>
+          <tr>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.address"):</font></td>
+
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.Address1</font></td>
+            <td width="16">&nbsp;</td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.postal"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> $!addr.Postal</font></td>
+
+            <td width="16">&nbsp;</td>
+          </tr>
+          <tr>
+            <td width="108">
+       #if($addr.Address2!="")
+       &nbsp;
+       #else
+       <font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.city"):</font>
+        #end    
+            </td>
+            <td>
+      #if($addr.Address2!="")
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.Address2 </font>
+      #else
+      <font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.City</font>
+      #end      
+            </td>
+            <td width="16">&nbsp;</td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.phone"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.Phone</font></td>
+            <td width="16">&nbsp;</td>
+          </tr>
+          <tr>
+            <td width="108">
+        #if($addr.Address2!="")     
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.city"):</font>
+        #else
+       &nbsp;
+       #end     
+            </td>
+            <td>
+      #if($addr.Address2!="")
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.City</font>
+       #else
+       &nbsp;
+       #end
+            </td>
+            <td width="16">&nbsp;</td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("word.email"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.Email</font></td>
+            <td width="16">&nbsp;</td>
+          </tr>
+       <tr><td colspan=6><br/></td></tr>
+      #end
+    #end                          
+</table>
+
+#if ($addrno == 1)
+<hr/>   
+#end
+
+#set ($addrno = 0)  
+#foreach($addr in $myAccountDTO.order.orderAddresses)
+    #if ($addr.addressdesc == 'SHIPPING ADDRESS')
+         #set ($addrno = 1)
+    #end
+#end
+
+#if ($addrno == 1)
+	<h3>#springMessage("vm.vieworderdetail.shipto"):</h3>
+
+  <table border="0" width="100%">
+     #foreach($addr in $myAccountDTO.order.orderAddresses)
+       #if ($addr.addressdesc == 'SHIPPING ADDRESS')
+          <tr>
+            <td colspan="5"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>$!addr.nickname</b></font></td>
+            <td width="16"> </td>
+          </tr>
+          
+          <tr>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.vieworderdetail.attention"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> $!addr.firstname $!addr.lastname</font></td>
+            <td width="16"> </td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.province"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#if ($addr.province.id != 0)
+                 $!addr.province.name #end</font></td>
+            <td width="16"> </td>
+          </tr>
+
+          <tr>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.company"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.company</font></td>
+            <td width="16">  </td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.country"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#if ($addr.country.id != 0)
+                 $!addr.country.name #end</font></td>
+            <td width="16"> </td>
+          </tr>
+          <tr>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.address"):</font></td>
+
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.Address1</font></td>
+            <td width="16"> </td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.postal"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2"> $!addr.Postal</font></td>
+
+            <td width="16"> </td>
+          </tr>
+          <tr>
+            <td width="108">
+       #if($addr.Address2!="")
+        
+       #else
+       <font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.city"):</font>
+        #end    
+            </td>
+            <td>
+      #if($addr.Address2!="")
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.Address2 </font>
+      #else
+      <font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.City</font>
+      #end      
+            </td>
+            <td width="16"> </td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.phone"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.Phone</font></td>
+            <td width="16"> </td>
+          </tr>
+          <tr>
+            <td width="108">
+        #if($addr.Address2!="")     
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("vm.register.city"):</font>
+        #else
+        
+       #end     
+            </td>
+            <td>
+      #if($addr.Address2!="")
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.City</font>
+       #else
+        
+       #end
+            </td>
+            <td width="16"> </td>
+            <td width="108"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">#springMessage("word.email"):</font></td>
+            <td><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!addr.Email</font></td>
+            <td width="16"> </td>
+          </tr>
+       <tr><td colspan=6><br></td></tr>
+      #end
+    #end                          
+  </table>
+<hr/>   
+#end
+
+
+#set ($downloadno = 0)  
+#foreach($download in $myAccountDTO.order.orderDownloads)
+     #set ($downloadno = 1)
+#end
+#if ($downloadno == 1)
+<h3>#springMessage("vm.vieworderdetail.downloadfiles"):</h3>
+
+  <table border="0" width="90%" cellpadding="5">
+    <!-- order items table header -->
+    <tr>
+      <td bgcolor="#FFFFFF" width="25%" align="left"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.vieworderdetail.itemname")</b>
+        </font></td>
+      <td bgcolor="#FFFFFF" width="45%" align="left">
+        <font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.vieworderdetail.filename")</b></font>
+      </td>
+      <td bgcolor="#FFFFFF" width="20%" align="center">
+        <font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.vieworderdetail.status")</b></font>
+      </td>                  
+    </tr>
+
+     #foreach($download in $myAccountDTO.order.orderDownloads)
+          <tr>
+            <td align="left">
+        <font face="Verdana, Arial, Helvetica, sans-serif" size="1">
+              #set($itemtitle="")
+              #foreach($item in $myAccountDTO.order.orderItems)
+                      #if ($item.itemid == $download.itemid)
+                            #set($itemtitle=$item.title)
+                      #end
+              #end
+               $!itemtitle
+          </font>
+         </td>
+          <td align="left">
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="1">
+               $!download.filename
+          </font>
+         </td>
+           <td align="center">
+            <font face="Verdana, Arial, Helvetica, sans-serif" size="1">
+               #if("${download.status}" != "0")
+                     #springMessage("vm.vieworderdetail.expired")
+               #else
+                  #if("${download.saveat}" == "1" )
+                        <a href="download.html?vid=${download.vid}&KeyId=${download.id}">#springMessage("word.download")</a>
+                  #else
+                        <a href="$!download.downloadurl">#springMessage("word.download")</a>
+                  #end
+               #end 
+             </font>
+         </td>
+          </tr>
+      #end    
+          
+  </table>
+<hr/>   
+#end
+
+
+                    
+  <table border="0" width="90%" cellpadding="5">
+    <!-- order items table header -->
+    <tr>
+      <td bgcolor="#FFFFFF" width="35%"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.vieworderdetail.details")</b><br>
+        </font></td>
+      <td bgcolor="#FFFFFF" width="10%">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.register.shipto")</b></font></div>
+      </td>
+      <td bgcolor="#FFFFFF" width="5%">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.register.qty")</b></font></div>
+      </td>
+      <td bgcolor="#FFFFFF" width="10%">
+        <p align="center"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.vieworderdetail.unitprice")</b></font></p>
+      </td>
+      <td bgcolor="#FFFFFF" width="10%">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.vieworderdetail.totalprice") </b></font></div>
+      </td>
+      <td bgcolor="#FFFFFF" width="10%">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.vieworderdetail.status")</b></font></div>
+      </td>                      
+    </tr>
+    
+    <!-- items list start-->
+    #set($tempSubtotal = 0)
+    #foreach($orderItem in $myAccountDTO.order.orderItems)
+    #set($singlePrice = $math.sub($orderItem.itemcost,$orderItem.discount))
+    #set($totalPrice = $math.mul($singlePrice, $orderItem.qty))
+    
+      #set($tempSubtotal = $math.add($tempSubtotal , $totalPrice) )
+
+    <tr>
+      <td>
+        <font face="Verdana, Arial, Helvetica, sans-serif" size="1">$!orderItem.itemcode<br>$!orderItem.title. 
+          </font>
+        <font face="Verdana, Arial, Helvetica, sans-serif" size="1">
+          $!orderItem.InventoryMsg
+        </font>
+      
+      </td>
+      <td >
+        <div align="center"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">
+     #foreach($addr in $myAccountDTO.order.orderAddresses)
+       #if ($addr.orderaddressid == $orderItem.shipto)
+          $!addr.nickname
+       #end
+     #end            
+        </font></div>
+
+      </td>
+      <td >
+        <div align="center"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$!orderItem.qty</font></div>
+
+      </td>
+
+      <td >
+        <div align="center"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$number.format('currency',$regExp.showPrice($!singlePrice),$viewStoreCurrency.locale)</font></div>
+      </td>
+              
+      <td>
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$number.format('currency',$regExp.showPrice($!totalPrice),$viewStoreCurrency.locale)</font></div>
+
+      </td>
+      <td>#set ($ois = $myAccountDTO.orderItemStates)
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$list.get($ois, $orderItem.orderitemstate)                         
+                    
+            
+            </font></div>
+
+      </td>
+    </tr>
+
+    #end
+    <!-- items list end-->
+    </table>
+<br/>
+    <table border="0" width="90%" cellpadding="5">
+    <!-- summary start -->
+
+    <tr>
+      <td colspan="3">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.register.subtotal")</b></font></div>
+
+      </td>
+      <td>
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$number.format('currency',$regExp.showPrice($math.sub($myAccountDTO.order.tot, $myAccountDTO.order.itemdiscount)),$viewStoreCurrency.locale)</font></div>
+      </td>
+
+    </tr>
+    
+    #if($math.toInteger($myAccountDTO.order.orderdiscount) > 0)
+    
+    <tr>
+      <td colspan="3">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.register.discounts")</b></font></div>
+
+      </td>
+      <td>
+        <div align="right"><font color="red" face="Verdana, Arial, Helvetica, sans-serif" size="2">$number.format('currency',$regExp.showPrice($myAccountDTO.order.orderdiscount),$viewStoreCurrency.locale)</font></div>
+      </td>
+
+    </tr>
+    #end
+ 
+    <tr>
+      <td colspan="3">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.register.shipping")</b></font></div>
+
+      </td>
+      <td>
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$number.format('currency',$regExp.showPrice($myAccountDTO.order.shiptot),$viewStoreCurrency.locale)</font></div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.register.tax")</b></font></div>
+
+      </td>
+      <td>
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$number.format('currency',$regExp.showPrice($myAccountDTO.order.taxtot),$viewStoreCurrency.locale)</font></div>
+      </td>
+    </tr>
+
+
+    <!-- check if gc or any amount already paid -->
+    #set($totalPaid = 0)
+    #foreach($orderpayment in $myAccountDTO.order.orderPayments)
+        #set($totalPaid = $totalPaid + $orderpayment.paytot)
+    #end
+    #if($totalPaid > 0)
+    <tr>
+      <td colspan="3">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.vieworderdetail.paid")</b></font></div>
+      </td>
+      <td>
+        <div align="right"><font color="red" face="Verdana, Arial, Helvetica, sans-serif" size="2">$number.format('currency',$regExp.showPrice($totalPaid),$viewStoreCurrency.locale)</font></div>
+      </td>
+    </tr>
+    #end
+    <!-- end gc or any amount already paid -->
+
+    <tr>
+      <td colspan="3">
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2"><b>#springMessage("vm.register.total")</b></font></div>
+
+      </td>
+      <td>
+        #set($otot = $math.add($myAccountDTO.order.tot ,$myAccountDTO.order.shiptot))
+        #set($otot = $math.sub($otot ,$myAccountDTO.order.itemdiscount))
+        #set($otot = $math.add($otot ,$myAccountDTO.order.taxtot))
+        #set($otot = $math.sub($otot ,$myAccountDTO.order.orderdiscount))
+        #set($otot = $math.sub($otot ,$totalPaid))
+        
+        <div align="right"><font face="Verdana, Arial, Helvetica, sans-serif" size="2">$number.format('currency',$regExp.showPrice($otot),$viewStoreCurrency.locale)</font></div>
+      </td>
+    </tr>
+    <!-- summary end -->
+    </table>
+    
+</div>
+
+
+

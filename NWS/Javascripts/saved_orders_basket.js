@@ -19,12 +19,12 @@ jQuery(document).ready(function(){
       data: data,
       success: function(data, textStatus, jqXHR){
         console.log(data.match(/saved/)[0]);
-        toastr.success("Saved Order Loaded Successfuly.<br/>Redirecting to Basket...")
+        toastr.success("Saved Order Loaded Successfuly.<br/>Redirecting to Basket...");
         window.location.replace(redirectURL);
       },
       error: function(jqXHR, textStatus, errorThrown){
         console.log(errorThrown);
-        toastr.error("Couldn't Load your Saved Order.")
+        toastr.error("Couldn't Load your Saved Order.");
       }
     });
     

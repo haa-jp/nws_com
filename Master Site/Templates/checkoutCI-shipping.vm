@@ -1,9 +1,13 @@
-<div class="span6">
-  <h3>Your Shipping Infomation</h3>
-  #springBind( "checkoutViewDTO.shipTypes.currentType")
-  #if($checkoutViewDTO.allNoneShippableItems)
-    <input id="rdoThisAddr" style="display:none;" type="radio" name="$status.expression" value="1" checked >
-  #else
+<div class="row">
+	<div class="ship-to">
+		<h3>Your Shipping Infomation</h3> 
+		<fieldset>
+			
+#springBind( "checkoutViewDTO.shipTypes.currentType")
+#if($checkoutViewDTO.allNoneShippableItems)
+	<input id="rdoThisAddr" style="display:none;" type="radio" name="$status.expression" value="1" checked >
+#else
+
     <div class="row-fluid">
       <div class="shipped-to span11 offset1">
         <span>#springMessage("vm.register.msg2"):</span><br /><br />
@@ -39,6 +43,7 @@
                 <option value="-1">New Address</option>
               </select>
 
+
               #springBind( "checkoutViewDTO.addresses.shippingAddress.nickName" )
               <input id="nickName" name="$status.expression" type="hidden" value="$!{status.value}" />
               #springBind( "checkoutViewDTO.addresses.shippingAddress.firstName" )
@@ -55,6 +60,7 @@
               <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
               #springBind( "checkoutViewDTO.addresses.shippingAddress.city" )
               <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" />
+
               #springBind( "checkoutViewDTO.addresses.shippingAddress.countryId" )
 
               #foreach($country in ${checkoutViewDTO.addresses.shippingAddress.countries})
@@ -75,6 +81,7 @@
               #end
 
               <input id="otherregionForShipping" value="${status.value}" name="$status.expression" type="hidden" >
+
               #springBind( "checkoutViewDTO.addresses.shippingAddress.postal" )
               <input id="$status.expression" name="$status.expression" type="hidden" value="$!{status.value}" >
               #springBind( "checkoutViewDTO.addresses.shippingAddress.phone" )
@@ -115,5 +122,8 @@
       </div> <!-- end shipped-to span 11-->
     </div>
   #end
+  
+		</fieldset>
+	</div> <!--end ship-to -->
 
-</div> <!--end span6 -->
+</div> <!-- end row -->
