@@ -41,9 +41,11 @@
       ',
       item: ' \
 	  <div> \
-          <h5><%= title %></h5> \
-          <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
           <div class="row"> \
+          <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
+            <h5><%= title %></h5> \
+          </div> \
+            <div class="row"> \
             <div class="prev-price"> \
               <label>was:</label> \
               <span>$ <%= listprice %></span> \
@@ -53,10 +55,12 @@
               <span>$ <%= price %></span> \
             </div> \
           </div> \
+         <div class="row"> \
           <form class="form-inline"> \
             <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>">About this item</a> \
             <button class="button small buy-button" type="button">Buy</button> \
           </form> \
+          </div> \
 	  </div> \
       '
     };
@@ -91,7 +95,7 @@
       tagName: 'li',
 
       //className: 'span3 featured-item',
-      className: 'james',
+      className: 'fitem',
 
       template: _.template(this.templates.item),
 

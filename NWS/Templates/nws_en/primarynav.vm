@@ -1,0 +1,157 @@
+<div class="megamenu_container">
+	<ul class="megamenu">
+#foreach($mainmenu in $Menu2DTO.items)
+#set($maincategory = $pageTile.getItemObject($Menu2DTO, $mainmenu, "c"))
+
+#if ($maincategory.name == 'RV Parts & Accessories')
+		<li> <a href="$seourl.encodeURL("store.html?cid=$maincategory.categoryid&vid=$vendorSettingsDTO.vendorId")" class="drop" alt="$maincategory.name"> RV </a>
+		<div class="fullwidth">
+			<div class="col_12">
+				<h3>RV &amp; MH Parts And Accessories</h3>
+			</div>
+			<div class="col_4">
+				<ul>
+#set($firstItem = 0)
+#foreach($temp in $Menu3DTO.items)
+  #if ($temp)
+  #set($category = $pageTile.getItemObject($Menu3DTO, $temp, "c"))
+    #if($firstItem == 0)
+						<li class="first"> <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">$category.name</a> </li>
+    #set($firstItem = 1)
+  #else
+						<li> <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">$category.name</a> </li>
+  #end 
+ #end
+#end
+				</ul>
+			</div>
+			<div class="col_4">
+				<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/rv.png" class="imgshadow" alt="RV and Mobile Home" />
+				<p>Northern Wholesale Supply, Inc. offers over 15,000 items for the RV &amp; MH from major industy manufacturers.</p>
+			</div>
+
+			<div class="col_4">
+				<h5> our post popular searches </h5>
+			</div>
+
+			<div class="col_2">
+				<ul>
+					<li><a href="#">FreelanceSwitch</a></li>
+					<li><a href="#">FreelanceSwitch</a></li>
+					<li><a href="#">FreelanceSwitch</a></li>
+					<li><a href="#">FreelanceSwitch</a></li>
+					<li><a href="#">FreelanceSwitch</a></li>
+				</ul>   
+			</div>
+
+			<div class="col_2">
+				<ul>
+					<li><a href="#">FreelanceSwitch</a></li>
+					<li><a href="#">FreelanceSwitch</a></li>
+					<li><a href="#">FreelanceSwitch</a></li>
+					<li><a href="#">FreelanceSwitch</a></li>
+					<li><a href="#">FreelanceSwitch</a></li>
+				</ul>   
+			</div>
+
+			<div class="col_4">
+				<p>Mauris vulputate eleifend urna in fermentum. Nulla dignissim rutrum tincidunt. Suspendisse eleifend bibendum leo, a consequat magna porttitor suscipit.</p>             
+				<p>Nulla erat velit, imperdiet id tempor at, tempor eget magna. Maecenas malesuada aliquet lacinia. Nulla iaculis arcu lectus, sed dignissim libero. Nullam rhoncus nunc pellentesque odio ornare.</p>
+			</div>
+		</li> <!-- end RV -->
+#end
+
+
+#if ($maincategory.name == 'Manufactured Housing Parts & Accessories')
+		<li> <a href="$seourl.encodeURL("store.html?cid=$maincategory.categoryid&vid=$vendorSettingsDTO.vendorId")" class="drop" alt="$maincategory.name"> Manufactured Housing</a>
+			<div class="fullwidth">
+				<div class="col_12">
+					<h3>Marine Parts &amp; Accessories</h3>
+				</div>
+	 			<div class="col_4">
+					<ul>
+#set($firstItem = 0)
+#foreach($temp in $Menu4DTO.items)
+  #if ($temp)
+  #set($category = $pageTile.getItemObject($Menu4DTO, $temp, "c"))
+    #if($firstItem == 0)
+						<li class="first"> <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">$category.name</a> </li>
+    #set($firstItem = 1)
+  #else
+						<li> <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">$category.name</a> </li>
+  #end 
+ #end
+#end
+					</ul>
+			</div>
+			<div class="col_4">
+				<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/mh.png" class="imgshadow" alt="Marine Parts" />
+				<p>Northern Wholesale Supply, Inc. offers over 15,000 items for the RV &amp; MH from major industy manufacturers.</p>
+			</div>
+
+     </li> <!-- end MH -->
+#end
+
+
+#if ($maincategory.name == 'Marine Parts & Accessories')
+		<li> <a href="$seourl.encodeURL("store.html?cid=$maincategory.categoryid&vid=$vendorSettingsDTO.vendorId")" class="drop" alt="$maincategory.name"> Marine </a>
+			<div class="fullwidth">
+				<div class="col_12">
+					<h3>Marine Parts &amp; Accessories</h3>
+				</div>
+	 			<div class="col_4">
+					<ul>
+#set($firstItem = 0)
+#foreach($temp in $Menu5DTO.items)
+  #if ($temp)
+  #set($category = $pageTile.getItemObject($Menu5DTO, $temp, "c"))
+    #if($firstItem == 0)
+						<li class="first"> <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">$category.name</a> </li>
+    #set($firstItem = 1)
+  #else
+						<li> <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">$category.name</a> </li>
+  #end 
+ #end
+#end
+					</ul>
+			</div>
+			<div class="col_4">
+				<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/marine.png" class="imgshadow" alt="Marine Parts" />
+				<p>Northern Wholesale Supply, Inc. offers over 15,000 items for the RV &amp; MH from major industy manufacturers.</p>
+			</div>
+
+     </li> <!-- end Marine -->
+#end
+
+#if ($maincategory.name == 'Powersports Parts & Accessories')
+		<li> <a href="$seourl.encodeURL("store.html?cid=$maincategory.categoryid&vid=$vendorSettingsDTO.vendorId")" class="drop" alt="$maincategory.name"> Powersports </a>
+			<div class="fullwidth">
+			<div class="col_12">
+				<h3> PowerSports Parts &amp; Accessories</h3>
+			</div>
+			<div class="col_4">
+					<ul>
+#set($firstItem = 0)
+#foreach($temp in $Menu6DTO.items)
+  #if ($temp)
+  #set($category = $pageTile.getItemObject($Menu6DTO, $temp, "c"))
+    #if($firstItem == 0)
+						<li class="first"> <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")" alt="">$category.name</a> </li>
+    #set($firstItem = 1)
+  #else
+						<li> <a href="$seourl.encodeURL("store.html?cid=$category.categoryid&vid=$vendorSettingsDTO.vendorId")">$category.name</a> </li>
+  #end 
+ #end
+#end
+					</ul>
+			</div>
+			<div class="col_4">
+				<img src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/images/powersports.png" class="imgshadow" alt="Powersports" />
+				<p>Northern Wholesale Supply, Inc. offers over 15,000 items for the RV &amp; MH from major industy manufacturers.</p>
+			</div>
+
+		</li> <!-- end PowerSports -->
+#end
+#end
+	</ul>
+</div>
