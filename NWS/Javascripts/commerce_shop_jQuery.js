@@ -1,5 +1,6 @@
 Commerce.Shop = {};
 
+var commerceshop_item_dropshipmsg="";
 Commerce.Shop.ItemPage = jQuery.klass({
 
 	initialize: function(vid, basketItemId,targetdiv) {
@@ -51,7 +52,8 @@ Commerce.Shop.ItemPage = jQuery.klass({
                         if(jQuery.inArray(this, skuIds))skuIds.push(this);});
                 }
             }
-            tmp = new Commerce.Domain.Item(this.vid, skuIds);
+            if (skuIds.length>0)
+            	tmp = new Commerce.Domain.Item(this.vid, skuIds);
             for(g=0,k=itemids.keys().length; g<k;g++){
                 tmp = new Commerce.Domain.Item(this.vid, itemids.keys()[g]-0);
                 if(tmp){
@@ -173,7 +175,7 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
         	this.qty=inv[0].minorderqty;
         else
         	this.qty=1;
-        console.log(this.qty);
+        //console.log(this.qty);
 	},	
 	
 	refreshItem: function() {
@@ -221,6 +223,7 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 	refreshItemByAttribute: function(event, propName) {
 		var attribute = this.inserters.get(propName);
 		var newSkuBO = attribute.refresh(event.target);
+		jQuery('#js-qtymsg').empty();
 		if (newSkuBO.item.domain.itemid != this.currentSkuBO.item.domain.itemid) {
 			this.currentSkuBO = newSkuBO;
 			this.compositeCode = attribute.getCompositeCode();
@@ -351,7 +354,18 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 	refreshCode: function(propName) {
 		this.showCode(propName);
 	},
+    showInvcode: function(propName) {
+        if (this.isExist(propName)==false) return;
+        var invcode = this.inventoryCode;
+        if (invcode == null || invcode =='' || invcode==undefined)
+                invcode = this.currentSkuBO.item.domain.code;
+        jQuery(this.containers.get(propName)).html(invcode);
+    },
 
+    refreshInvcode: function(propName) {
+        this.showInvcode(propName);
+    },
+    
 	showYousave: function(propName) {
 		if (this.isExist(propName)==false) return;
 
@@ -604,7 +618,7 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
             }
             else {
                 var price = new String(this.calculatePrice(this.price, this.qty));
-                priceDollar = formatCurrency(this.getDollar(price).toString(),this.price);;
+                priceDollar = formatCurrency1(this.getDollar(price).toString(),this.price);;
                 if (this.price.customerDiscount < 1) {
                     this.containers.get(propName).parentNode.parentNode.className += ' special-price';
                 }
@@ -626,7 +640,7 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
             }
             else {
                 var price = new String(this.calculatePrice(this.price, this.qty));
-                priceDollar = formatCurrency(this.getDollar(price).toString(),this.price);;
+                priceDollar = formatCurrency1(this.getDollar(price).toString(),this.price);;
             }
             jQuery(this.containers.get(propName)).html(priceDollar).show();
 
@@ -658,7 +672,7 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
                 && attributes && !this.isAttributeSelected(attributes)) {
 
             var priceLow = new String(this.calculatePrice(this.priceLow, this.qty));
-            priceDollarLow = formatCurrency(this.getDollar(priceLow).toString(),this.priceLow);
+            priceDollarLow = formatCurrency1(this.getDollar(priceLow).toString(),this.priceLow);
 
             jQuery(this.containers.get(propName)).parents(".priceRange").siblings().hide();
             jQuery(this.containers.get(propName)).html(priceDollarLow).parents(".priceRange").show();
@@ -697,7 +711,7 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
                 && !this.comparePrice(this.priceLow, this.priceHigh)) {
 
             var priceHigh = new String(this.calculatePrice(this.priceHigh, this.qty));
-            priceDollarHigh = formatCurrency(this.getDollar(priceHigh).toString(),this.priceHigh);
+            priceDollarHigh = formatCurrency1(this.getDollar(priceHigh).toString(),this.priceHigh);
 
             jQuery(this.containers.get(propName)).html(priceDollarHigh);
         }
@@ -832,9 +846,38 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 		this.showNoprice(propName);
 	},
 
+	showStockinfo: function(propName){
+		if (this.isExist(propName)==false) return;
+		jQuery(this.containers.get(propName)).html("");
+		
+		var inv = null;
+			
+		if(this.currentSkuBO.item.domain.itemid==this.mainItemBO.item.domain.itemid){
+			if(this.currentSkuBO.skuAttribs.length>0){
+		 	    inv = this.currentSkuBO.item.getChildInventory(this.inventoryCode);
+			}else{
+				inv = this.currentSkuBO.item.getInventory(this.inventoryCode);
+				if(inv!=undefined && inv.length>0)
+					inv = inv[0];
+			}
+		}else{
+			inv = this.currentSkuBO.item.getInventory(this.inventoryCode);	
+			if(inv!=undefined && inv.length>0)
+				inv = inv[0];
+		}
+		if(inv!=null && inv!=undefined && inv.instock==0 && inv.nextshipdate!=''){
+   			var m_avai = new Commerce.Domain.Message(this.vid, "vm.itemTemplate.nextshipdate");
+   			jQuery(this.containers.get(propName)).html("<div class=\"f-row\"><span>"+m_avai.domain.message+inv.nextshipdate+"</span></div>");
+   		}
+	},
+	
+	refreshStockinfo: function(propName) {
+		this.showStockinfo(propName);
+	},
+	
 	showInventory: function(propName) {
 		if (this.isExist(propName)==false) return;
-
+		
 		if (!this.inventory || this.inventory == undefined || this.inventory.length ==0) {
 			jQuery(this.containers.get(propName)).hide();
 			return;
@@ -854,15 +897,33 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 			}else if(this.inventory[0].nextshipqty >0){
 				var m_shipson = new Commerce.Domain.Message(this.vid, "vm.itemTemplate.shipson");
 				jQuery(this.containers.get(propName)).html("<div class=\"f-row\"><span>"+m_avai.domain.message+"</span><div class=\"f-field\">"+m_shipson.domain.message+" "+this.inventory[0].nextshipdate+"</div></div>");
-			}else if(this.inventory[0].dropshipminqty >0){
+			}else if(this.inventory[0].dropshipminqty >0 && this.inventory[0].permitnostock==false){
 				var m_dropship = new Commerce.Domain.Message(this.vid, "deliveryoption.dropshipMsg2");
 				jQuery(this.containers.get(propName)).html("<div class=\"f-row\"><div class=\"f-field\">"+m_dropship.domain.message.replace("{0}",this.inventory[0].dropshipminqty)+"</div></div>");
 			}else if(this.inventory[0].dropshipminqty==0 && this.inventory[0].permitnostock==true){
 				var m_usualships = new Commerce.Domain.Message(this.vid, "vm.itemTemplate.usualships");
 				jQuery(this.containers.get(propName)).html("<div class=\"f-row\"><span>"+m_avai.domain.message+"</span><div class=\"f-field\">"+m_usualships.domain.message+"</div></div>");
+			}else if(this.inventory[0].defdelivery==3){
+                if (commerceshop_item_dropshipmsg!=undefined && commerceshop_item_dropshipmsg!=null&&commerceshop_item_dropshipmsg!='')
+                    jQuery(this.containers.get(propName)).html(commerceshop_item_dropshipmsg);
+                else {
+                    var message = new Commerce.Domain.Message(this.vid, "commerceshop.item.dropshipmsg");
+                    jQuery(this.containers.get(propName)).html("<div class=\"DSMessage\">"+message.domain.message+"</div>");
+                }
 			}else{
 				var m_outofstock = new Commerce.Domain.Message(this.vid, "vm.itemTemplate.outstock");
 				jQuery(this.containers.get(propName)).html("<div class=\"f-row\"><span>"+m_avai.domain.message+"</span><div class=\"f-field\">"+m_outofstock.domain.message+"</div></div>");
+			}
+		}
+		else {
+			if(this.inventory[0].defdelivery==3){
+                if (commerceshop_item_dropshipmsg!=undefined && commerceshop_item_dropshipmsg!=null && commerceshop_item_dropshipmsg!='')
+                    jQuery(this.containers.get(propName)).html(commerceshop_item_dropshipmsg);
+                else {
+                    var message = new Commerce.Domain.Message(this.vid, "commerceshop.item.dropshipmsg");
+                    jQuery(this.containers.get(propName)).html("<div class=\"DSMessage\">"+message.domain.message+"</div>");
+            	}
+
 			}
 		}
 	},
@@ -969,6 +1030,30 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 	refreshLongdesc2: function(propName) {
 		this.showLongdesc2(propName);
 	},
+	showLongdesc3: function(propName) {
+		if (this.isExist(propName)==false) return;
+
+		var desc = this.currentSkuBO.item.domain.longdesc3;
+		if (desc != undefined && desc !='')
+			jQuery(this.containers.get(propName)).html(desc);
+		else
+			jQuery(this.containers.get(propName)).html('');
+	},
+	refreshLongdesc3: function(propName) {
+		this.showLongdesc3(propName);
+	},
+	showLongdesc4: function(propName) {
+		if (this.isExist(propName)==false) return;
+
+		var desc = this.currentSkuBO.item.domain.longdesc4;
+		if (desc != undefined && desc !='')
+			jQuery(this.containers.get(propName)).html(desc);
+		else
+			jQuery(this.containers.get(propName)).html('');
+	},
+	refreshLongdesc4: function(propName) {
+		this.showLongdesc4(propName);
+	},
 	showProperties: function(propName) {
 		if (this.isExist(propName)==false) return;
 
@@ -1054,6 +1139,31 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 			elem.validateAndSubmit(e);
 			//elem.askMinorderQTY(e);
 			});
+	},
+	
+	showAlsolikeprice: function(propName){
+		if (this.isExist(propName)==false) return;
+		
+		var relatedItems = this.currentSkuBO.item.domain.alsoLikeItems;
+		var _Obj = this;
+		if(relatedItems && relatedItems.length>0){
+			jQuery.each(relatedItems,function(){
+				var code = this.code;
+				var currentPrice = jQuery(this.prices).filter(function(){
+					   return jQuery.trim(this.itemcode)==jQuery.trim(code)
+					})[0];
+				
+				if(currentPrice){
+					if(!currentPrice.customerDiscount)
+					   currentPrice.customerDiscount = 1;
+					var price = _Obj.calculatePrice(currentPrice,1);
+					if(typeof(priceFormat) == 'function')
+					 jQuery("#alsolike_price_"+this.itemid).html(priceFormat(price));
+					else
+					 jQuery("#alsolike_price_"+this.itemid).html(price);	
+				}
+			});
+		}
 	},
 	
 	showNotifymebtn: function(propName) {
@@ -1214,7 +1324,8 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 		if (this.allAttributesSelected && this.price!=undefined ) {
 			if (devliveryOption.isSuccess) {
 				this.hiddenFields.setBasketField('inventoryHistoryId', devliveryOption.getInventoryHistoryId());
-				if(devliveryOption.optionid==5) {
+				jQuery('#js-autoselectedoption').val(devliveryOption.optionid);
+				if(devliveryOption.optionid == 5) {
 					jQuery(this.containers.get('qtybox')).val(devliveryOption.qty);
 					this.qty = devliveryOption.qty;
 				}
@@ -1254,7 +1365,41 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 	
 	addToCart: function() {
         	this.refreshHiddenfields('hiddenfields');
-        	document[this.formName].submit();
+        	var stayAftAdd2Crt = jQuery('#js-stayaftadd2crt').attr('value');
+        	if(stayAftAdd2Crt == "true"){
+        		if(jQuery('#js-autoselectedoption').attr('value') == '5'){
+        			jQuery('#js-qtymsg').html('Sorry, only '+jQuery(this.containers.get('qtybox')).val()+' available');
+        		}else{
+        			jQuery('#js-qtymsg').html('');
+        			this.addToCartByAjax();
+        		}
+        		
+        	}else{
+        		document[this.formName].submit();
+        	}
+	},
+	
+	addToCartByAjax :function() {
+		var thisobj = this;
+		jQuery.ajax({
+			url: "storeitem.html?ajax=true&vid="+this.vid,
+			type: 'post',
+			data: jQuery("form[name='"+this.formName+"']").serialize(),
+			async: false,
+			dataType: 'json',
+			success: function(r){
+			            if(r.globalErrors.length > 0){
+	        	          jQuery('#js-qtymsg').html(r.globalErrors[0].text);
+	                    }else if(r.fieldErrors.length > 0){
+	        	          jQuery('#js-qtymsg').html(r.fieldErrors[0].text);
+	                    }else{
+	        	          jQuery('#js-qtymsg').html('');
+	        	          updateTopQtyBasketLines();
+		                  jQuery('#largepopup').click();
+	                    }
+		             }
+		});
+		
 	},
 
 	refreshAddtocartbtn: function(propName) {
@@ -1267,8 +1412,8 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 		else
 			el.disabled=true;
 		
-		if (this.inventory && this.inventory != undefined && 
-				this.inventory.length !=0 && this.inventory[0].instock == 0) {
+		if (this.inventory && this.inventory != undefined && this.inventory.length !=0 && 
+				this.inventory[0].dropshipminqty==0 && this.inventory[0].nextshipqty==0 && this.inventory[0].instock == 0 && this.inventory[0].permitnostock==false) {
 			jQuery(el).hide();
 		}else{
 			jQuery(el).show();
@@ -1292,8 +1437,8 @@ Commerce.Shop.ItemPage.Item = jQuery.klass({
 			this.subscribedmap.put(this.currentSkuBO.item.domain.subscribedcodes[idx],"");
 		}
 		
-		if (this.inventory && this.inventory != undefined && 
-				this.inventory.length !=0 && this.inventory[0].instock == 0) {
+		if (this.inventory && this.inventory != undefined && this.inventory.length !=0 && 
+				this.inventory[0].dropshipminqty==0 && this.inventory[0].nextshipqty==0 && this.inventory[0].instock == 0 && this.inventory[0].permitnostock==false) {
 			
 			if(this.subscribedmap.containsKey(this.compositeCode)){
 				//grey out
@@ -1468,18 +1613,8 @@ Commerce.Shop.ItemPage.Attribute =  jQuery.klass({
 			var e_div2 = undefined;
 			attribs[idx2].optionFilter = this.skuBO.mainItemSkus.values();
 			var el;
-			if (attribs[idx2].domain.attype=='2') {
-				if (attribs[idx2].domain.format=='D') {
-					e_div2 = this.createSelectBoxDiv(e_fieldset, attribs[idx2]);
-					events = [['change', 'refreshItemByAttribute', eItem, this.propName]];
-					attribs[idx2].initializeSelectBox('', [], events);
-					if (eItem.mode == 'edit')
-						el = attribs[idx2].toSelectBox(true, eItem.product.findOption(attribs[idx2].domain.attributeid));
-					else
-						el = attribs[idx2].toSelectBox(true, this.findOptionInSku(attribs[idx2].domain.attributeid, sku));
-					e_div2.append(el);
-				}
-				else if (attribs[idx2].domain.format=='C') {
+			if (attribs[idx2].domain.attype=='2') {				
+				if (attribs[idx2].domain.format=='C') {
 					e_div2 = this.createSelectBoxDiv(e_fieldset, attribs[idx2]);
 					events = [['change', 'refreshItemByAttribute', eItem, this.propName]];
 					attribs[idx2].initializeSelectBox('', [], events);
@@ -1497,7 +1632,7 @@ Commerce.Shop.ItemPage.Attribute =  jQuery.klass({
 // 						el = attribs[idx2].toColorSwatch(true, this.findOptionInSku(attribs[idx2].domain.attributeid, sku));
 // 					e_div2.append(el);
 				}
-				else if (attribs[idx2].domain.format=='R') {
+				else if (attribs[idx2].domain.format=='R'){
 					e_div2 = this.createRadioButtonDiv(e_fieldset, attribs[idx2]);
 					events = [['click', 'refreshItemByAttribute', eItem, this.propName]];
 					attribs[idx2].initializeSelectBox('custom1', ['f-row'], events, e_div2);
@@ -1507,7 +1642,7 @@ Commerce.Shop.ItemPage.Attribute =  jQuery.klass({
 						el = attribs[idx2].toRadioButton(true, this.findOptionInSku(attribs[idx2].domain.attributeid, sku));
 				//this.appendRadioOptionToParent(e_div2, el);
 				}
-				else {//default is D
+				else{
 					e_div2 = this.createSelectBoxDiv(e_fieldset, attribs[idx2]);
 					events = [['change', 'refreshItemByAttribute', eItem, this.propName]];
 					attribs[idx2].initializeSelectBox('', [], events);
@@ -1645,6 +1780,7 @@ Commerce.Shop.ItemPage.Attribute =  jQuery.klass({
 		var updatedAttrib = jQuery(this.attribs).filter(function() {
 			return updatedAttribID==this.domain.attributeid;
 		});
+		var switchImage = updatedAttrib.attr('domain').switchimage;
 		if (updatedAttrib.attr('domain').enablesku == false) {
 			return this.skuBO;
 		}
@@ -1682,6 +1818,14 @@ Commerce.Shop.ItemPage.Attribute =  jQuery.klass({
 				this.itemid = skuid;
 				this.skuBO = new Commerce.BO.Sku(this.skuBO.item.domain.vendorid, this.itemid);
 			}
+		}
+		else if (switchImage == 'Y') {
+            var imageItemId = this.findSkuId(lastFilter[0]);
+            var imageItemSku =  new Commerce.BO.Sku(this.skuBO.item.domain.vendorid, imageItemId);
+            this.skuBO.item.domain.cimage = imageItemSku.item.domain.cimage;
+            this.skuBO.item.domain.image = imageItemSku.item.domain.image;
+            this.skuBO.item.domain.image3 = imageItemSku.item.domain.image3;
+            this.skuBO.item.domain.hiddenProperties = imageItemSku.item.domain.hiddenProperties;
 		}
 
 		return this.skuBO;
@@ -1755,7 +1899,7 @@ Commerce.Shop.ItemPage.Attribute =  jQuery.klass({
 
 Commerce.Shop.ItemPage.DeliveryOption = jQuery.klass({
 
-	initialize: function(eItem, vid, invcode, qty, invhistid) {
+	initialize: function(eItem, vid, invcode, qty, invhistid,replaceditemcode) {
 
 		this.isSuccess = false;
 		this.isCancel = false;
@@ -1768,7 +1912,7 @@ Commerce.Shop.ItemPage.DeliveryOption = jQuery.klass({
 		this.mode = 'query';
 		this.optionName = 'delivery-option';
 		this.eItem = eItem;
-
+		this.replaceditemcode=replaceditemcode;
 		this.getDeliveryOption();
 	},
 
@@ -1787,6 +1931,12 @@ Commerce.Shop.ItemPage.DeliveryOption = jQuery.klass({
 			params.put('optionid', this.optionid);
 		params.put('invcode', this.inventoryCode);
 		params.put('mode', this.mode);
+		
+		var suppressautochooseinstock = jQuery('#js-suppressautochooseinstock').attr('value');
+		if(suppressautochooseinstock == undefined){
+			suppressautochooseinstock = false;
+		}
+		params.put('suppressautochooseinstock', suppressautochooseinstock);
 		this.ajaxGetDeliveryOption(params, 'getdeliveryoptions.ajx');
 	},
 	getInventoryHistoryId: function() {
@@ -1811,6 +1961,13 @@ Commerce.Shop.ItemPage.DeliveryOption = jQuery.klass({
 		}
 		else {
 			var result = response.__Result;
+			var result_replaceditemcode=result.replaceditemcode;
+			if(result_replaceditemcode!=''){
+				if(result.deliveryitemid!=0){
+					this.eItem.currentSkuBO.item.domain.itemid=result.deliveryitemid;
+					document.getElementById('replaceditemmsg_0').value =result.replaceditemmsg;
+				}
+			}
 			if (result.status == 2) {
 				this.isSuncess = false;
 				this.message = result.message;
@@ -1972,7 +2129,7 @@ Commerce.Shop.ItemPage.HiddenFields = jQuery.klass({
 });
 
 /**format currency**/
-function formatCurrency(num,price) {
+function formatCurrency1(num,price) {
 	num = num.toString().replace(/\$|\,/g,'');
 	var sign=",";
 	if((price.langcode=="de"||price.langcode=="DE")&&price!=undefined)

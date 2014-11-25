@@ -31,38 +31,35 @@
 
     this.templates = {
       container: ' \
-        <div class="container-fluid"> \
+        <div class="row"> \
           <h2> Featured Items</h2> \
-          <div id="featured-items-container" class="row-fluid"> \
-		<ul class="small-block-grid-1 medium-block-grid-2 large-block-grid-3"> \
-		</ul> \
+          <div id="featured-items-container" class="row"> \
           </div> \
         </div> \
       ',
       item: ' \
-	  <div> \
-          <div class="row"> \
-          <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
-            <h5><%= title %></h5> \
-          </div> \
-            <div class="row"> \
-            <div class="prev-price"> \
-              <label>was:</label> \
-              <span>$ <%= listprice %></span> \
-            </div> \
-            <div class="price"> \
-              <label>On Sale:</label> \
-              <span>$ <%= price %></span> \
-            </div> \
-          </div> \
-         <div class="row"> \
+         <li> \
+         <div> <ul class="pricing-table"> \
+            <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
+            <li class="title"> <%= title %> </li> \
+              <li class="bullet-item"> \
+                <div class="prev-price"> \
+                  <label> MSRP:</label> \
+                  <span>$ <%= listprice %></span> \
+                </div> </li>\
+                <li class="price"> \
+                  <div class=""> \
+                  <label>On Sale:</label> \
+                  <span>$ <%= price %></span> \
+                </div> </li> \
+         <li class="cta-button"> \
           <form class="form-inline"> \
-            <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>">About this item</a> \
-            <button class="button small buy-button" type="button">Buy</button> \
+            <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"> About this item </a> \
+            <button class="button small buy-button" type="button"> Buy </button> \
           </form> \
-          </div> \
-	  </div> \
-      '
+          </li> \
+          </div> </li> \
+	  '
     };
 
     // Private inaccesible methods
