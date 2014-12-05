@@ -39,13 +39,21 @@
 #if($storetype == "rv")
   #set($storeclass = "a")
   #set($menuCategories = $Menu2DTO)
+  #set($searchBook = "&catalog=RV+%2F+MH+Catalog")
 #elseif ($storetype == "marine")
   #set($storeclass = "b")
   #set($menuCategories = $Menu4DTO)
+  #set($searchBook = "&catalog=Marine+Catalog")
 #elseif ($storetype == "power")
   #set($storeclass = "c")
   #set($menuCategories = $Menu5DTO)
-#else
-  #set($storeclass = "a")
+  #set($searchBook = "&catalog=Powersports+Catalog")
+#elseif ($storetype == "all")
+  #set($storeclass = "m")
   #set($menuCategories = $Menu2DTO)
+  #set($searchBook = " ")
+#else
+  #set($storeclass = "m")
+  #set($menuCategories = $Menu2DTO)
+  #set($searchBook = "&catalog=RV+%2F+MH+Catalog");
 #end

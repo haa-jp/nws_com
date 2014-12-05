@@ -111,3 +111,21 @@
     </div>
   </body>
 </html>
+
+
+
+## Iterate over the vendor information
+## ----------------------------------------
+#set($itemIter = $vendorDataDTO.getItem(0))
+
+<b>$pageTile.getItemObject($vendorDataDTO, $itemIter, "company")</b><br>
+$pageTile.getItemObject($vendorDataDTO, $itemIter, "address1")&nbsp;
+$pageTile.getItemObject($vendorDataDTO, $itemIter, "address2")<br>
+$pageTile.getItemObject($vendorDataDTO, $itemIter, "city")<br>
+$pageTile.getItemObject($vendorDataDTO, $itemIter, "prov")<br>
+$pageTile.getItemObject($vendorDataDTO, $itemIter, "postal")<br>
+$pageTile.getItemObject($vendorDataDTO, $itemIter, "country")
+
+<br>
+
+ </p>

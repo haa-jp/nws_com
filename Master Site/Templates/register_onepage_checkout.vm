@@ -1,8 +1,6 @@
-
-                <div class="span12">
 #if($registerViewDTO.onepagecheckout)
   #if($registerViewDTO.memberType != '1' && $productsDetails.products.size() > 0)
-                  <!-- one page checkout -->
+<!-- one page checkout -->
                   <div id="payment_info" >
                     <a name="payment"></a>
     #if($registerViewDTO.islogin)
@@ -267,21 +265,23 @@
   #end
                     </div><!-- promos -->
                   </div> <!--  end of payment_info -->
-                  <!-- one page checkout end -->
+<!-- one page checkout end -->
   #end
 #end
 
 #if($checkOutQuestionDTO.productOptionPageDTOs && $productsDetails.products.size() > 0)
-                  <div class="question">
+<div class="row">
+	<div class="question">
   <!-- START QUESTION CONTENT -->
-                    <input type="hidden" name="mode" value="answerQuestion"/>
-  #foreach($popage in $checkOutQuestionDTO.productOptionPageDTOs)
-    #foreach($question in $popage.questions)
-      #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/$question.template")
-    #end
-  #end
+		<input type="hidden" name="mode" value="answerQuestion"/>
+	#foreach($popage in $checkOutQuestionDTO.productOptionPageDTOs)
+		#foreach($question in $popage.questions)
+			#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/$question.template")
+		#end
+	#end
   <!-- END QUESTION CONTENT -->
-                  </div>
+	</div>
+</div>	<!-- end row -->
 #end
 #end
 
@@ -313,21 +313,22 @@
 #springBind("registerViewDTO.customerDTO.externalLoginDTO.externalLocationDTO.city")
                   <input type="hidden" name="$status.expression" value="$status.value" id="$status.expression">
 <!-- END OF External Login -->
+<div class="row">
 #if($registerViewDTO.memberType == '1' || !($productsDetails.products.size() > 0) || !$productsDetails)
 ##modJp. 11/12/14 - Buttons
                   <div class="form-actions">
                     <input type="button" class="button small" value="#springMessage('button.CONTINUE')" onclick="javascript:document.getElementById('hiddensubmit').value='register';document.registerForm.submit();"/>
-                    <input type="button" class="bytton small" value="#springMessage('button.CANCEL')" onclick="javascript:document.location='signin.html?vid=$vendorSettingsDTO.vendorId&mt=$registerViewDTO.memberType'"/>
+                    <input type="button" class="button small" value="#springMessage('button.CANCEL')" onclick="javascript:document.location='signin.html?vid=$vendorSettingsDTO.vendorId&mt=$registerViewDTO.memberType'"/>
                   </div>
 #else
                   <div class="form-actions">
                     <input type="hidden" id="onepagecheckout" name="onepagecheckout" value="${registerViewDTO.onepagecheckout}" />
   #if($registerViewDTO.onepagecheckout)
-                    <input class="btn btn-primary" type="button" value="#springMessage('button.CONTINUE')" onclick="javascript:submitWithAsynRegister();"/>
+                    <input class="button small" type="button" value="#springMessage('button.CONTINUE')" onclick="javascript:submitWithAsynRegister();"/>
   #else
-                    <input class="btn btn-primary" type="button" value="#springMessage('button.CONTINUE')" onclick="javascript:document.getElementById('hiddensubmit').value='register';document.registerForm.submit();"/>
+                    <input class="button small" type="button" value="#springMessage('button.CONTINUE')" onclick="javascript:document.getElementById('hiddensubmit').value='register';document.registerForm.submit();"/>
   #end
-                    <input class="btn" type="button" value="#springMessage('button.CANCEL')" onclick="javascript:document.location='signin.html?vid=$vendorSettingsDTO.vendorId&mt=$registerViewDTO.memberType'"/>
+                    <input class="button small smaller" type="button" value="#springMessage('button.CANCEL')" onclick="javascript:document.location='signin.html?vid=$vendorSettingsDTO.vendorId&mt=$registerViewDTO.memberType'"/>
                   </div>
 #end
-          </div>
+</div> <!-- end row ==-->

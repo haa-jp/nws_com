@@ -31,34 +31,29 @@
 
     this.templates = {
       container: ' \
-        <div class="row"> \
+        <div class="small-12 columns"> \
           <h2> Featured Items</h2> \
           <div id="featured-items-container" class="row"> \
           </div> \
         </div> \
       ',
       item: ' \
-         <li> \
-         <div> <ul class="pricing-table"> \
-            <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
-            <li class="title"> <%= title %> </li> \
+            <ul class="pricing-table"> \
+                 <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"><img src="store/<%= cimage %>"/></a> \
+              <li class="title"> <%= title %> </li> \
               <li class="bullet-item"> \
-                <div class="prev-price"> \
-                  <label> MSRP:</label> \
-                  <span>$ <%= listprice %></span> \
-                </div> </li>\
-                <li class="price"> \
-                  <div class=""> \
-                  <label>On Sale:</label> \
-                  <span>$ <%= price %></span> \
-                </div> </li> \
-         <li class="cta-button"> \
-          <form class="form-inline"> \
-            <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"> About this item </a> \
-            <button class="button small buy-button" type="button"> Buy </button> \
-          </form> \
-          </li> \
-          </div> </li> \
+                  <div class="prev-price"><label> MSRP:</label> <span>$ <%= listprice %></span></div> \
+              </li>\
+              <li class="price"> \
+                  <div class=""><label>On Sale:</label> <span>$ <%= price %></span></div> \
+              </li> \
+              <li class="cta-button"> \
+                <form class="form-inline"> \
+                  <a href="store.html?vid=<%= vendorid %>&iid=<%= itemid %>"> About this item </a> \
+                  <button class="button small buy-button" type="button"> Buy </button> \
+                </form> \
+              </li> \
+            </ul>\
 	  '
     };
 
@@ -89,11 +84,13 @@
     var _viewModel = Backbone.View.extend({
       
       //tagName: 'div',
-      tagName: 'li',
+      //tagName: 'li',
+      tagName: 'div',
 
       //className: 'span3 featured-item',
-      className: 'fitem',
-
+      //className: 'fitem',
+      className: 'small-12 medium-6 large-3 columns',
+      
       template: _.template(this.templates.item),
 
       events: {
@@ -167,13 +164,13 @@
       _renderReady: function(renderedView) {
         this.views.push(renderedView);
         if (this.views.length === this._collection.length) {
-          this.$el.find('#featured-items-container ul').html(this.template({elements: this.views.join('')}));  
+          this.$el.find('#featured-items-container').html(this.template({elements: this.views.join('')}));  
         }
         return true;
       },
 
       render: function() {
-        var container = this.$el.find('#featured-items-container ul');
+        var container = this.$el.find('#featured-items-container');
         container.empty();
         _.each(this._collection.models, function(model){
           var view = new _viewModel({model: model});

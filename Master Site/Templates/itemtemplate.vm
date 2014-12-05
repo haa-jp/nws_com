@@ -84,10 +84,7 @@
 
     <input type="hidden" id="js-vid" value="$vendorSettingsDTO.vendorId">
 
-		<div class="row">
-					<h2 class="title itemTitle" id="js-item-title-$item.itemid">$item.Title</h2>
-					<h3> $item.shortdesc</h3>
-		</div> <!-- end row -->
+
 
 
 		<div class="row">
@@ -100,6 +97,11 @@
 				<div class="row">
 			#parse($item_topDTO.getItems().get(0).get('item_top'))
 				</div><!-- end row -->
+				
+				<div class="row">
+					<h2 class="title itemTitle" id="js-item-title-$item.itemid">$item.Title</h2>
+					<h3> $item.shortdesc</h3>
+				</div> <!-- end row -->
           	
           	
           		<div class="row">
@@ -149,7 +151,7 @@
      </div> <!-- end s8 -->
               
 					<div class="small-4 columns">
-						<div class="pricing">
+						<div class="pricing row">
 							<ul class="no-bullet">
 								<li>
 									<b> Your Price:</b>
@@ -163,13 +165,13 @@
 									<span id="js-item-listprice-$item.itemid">$regExp.showPrice($math.roundTo(2,$price.listPrice))</span>
 								</li>
 							</ul>
-						</div>
-						<div>
+						</div> <!-- end row -->
+						<div class="row">
 							<ul class="no-bullet">
 								<li><b> Item:</b> <span id="js-item-code-$item.itemid">$item.code.replace("-",".")</span></li>
-								<li><b>MFG Item Number:</b> $item.mfgpartno</li>
+								<li><b> MFG Item Number:</b> $item.mfgpartno</li>
 							</ul>
-						</div>
+						</div> <!-- end row -->
 						
 #*
 ## Whenever reviews is ready, verify css that margins is not messing up layout
@@ -188,13 +190,13 @@
 #else
 					 <div id="js-item-attributes-$item.itemid" class="item-attr-section hide"></div> 
 #end
-						<div>
+						<div class="row">
 							<ul class="no-bullet">
 							<!-- <li><a href="$seourl.encodeURL("storeitem.html?vid=$vendorSettingsDTO.vendorId&iid=$printitemid")?tptm=pf"  target=_blank>#springMessage('vm.itemTemplate.printerfriendly')</a></li> -->
 								<li><a href="action.html?mode=addWishlist&iid=$item.itemid&vid=$vendorSettingsDTO.vendorId&qty=1&url=storeitem.html%3Fiid%3D$item.itemid%26vid%3D$vendorSettingsDTO.vendorId"> Add to your Wish List</a></li>
 								<li><a href="wishlist.html?vid=$vendorSettingsDTO.vendorId&action=add" title="add this ite tot you wish list"> View Your Wish List </a></li>
 							</ul>
-						</div>
+						</div> <!-- end row -->
  
 
 
@@ -211,7 +213,7 @@
 ### show or hide the buy button - begin ###					
 					#set ($inv=$itemInventoryDTO.getItem(0))
 					#if($inv)
-						#if($inv.instock>0) 
+						#if($inv.instock>=0) 
 						<div class="row">
 							##springMessage("vm.itemTemplate.instock")
 							<div class="row collapse rounded">
@@ -281,7 +283,7 @@
 			</form>
 			
 		
-		#parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_logo.vm")
+		##parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/itemT_logo.vm")
                 </div><!-- end span4 -->
       </div> <!-- end row -->
 
@@ -329,6 +331,39 @@
 <script type="text/javascript" src="assets/plugins/juitter/jquery.juitter.js"></script>
 <script src="assets/plugins/extlogin/popup.js" type="text/javascript"></script>
 <script src="assets/commercelib/showimage/showimage.js" type="text/javascript"></script>
+
+
+<script type="text/javascript">
+	try {
+  Commerce.Shop.ItemPage.Item.addMethods({
+    /*
+    * Replace Hyphen from item code
+    */
+    sayYo: function(propName) {
+      if (this.inventory[0].instock() = 1) {
+      	alert: "yo!";
+      }
+      else {
+      	alert: "no!";
+      }
+    },
+    refreshCode: function(propName) {
+      if (this.isExist(propName)==false) return;
+      var _itemCode = this.currentSkuBO.item.domain.code.replace('-','.');
+      this.containers.get(propName).update(_itemCode);
+      // Remove attr preloader if any
+      this.removePreloader();
+      // Call lostSale
+      this._lostSale(_itemCode);
+    },
+	});
+	
+	} catch (e) {
+  console.warn(e.message);
+}
+	
+</script>
+
 
 <script type="text/javascript">
       var $j = jQuery.noConflict();

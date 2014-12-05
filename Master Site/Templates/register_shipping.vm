@@ -1,137 +1,146 @@
-
 <div class="span6" id="shippingInfo" style="display:none">
 #if($registerViewDTO.billingandshippinginonepage && $registerViewDTO.memberType != '1')
-                <h3>Your Shipping Infomation</h3>
-                <div class="required"><span class="needed_star">*</span> required information</div>
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.addressId" )
+<div class="row">
+	<div class="small-12">
+		<h3>Your Shipping Information</h3>
+		<div class="required"><span class="needed_star">*</span> required information</div>
+	</div> <!-- end s12 -->
+</div> <!-- end row -->
+
+<div class="row">
+	<div class="small-12 columns">
+		<fieldset>
+			<legend> Your Information</legend>
+			
+			
+				#springBind( "registerViewDTO.customerDTO.shippingAddress.addressId" )
                 <input type="hidden" id="$status.expression" name="$status.expression" value="$!{status.value}">
-  #springBind( "registerViewDTO.billingandshippinginonepage" )
+	#springBind( "registerViewDTO.billingandshippinginonepage" )
                 <input type="hidden" id="$status.expression" name="$status.expression" value="$!{status.value}">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.clientId" )
+	#springBind( "registerViewDTO.customerDTO.shippingAddress.clientId" )
                 <input type="hidden" name="$status.expression" value="$!{status.value}">
+
                 <div class="control-group">
-  #springBind("registerViewDTO.sameAsBillingAddress")
+	#springBind("registerViewDTO.sameAsBillingAddress")
                   <div class="controls">
                     <label class="checkbox">
                       <input id="sameasbilling" name="$status.expression" #if($registerViewDTO.allNoneShippableItems)checked="checked"#end type="checkbox" onclick="showhideShipping();showhidepayment_info(2);"/>Same as billing address
                     </label>
                   </div>
                 </div>
-                <div id = "notSameAsBilling">
+  <div id="notSameAsBilling">
                   <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.nickName" )
-                    <label class="control-label" for="nickName">#springMessage("vm.editshippingaddress.nickname")<span class="needed_star">*</span></label>
-                    <div class="controls">
-                      <input id="nickName" name="$status.expression" type="text" value="$!{status.value}" size="30" />
-                    </div>
-                  </div>
-                  <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.firstname" )
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.firstname")<span class="needed_star">*</span></label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
-                    </div>
-                  </div>
-                  <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.middlename" )
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.middlename")</label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="3" onBlur="initCap(this)" onSubmit="initCap(this)"/>
-                    </div>
-                  </div>
-                  <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.lastname" )
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.lastname")<span class="needed_star">*</span></label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
-                    </div>
-                  </div>
-                  <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.company" )
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.company")</label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
-                    </div>
-                  </div>
-                  <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.address1" )
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.adress") 1<span class="needed_star">*</span></label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
-                    </div>
-                  </div>
-                  <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.address2" )
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.adress") 2</label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
-                    </div>
-                  </div>
-                  <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.city" )
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.city")<span class="needed_star">*</span></label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
-                    </div>
-                  </div>
-                  <div class="control-group">
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.countryId" )
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.country")<span class="needed_star">*</span></label>
-                    <div class="controls">
-                      <select size="1" id="$status.expression" name="$status.expression" onchange="changeRegion1(this.value)">
-                        <option value="0">#springMessage("vm.checkout_address.selectcountry")</option>
-  #foreach($country in ${registerViewDTO.countriesInUse})
-                          <option #if($country.country.id == $status.value) selected="selected" #end
-                          value="$country.country.id">
-                          $country.country.name
-                        </option>
-  #end
-                      </select>
-                    </div>
-                  </div>
-  #springBind("registerViewDTO.customerDTO.shippingAddress.provinceId")
-                  <div class="control-group">
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.region")<span class="needed_star">*</span></label>
-                    <div class="controls">
-  #if(${registerViewDTO.customerDTO.shippingAddress.provinceId}!=0)
-    #set($hide = "style=\"display:none\"")
-  #end
-                      <select name="$status.expression" id="provinces" $!{hide}>
-                        <option value="0">#springMessage("vm.checkout_address.selectregion")</option>
-  #foreach($country in ${registerViewDTO.countriesInUse})
-    #if(${registerViewDTO.customerDTO.shippingAddress.countryId} == ${country.country.id})
-      #foreach($province in ${country.provinces})
-        #if( ${province.province.id} == ${status.value})
-                        <option value="${province.province.id}" selected>${province.province.name}</option>
-        #else
-                        <option value="${province.province.id}">${province.province.name}</option>
-        #end
-      #end
-    #end
-  #end
-                      </select>
-  #springBind("registerViewDTO.customerDTO.shippingAddress.anotherProvince")
-    #if(${registerViewDTO.customerDTO.shippingAddress.provinceId}!=0)
-                      <input id="otherregionForShipping" size="30" maxlength="9" value="${status.value}" name="$status.expression" type="text">
-    #else
-                      <input id="otherregionForShipping" size="30" maxlength="9" value="${status.value}" name="$status.expression" type="text" style="display:none">
-    #end
-                    </div>
-                  </div>
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.postal" )
-                  <div class="control-group">
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.zippostalcode")<span class="needed_star">*</span></label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" maxlength="9"/>
-                    </div>
-                  </div>
-  #springBind( "registerViewDTO.customerDTO.shippingAddress.phone" )
-                  <div class="control-group">
-                    <label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.phone")<span class="needed_star">*</span></label>
-                    <div class="controls">
-                      <input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" maxlength="18" size="30" />
-                    </div>
-                  </div>
-                </div>
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.nickName" )
+				<div class="control-group">
+					<label class="control-label" for="nickName">#springMessage("vm.editshippingaddress.nickname")<span class="needed_star">*</span></label>
+					<input id="nickName" name="$status.expression" type="text" value="$!{status.value}" size="30" />
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.firstname" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.firstname")<span class="needed_star">*</span></label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.middlename" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.middlename")</label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="3" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.lastname" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.lastname")<span class="needed_star">*</span></label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.company" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.company")</label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.address1" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.adress") 1<span class="needed_star">*</span></label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.address2" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.adress") 2</label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.city" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.city")<span class="needed_star">*</span></label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.countryId" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.country")<span class="needed_star">*</span></label>
+					<select size="1" id="$status.expression" name="$status.expression" onchange="changeRegion1(this.value)">
+						<option value="0">#springMessage("vm.checkout_address.selectcountry")</option>
+					#foreach($country in ${registerViewDTO.countriesInUse})
+						<option #if($country.country.id == $status.value) selected="selected" #end
+							value="$country.country.id">
+								$country.country.name
+						</option>
+					#end
+					</select>
+				</div>
+
+
+			#springBind("registerViewDTO.customerDTO.shippingAddress.provinceId")
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.region")<span class="needed_star">*</span></label>
+				#if(${registerViewDTO.customerDTO.shippingAddress.provinceId}!=0)
+					#set($hide = "style=\"display:none\"")
+				#end
+					<select name="$status.expression" id="provinces" $!{hide}>
+						<option value="0">#springMessage("vm.checkout_address.selectregion")</option>
+					#foreach($country in ${registerViewDTO.countriesInUse})
+						#if(${registerViewDTO.customerDTO.shippingAddress.countryId} == ${country.country.id})
+							#foreach($province in ${country.provinces})
+								#if( ${province.province.id} == ${status.value})
+						<option value="${province.province.id}" selected>${province.province.name}</option>
+								#else
+						<option value="${province.province.id}">${province.province.name}</option>
+								#end
+							#end
+						#end
+					#end
+					</select>
+			#springBind("registerViewDTO.customerDTO.shippingAddress.anotherProvince")
+				#if(${registerViewDTO.customerDTO.shippingAddress.provinceId}!=0)
+			<input id="otherregionForShipping" size="30" maxlength="9" value="${status.value}" name="$status.expression" type="text">
+				#else
+			<input id="otherregionForShipping" size="30" maxlength="9" value="${status.value}" name="$status.expression" type="text" style="display:none">
+				#end
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.postal" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.zippostalcode")<span class="needed_star">*</span></label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" size="30" maxlength="9"/>
+				</div>
+
+			#springBind( "registerViewDTO.customerDTO.shippingAddress.phone" )
+				<div class="control-group">
+					<label class="control-label" for="$status.expression">#springMessage("vm.checkout_address.phone")<span class="needed_star">*</span></label>
+					<input id="$status.expression" name="$status.expression" type="text" value="$!{status.value}" maxlength="18" size="30" />
+				</div>
+	</div> <!-- end #notsameasbilling -->
+			
+			
+			
+		</fieldset>
+	</div>
+	
+</div> <!-- end row -->
+
+###### END #if($registerViewDTO.billingandshippinginonepage && $registerViewDTO.memberType != '1')
 #end
-              </div>
+</div>

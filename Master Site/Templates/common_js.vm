@@ -8,6 +8,8 @@
     <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/foundation/vendor/jquery.js"></script>
 
     <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/foundation/foundation.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/foundation/foundation.topbar.js"></script>
+    <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/plugins/foundation/foundation.alerts.js"></script>
     <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/backbone/underscore.js"></script>
     <script type="text/javascript" src="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/plugins/backbone/backbone.js"></script>
 
@@ -15,10 +17,16 @@
   <script type="text/javascript">
   jQuery('.navbar-form').submit(function(evt){
     evt.preventDefault();
-    window.location = 'asearch.html?vid=${vid}&keyword=' + encodeURIComponent(jQuery(this).find('input').val().trim()) + '&catalog=RV+%2F+MH+Catalog';
+    window.location = 'asearch.html?vid=${vid}&keyword=' + encodeURIComponent(jQuery(this).find('input').val().trim()) + "$searchBook";
   });
   </script>
-
+  <script type="text/javascript" type="text/javascript">
+  function checkKey() {
+    var keyword = document.getElementById('key');
+    if (keyword.value.length==0)
+      keyword.value = $vendorSettingsDTO.vendorId;
+  }
+</script>
 
 
   <script type="text/javascript">
@@ -33,13 +41,7 @@
   }
   </script>
 
-<script type="text/javascript" type="text/javascript">
-  function checkKey() {
-    var keyword = document.getElementById('key');
-    if (keyword.value.length==0)
-      keyword.value = $vendorSettingsDTO.vendorId;
-  }
-</script>
+
 
 <script>
 $(document).foundation();

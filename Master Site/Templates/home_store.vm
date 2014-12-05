@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/global_vars.vm")
 ##if (!$pageTileDictionaryDTO)
@@ -54,13 +55,13 @@
     ############################ Left Column ##############################
     #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/${storeclass}_home_left.vm")
     ############################ End Left Column ##########################			
- 
+ 			</div>
+		</div> <!-- end row -->
+		
     ############################ Page Content #############################
-<!-- right here -->
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/home_content.vm")
     ############################ Edns Page Content ########################
-			</div>
-		</div> <!-- end row -->
+
 		
     ############################ Footer ###################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")

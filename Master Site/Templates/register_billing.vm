@@ -6,7 +6,7 @@
 </div> <!-- end row -->
 
 <div class="row">
-	<div class="small-6 columns">
+	<div class="small-12 columns">
 		 <fieldset>
 			<legend> Your Information</legend>
 				#springBind("registerViewDTO.customerDTO.firstName")
@@ -30,8 +30,6 @@
 						<label class="control-label" for="customerDTO.customerAddresses['1'].phone"> #springMessage("vm.register.phone")<span class="needed_star">*</span></label>
 						<input id="cname" value="${status.value}" id="customerDTO.customerAddresses['1'].phone" size="30" name="customerDTO.customerAddresses['1'].phone" size="30" maxlength="18" type="text">
 					</div>
-					
-					
 		</fieldset>
 ############
 #if($registerViewDTO.use_register_realloginname)
@@ -39,13 +37,15 @@
 					<h4> What is your preferend loign Name or ID</h4>
 					<div class="control-group">
 						<label for="register_realloginname">#springMessage("word.loginname")</label>
-						<input size="30" maxlength="50" value="${status.value}" id="register_realloginname" name="register_realloginname" type="text"/></div>
+						<input size="30" maxlength="50" value="${status.value}" id="register_realloginname" name="register_realloginname" type="text"/>
 					</div>
 #end
 #############
-	</div> <!-- end s6 -->
+	</div> <!-- end s12 -->
+</div> <!-- end row -->
 
-	<div class="small-6 columns">
+<div class="row">
+	<div class="small-12 columns">
 		 <fieldset>
 			<legend> Account Information</legend>
 				#springBind("registerViewDTO.customerDTO.loginname")
@@ -70,17 +70,14 @@
 						<input class="required" value="${status.value}" size="30" maxlength="20" id="confirmPassword" name="confirmPassword" type="password">
 					</div>
 		</fieldset>
-	</div> <!-- end s6 -->
-</div> <!-- end row -->
-
-<div class="row">
-	<div class="small-12">
 	</div> <!-- end s12 -->
 </div> <!-- end row -->
 
-
-                
-######### START #if($registerViewDTO.memberType != '1') ##########
+<div class="row">
+	<div class="small-12 columns">
+		<fieldset>
+			
+			######### START #if($registerViewDTO.memberType != '1') ##########
 #if($registerViewDTO.memberType != '1')
 
 		#### removed phone from here ####
@@ -88,29 +85,31 @@
 		#springBind("registerViewDTO.customerDTO.customerAddresses['1'].company")
                 <div class="control-group">
                   <label class="control-label" for="customerDTO.customerAddresses['1'].company">#springMessage("vm.register.company")</label>
-                  <div class="controls"><input id ="customerDTO.customerAddresses['1'].company" name="customerDTO.customerAddresses['1'].company" value="${status.value}" type="text" size="30"  onBlur="initCap(this)" onSubmit="initCap(this)"/></div>
+                  <input id ="customerDTO.customerAddresses['1'].company" name="customerDTO.customerAddresses['1'].company" value="${status.value}" type="text" size="30"  onBlur="initCap(this)" onSubmit="initCap(this)"/>
                 </div>
+                
 		#springBind("registerViewDTO.customerDTO.customerAddresses['1'].address1")
                 <div class="control-group">
                   <label class="control-label" for="${status.expression}">#springMessage("vm.register.address") 1<span class="needed_star">*</span></label>
-                  <div class="controls" ><input  value="${status.value}" id="${status.expression}" name="${status.expression}" type="text" size="30" onblur="javascript:fieldBlurred(this,1);initCap(this)"  onSubmit="initCap(this)"/></div>
+                  <input  value="${status.value}" id="${status.expression}" name="${status.expression}" type="text" size="30" onblur="javascript:fieldBlurred(this,1);initCap(this)"  onSubmit="initCap(this)"/>
                 </div>
+                
 		#springBind("registerViewDTO.customerDTO.customerAddresses['1'].address2")
                 <div class="control-group">
                   <label class="control-label" for="${status.expression}">#springMessage("vm.register.address")2</label>
-                    <div class="controls"><input  value="${status.value}" id="${status.expression}" name="${status.expression}" type="text" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/></div>
+                  <input  value="${status.value}" id="${status.expression}" name="${status.expression}" type="text" size="30" onBlur="initCap(this)" onSubmit="initCap(this)"/>
                 </div>
+
 		#springBind("registerViewDTO.customerDTO.customerAddresses['1'].city")
                 <div class="control-group">
                   <label class="control-label" for="${status.expression}">#springMessage("vm.register.city")<span class="needed_star">*</span></label>
-                  <div class="controls"><input  value="${status.value}" id="${status.expression}" name="${status.expression}" type="text" size="30" onblur="javascript:fieldBlurred(this,2);initCap(this);#if($registerViewDTO.onepagecheckout && !$registerViewDTO.islogin)#end"   onSubmit="initCap(this)"/></div>
+                  <input  value="${status.value}" id="${status.expression}" name="${status.expression}" type="text" size="30" onblur="javascript:fieldBlurred(this,2);initCap(this);#if($registerViewDTO.onepagecheckout && !$registerViewDTO.islogin)#end"   onSubmit="initCap(this)"/>
                 </div>
 		#springBind("registerViewDTO.customerDTO.customerAddresses['1'].countryId")
 		#set($curcountry=$status.value)
 	<!-- curcountry=$status.value -->
                 <div class="control-group">
                   <label class="control-label" for="country_id">#springMessage("vm.register.country") <span class="needed_star">*</span></label>
-                  <div class="controls">
                     <select size="1" id="country_id" name="customerDTO.customerAddresses['1'].countryId" onChange="changeRegion(this.value);isBillingAddressChanged=true;#if($productsDetails.products.size() != "" && $productsDetails.products.size() > 0)cleanPaymentMethod();#end" style="width:215px;">
                       <option value="0">#springMessage("vm.register.chosecountry")</option>
 		#foreach($country in $registerViewDTO.countriesInUse)
@@ -120,7 +119,6 @@
                         <option value="$country.country.id"> #if($country.country.id==${status.value})selected#end $country.country.name</option>
 		#end
                     </select>
-                  </div>
                 </div>
 		
 		#set($state="inline-block")
@@ -138,7 +136,6 @@
                 <div class="control-group">
                   <label class="control-label" for="$status.expression" id="state" style="display:$state" >#springMessage("vm.register.state")<span class="needed_star">*</span></label>
                   <label class="control-label" for="$status.expression" id="province" style="display:$province" >#springMessage("vm.register.province")<span class="needed_star">*</span> </label>
-                  <div class="controls">
 		#springBind("registerViewDTO.customerDTO.customerAddresses['1'].provinceId" )
 		#if(${status.value}!=0)
                     <select size="1" name="$status.expression" id="region" onchange="isBillingAddressChanged=true;#if($productsDetails.products.size() > 0)cleanPaymentMethod();#end" style="width:215px;">
@@ -178,13 +175,12 @@
 		#springBind("registerViewDTO.customerDTO.customerAddresses['1'].anotherProvince")
                     <input id="otherregionForBilling" size="30" maxlength="9" value="${status.value}" name="customerDTO.customerAddresses['1'].anotherProvince" type="text" onblur="fieldBlurred(this,4)">
 		#end
-                  </div>
                 </div>
 
 		#springBind("registerViewDTO.customerDTO.customerAddresses['1'].postal")
                 <div class="control-group">
                   <label class="control-label" for="customerDTO.customerAddresses['1'].postal">#springMessage("vm.register.postal")<span class="needed_star"> *</span></label>
-                  <div class="controls"><input size="30" maxlength="10" value="${status.value}" id="customerDTO.customerAddresses['1'].postal" name="customerDTO.customerAddresses['1'].postal" type="text" onblur="fieldBlurred(this,3);#if($registerViewDTO.islogin) shippingAddressListenerAfterReg(${vendorSettingsDTO.vendorId},this.form,1,2);#else shippingAddressListener(${vendorSettingsDTO.vendorId},this.form,1,2,false);#end"/></div>
+                  <input size="30" maxlength="10" value="${status.value}" id="customerDTO.customerAddresses['1'].postal" name="customerDTO.customerAddresses['1'].postal" type="text" onblur="fieldBlurred(this,3);#if($registerViewDTO.islogin) shippingAddressListenerAfterReg(${vendorSettingsDTO.vendorId},this.form,1,2);#else shippingAddressListener(${vendorSettingsDTO.vendorId},this.form,1,2,false);#end"/>
                 </div>
 #end
 ######### END #if($registerViewDTO.memberType != '1') ###########
@@ -195,9 +191,7 @@
 #if($registerViewDTO.memberType == '1')
                 <div class="control-group">
 	#springBind("registerViewDTO.customerDTO.customerProperties['Subscribe to Newsletter']")
-                  <div class="controls">
                     <label class="checkbox" for="$status.expression"><input type="checkbox" id="$status.expression" name="$status.expression" value="yes" #if("${status.value}"=="yes") checked #end > <b>#springMessage("vm.register.subscribe")</b></label>
-                  </div>
                 </div>
 #end
 ######### END #if($registerViewDTO.memberType == '1') ##########
@@ -209,28 +203,25 @@
                 <div class="control-group">
                   <label class="control-label" for="${status.expression}">#springMessage("vm.register.question")<span class="needed_star">*</span></label>
 	#springBind("registerViewDTO.securityQuestion")
-                  <div class="controls">
                     <select size="1" id="${status.expression}" name="${status.expression}" style="width:215px;">
                       <option value="#springMessage("vm.register.securitymessage1")">#springMessage("vm.register.securitymessage1")</option>
                       <option value="#springMessage("vm.register.securitymessage2")">#springMessage("vm.register.securitymessage2")</option>
                       <option value="#springMessage("vm.register.securitymessage3")">#springMessage("vm.register.securitymessage3")</option>
                       <option value="#springMessage("vm.register.securitymessage4")">#springMessage("vm.register.securitymessage4")</option>
                     </select>
-                  </div>
                 </div>
+
 	#springBind("registerViewDTO.securityAnswer")
                 <div class="control-group">
                   <label class="control-label" for="securityAnswer">#springMessage("vm.register.answer")<span class="needed_star">*</span></label>
-                  <div class="controls"><input size="30" maxlength="50" value="${status.value}" id="securityAnswer" name="securityAnswer" type="text"></div>
+                  <input size="30" maxlength="50" value="${status.value}" id="securityAnswer" name="securityAnswer" type="text">
                 </div>
 <!-- end of input fields-->
 
 
-                <div class="control-group newsletter">
 	#springBind("registerViewDTO.customerDTO.customerProperties['Subscribe to Newsletter']")
-                  <div class="controls">
+                <div class="control-group newsletter">
                     <label class="checkbox" for="$status.expression"><input type="checkbox" id="$status.expression" name="$status.expression" value="yes" #if("${status.value}"=="yes") checked="checked" #end > <b>#springMessage("vm.register.subscribe")</b></label>
-                  </div>
                 </div>
 	#if($productsDetails.products.size() > 0)
 		#set($authenticationSubmitURL="store.html")
@@ -277,7 +268,6 @@
 
 			#if($retailcount)
                 <div class="control-group">
-                  <div class="controls">
                     <label for="rdoMultAddr" class="radio"><input id="rdoMultAddr" name="$status.expression" value="4" type="radio" #if($status.value && $status.value==4)checked="checked" #end onclick="javascript:setregister('payment.html?vid=$vendorSettingsDTO.vendorId');showhidepayment_info(this.value);"> #springMessage("vm.register.shipretailers")</label>
 				#springBind( "registerViewDTO.retailerid")
                     <select id="selretailer"  name="$status.expression">
@@ -286,7 +276,6 @@
                       <option value="$retail.retailer.id" #if($status.value && $status.value==$retail.retailer.id) selected  #end>$retail.retailer.name</option>
 				#end
                     </select>
-                  </div>
                 </div>
 			#end
 		
@@ -294,3 +283,10 @@
 	#end
 #end
 ######### END #if($registerViewDTO.memberType != '1') ##########
+			
+		</fieldset>
+	</div> <!-- end s12 -->
+</div> <!-- end row -->
+
+
+                

@@ -1,3 +1,4 @@
+
 <div class="row">	
 	<div id="categories" class="small-12 columns">
 		<h2>Product Categories</h2>
@@ -7,10 +8,8 @@
 <div class="row">
 	<!-- begin rv -->
 	<div class="small-12 large-6 columns">
-		<div class="row">
-			<div class="row">
-				<h3> RV &amp; Camper</h3>
-			</div>	
+		<h3> RV &amp; Camper</h3>
+
 #set($rvcats = $Menu2DTO.items.size())
 #set($rvcol1 = [])
 #set($rvcol2 = [])
@@ -42,10 +41,8 @@
 	</div> <!-- end rv -->
 	<!-- begin marine -->
 	<div class="small-12 large-6 columns">
-		<div class="row">
-			<div class="row">
-				<h3> Marine</h3>
-			</div>	
+		<h3> Marine</h3>
+
 #set($mrcats = $Menu4DTO.items.size())
 #set($mrcol1 = [])
 #set($mrcol2 = [])
@@ -78,42 +75,3 @@
 
 
 <div class="row" id="featured-items"></div> <!-- end row -->
-
-#######################################################
-# unse dynamic category logic form user session
-# commented out until logic resolved to switch form one catalog to multiple
-#*
-<!-- Main Content -->
-<div class="row">
-	#*
-#set($totalMenus = $menuCategories.items.size())
-#set($column1 = [])
-#set($column2 = [])
-#set($x = 0)
-#foreach($temp in $menuCategories.items)
-  #set($category = $pageTile.getItemObject($menuCategories, $temp, "c"))
-  #if($x >= $math.div($totalMenus,2))
-    #set($null = $column2.add([$category.categoryid, $category.name]))
-  #else
-    #set($null = $column1.add([$category.categoryid, $category.name]))
-  #end                      
-  #set($x = $x + 1)
-#end            
-		<div class="small-6 columns">
-			<ul class="no-bullet">
-#foreach($line in $column1)
-				<li><a href="${seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${line.get(0)}")}">${line.get(1)}</a></li>
-#end
-			</ul>
-		</div>
-
-		<div class="small-6 columns">
-			<ul class="no-bullet">
-#foreach($line in $column2)
-				<li><a href="${seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=${line.get(0)}")}">${line.get(1)}</a></li>
-  #end
-			</ul>
-		</div>
-	</div> <!-- end row -->
- *#
-#######################################################
