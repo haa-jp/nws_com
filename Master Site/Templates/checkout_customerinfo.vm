@@ -21,7 +21,7 @@
 		<meta content="processing your order" name="keywords"/>
 		<base href="$baselink"/>
 		#parse("/$vendorSettingsDTO.vendorId/$masterSkinId/common_css.vm")
-		<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$vendorSettingsDTO.skinname/css/avetti-checkout.css" />
+		<link rel="stylesheet" type="text/css" href="store/$vendorSettingsDTO.vendorId/assets/themes/$masterSkinName/css/avetti-checkout.css" />
 	</head>
 	<body id="checkout" class="checkout" onload="showhidepayment_info($checkoutViewDTO.shipTypes.currentType);showhideShipping();">
 <!-- checkout_customerinfo.vm-->
@@ -36,6 +36,8 @@
         #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
     #end
     ############################ End Header ################################    
+	<div class="page">
+	    
 		<div class="row">
 			<div class="small-12">
 				<ul class="co-breadcrumb step2">
@@ -477,7 +479,7 @@
                   <input type="hidden" name="vid" value="$vendorSettingsDTO.vendorId">
   ##One page checkout include
   #parse("/$vendorSettingsDTO.vendorId/$vendorSettingsDTO.themeId/checkoutCI-onepage.vm")
-		</div> <!--end row -->
+		<!-- </div> end row -->
 		
 
   <!-- External Login -->
@@ -515,14 +517,14 @@
 		<div class="row">
 			<div class="form-actions">
 				<input type="button" class="button small primary" value="#springMessage('button.CONTINUE')" onClick="doContinue('frm', 't', this,'update');"/>
-				<input type="button" value="#springMessage('button.CANCEL')" onClick="JavaScript:window.location.href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/basket.html?vid=${vendorSettingsDTO.vendorId}'"/>
+				<input type="button" class="button small smaller" value="#springMessage('button.CANCEL')" onClick="JavaScript:window.location.href='https://${appSettingsDTO.getDomainAlias($vendorSettingsDTO.vendorId)}/${appSettingsDTO.AppName}/basket.html?vid=${vendorSettingsDTO.vendorId}'"/>
 				<div id="payment_method_alert" style="display:none;" class="warning" >#springMessage('vm.register.msg4')</div>
 			</div>
 		</div> <!-- end row -->
 
 
 
-
+    </div> <!-- end .page -->
 
 
     ############################ Footer ###################################

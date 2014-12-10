@@ -2,8 +2,8 @@
 <ul class="small-block-grid-2 medium-block-grid-3 large-block-grid-4">
     #foreach($itemIter in $childCategoriesDTO.getItems())
     #set($category = $pageTile.getItemObject($childCategoriesDTO, $itemIter, "c"))
-    <li>
-        <div class="cat">
+    <li class="cat">
+        <div class="catimg">
             <a href="$seourl.encodeURL("store.html?vid=$vendorSettingsDTO.vendorId&cid=$category.categoryid")">
                 <img src="store${category.thumbimage}" /></a>
 ##   <div class="text-bg opacity-50"></div>

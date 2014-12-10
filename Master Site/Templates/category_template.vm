@@ -108,17 +108,16 @@ window.location = "$baselink/signin.html?vid=20120606532&mt=1"
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/search_bar.vm")
     ############################ End Search Bar ############################
 
-<div class="row">
-	<h2 class="category-title">$categoryDescription</h2>
-</div>
-
-
-		<div class="row">
+		<div class="row page">
 			<div  id="left-col" class="small-4 columns">
 #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/breadcrumbs.vm")
 			</div>
 		
 			<div id="right-col" class="small-8 columns" >
+			
+		    	<div class="row">
+	                <h2 class="category-title">$categoryDescription</h2>
+                </div>
     ############################ Advertising Area ##########################
 	#* Uncomment this if category image and featured items is needed 
 				<div class="row-fluid">

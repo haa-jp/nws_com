@@ -21,6 +21,7 @@
         #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
     #end
     ############################ End Header ################################
+ 	<div class="page">
  		<div class="row">
 			<div class="small-12">
 				<ul class="co-breadcrumb step5">
@@ -296,7 +297,7 @@
 					#springMessage("vm.checkout_completed.gotomyacc")</a>
 			</div>
 		</div> <!-- end row -->
-
+	</div> <!-- end .page -->
     ############################ Footer ###################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
     ############################ Ends Footer ##############################

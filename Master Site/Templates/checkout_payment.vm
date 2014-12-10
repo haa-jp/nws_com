@@ -21,6 +21,7 @@
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/${storeclass}_banner.vm")
 #end
     ############################ End Header ################################
+	<div class="page">
   		<div class="row">
 			<div class="small-12">
 				<ul class="co-breadcrumb step3">
@@ -119,7 +120,7 @@
 			</div>
 		</div> <!-- end row -->
 			</form>
-   
+	</div> <!-- end .page -->
     ############################ Footer ###################################
     #parse("/$vendorSettingsDTO.vendorId/$masterSkinId/footer.vm")
     ############################ Ends Footer ##############################
